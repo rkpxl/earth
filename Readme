@@ -1,2 +1,20 @@
-Earth Next.js Project
-This repository contains the source code for the Earth Next.js project. It is a web application built with Next.js, a popular React framework for server-side rendering and static site generation.
+# Earth
+## Description
+
+[Describe your project briefly here]
+
+## Getting Started
+### Prerequisites
+- Node.js (v14 or above)
+- Yarn
+### Installation
+
+git clone git@github.com:rkpxl/earth.git 
+yarn install
+yarn dev
+
+Built With
+Next.js - The React framework for building server-side rendered applications
+Material UI - UI component library for React
+Tailwind CSS - Utility-first CSS framework
+[Other dependencies you may have]
