@@ -1,17 +1,32 @@
 "use client";
-import { Button, Grid, Stack } from "@mui/material";
+
+import React from 'react'
+import { decrement, increment, reset } from "./Redux/Reducer/counterSclice";
+import { useAppDispatch, useAppSelector } from "./Redux/hooks";
+import { useRouter } from 'next/navigation';
+
 export default function Home() {
+  const count = useAppSelector((state) => state.counterReducer.value);
+  const dispatch = useAppDispatch();
+  const router = useRouter();
+
+  if(typeof localStorage !== 'undefined' && !localStorage?.getItem('USER')) {
+    router.push('/login')
+  }
+
   return (
-    <Grid container height="100vh" alignItems="center" justifyContent="center" direction="column">
-      <h1 className="text-blue-500">Using Material UI with Next.js 13</h1>
-      <h4 className="text-red-500">(with Tailwind CSS)</h4>
-      <Stack direction="row" columnGap={1}>
-        <Button variant="text" className="text-red-500">
-          Text
-        </Button>
-        <Button variant="contained">Contained</Button>
-        <Button variant="outlined">Outlined</Button>
-      </Stack>
-    </Grid>
+    <main style={{ maxWidth: 1200, marginInline: "auto", padding: 20 }}>
+      <div style={{ marginBottom: "4rem", textAlign: "center" }}>
+        <h4 style={{ marginBottom: 16 }}>{count}</h4>
+        <button onClick={() => dispatch(increment())}>increment</button>
+        <button
+          onClick={() => dispatch(decrement())}
+          style={{ marginInline: 16 }}
+        >
+          decrement
+        </button>
+        <button onClick={() => dispatch(reset())}>reset</button>
+      </div>
+    </main>
   );
 }
