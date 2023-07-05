@@ -1,7 +1,7 @@
 import { Children } from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import createEmotionServer from '@emotion/server/create-instance';
-import { createEmotionCache } from '../Utils/create-emotion-cache';
+import { createEmotionCache } from '../Utils/create-emotion-cache.js'
 
 class CustomDocument extends Document {
   render() {

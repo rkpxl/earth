@@ -3,6 +3,7 @@ import type { NextPage } from 'next'
 import styles from '../../styles/Home.module.css'
 import { useRouter } from 'next/router'
 import Component from '../Scenes/Home'
+import HomePage from '../Scenes/Home/Home'
 
 
 const Home: NextPage = () => {
@@ -16,7 +17,7 @@ const Home: NextPage = () => {
 
   return (
     <>
-      <Component />
+      <Component><HomePage /></Component>
     </>
   )
 }
