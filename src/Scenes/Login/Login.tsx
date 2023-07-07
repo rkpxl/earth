@@ -57,7 +57,7 @@ const Login = () => {
               <Typography
                 color="textSecondary"
                 gutterBottom
-                variant="body2"
+                variant="body2" 
               >
                 Sign in on the internal platform
               </Typography>

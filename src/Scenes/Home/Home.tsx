@@ -7,17 +7,33 @@ import PendingTask from '../../Components/Home/PendingTask';
 import { LatestTasks } from '../../Components/Home/LatestTasks'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import ProtocolPopUp from '../../Components/Common/ProtocolDialog'
 
 
 const Home = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const [popOpen, setPopOpen] = React.useState(false);
+
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
-  const handleClose = () => {
+
+  const handleClose = () : void=> {
     setAnchorEl(null);
   };
+
+  const handlePopOpen = () : void => {
+    setPopOpen(true);
+    handleClose()
+  };
+  const handlePopClose = () : void => {
+    setPopOpen(false);
+  };
+  const handleSubmitProtocol = () : void => {
+    handlePopClose()
+  } 
+
   return (
     <>
       <Head>
@@ -56,7 +72,7 @@ const Home = () => {
             aria-labelledby="demo-positioned-button"
             anchorEl={anchorEl}
             open={open}
-            onClose={handleClose}
+            onClose={handlePopOpen}
             sx={{ mt: 5}}
             anchorOrigin={{
               vertical: 'top',
@@ -67,9 +83,9 @@ const Home = () => {
               horizontal: 'left',
             }}
           >
-            <MenuItem onClick={handleClose}>Chemical</MenuItem>
-            <MenuItem onClick={handleClose}>Computer Science</MenuItem>
-            <MenuItem onClick={handleClose}>Human Ethics</MenuItem>
+            <MenuItem onClick={handlePopOpen}>Chemical</MenuItem>
+            <MenuItem onClick={handlePopOpen}>Computer Science</MenuItem>
+            <MenuItem onClick={handlePopOpen}>Human Ethics</MenuItem>
           </Menu>
         </Box>
         <Container maxWidth={false}>
@@ -91,6 +107,7 @@ const Home = () => {
             </Grid>
           </Grid>
           <LatestTasks />
+          <ProtocolPopUp handleClose={handlePopClose} popOpen={popOpen} handleSubmit={handleSubmitProtocol} />
         </Container>
       </Box>
     </>

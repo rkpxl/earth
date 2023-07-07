@@ -15,11 +15,11 @@ const items = [
     icon: (<ChartBarIcon fontSize="small" />),
     title: 'Home'
   },
-  {
-    href: '/account',
-    icon: (<UserIcon fontSize="small" />),
-    title: 'Account'
-  },
+  // {
+  //   href: '/account',
+  //   icon: (<UserIcon fontSize="small" />),
+  //   title: 'Account'
+  // },
   {
     href: '/settings',
     icon: (<CogIcon fontSize="small" />),
