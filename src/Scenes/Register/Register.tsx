@@ -19,8 +19,8 @@ const Register = () => {
   const formik = useFormik({
     initialValues: {
       email: '',
-      firstName: '',
-      lastName: '',
+      name: '',
+      userName: '',
       password: '',
       policy: false
     },
@@ -31,14 +31,14 @@ const Register = () => {
         .max(255)
         .required(
           'Email is required'),
-      firstName: Yup
+      name: Yup
         .string()
         .max(255)
         .required('First name is required'),
-      lastName: Yup
+      userName: Yup
         .string()
         .max(255)
-        .required('Last name is required'),
+        .required('User name is required'),
       password: Yup
         .string()
         .max(255)
@@ -74,17 +74,6 @@ const Register = () => {
         }}
       >
         <Container maxWidth="sm">
-          <NextLink
-            href="/"
-            passHref
-          >
-            <Button
-              component="a"
-              startIcon={<ArrowBackIcon fontSize="small" />}
-            >
-              Dashboard
-            </Button>
-          </NextLink>
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
               <Typography
@@ -102,27 +91,27 @@ const Register = () => {
               </Typography>
             </Box>
             <TextField
-              error={Boolean(formik.touched.firstName && formik.errors.firstName)}
+              error={Boolean(formik.touched.name && formik.errors.name)}
               fullWidth
-              helperText={formik.touched.firstName && formik.errors.firstName}
-              label="First Name"
+              helperText={formik.touched.name && formik.errors.name}
+              label="Name"
               margin="normal"
               name="firstName"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              value={formik.values.firstName}
+              value={formik.values.name}
               variant="outlined"
             />
             <TextField
-              error={Boolean(formik.touched.lastName && formik.errors.lastName)}
+              error={Boolean(formik.touched.userName && formik.errors.userName)}
               fullWidth
-              helperText={formik.touched.lastName && formik.errors.lastName}
-              label="Last Name"
+              helperText={formik.touched.userName && formik.errors.userName}
+              label="User Name"
               margin="normal"
               name="lastName"
               onBlur={formik.handleBlur}
               onChange={formik.handleChange}
-              value={formik.values.lastName}
+              value={formik.values.userName}
               variant="outlined"
             />
             <TextField
@@ -197,27 +186,9 @@ const Register = () => {
                 type="submit"
                 variant="contained"
               >
-                Sign Up Now
+                Register Now
               </Button>
             </Box>
-            <Typography
-              color="textSecondary"
-              variant="body2"
-            >
-              Have an account?
-              {' '}
-              <NextLink
-                href="/login"
-                passHref
-              >
-                <Link
-                  variant="subtitle2"
-                  underline="hover"
-                >
-                  Sign In
-                </Link>
-              </NextLink>
-            </Typography>
           </form>
         </Container>
       </Box>

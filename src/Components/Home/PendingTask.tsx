@@ -1,9 +1,10 @@
-import { Avatar, Box, Card, CardContent, Grid, Typography } from '@mui/material';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
+import { Avatar, Box, Card, CardContent, Grid, Typography, Button, Divider } from '@mui/material';
+import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import PeopleIcon from '@mui/icons-material/PeopleOutlined';
+import NextLink from 'next/link';
 
 export const PendingTask = (props : any) => (
-  <Card {...props}>
+  <Card {...props} sx={{ height: '100%' }}>
     <CardContent>
       <Grid
         container
@@ -16,13 +17,13 @@ export const PendingTask = (props : any) => (
             gutterBottom
             variant="overline"
           >
-            Pending Task
+            Pending Tasks
           </Typography>
           <Typography
             color="textPrimary"
             variant="h4"
           >
-            1,6k
+            1.6k
           </Typography>
         </Grid>
         <Grid item>
@@ -37,28 +38,33 @@ export const PendingTask = (props : any) => (
           </Avatar>
         </Grid>
       </Grid>
+      <Divider
+          sx={{
+            borderColor: 'textSecondary',
+            py: 1,
+          }}
+        />
       <Box
         sx={{
-          alignItems: 'center',
           display: 'flex',
-          pt: 2
+          alignItems: 'center',
+          justifyContent: 'flex-start',
         }}
       >
-        <ArrowUpwardIcon color="success" />
-        <Typography
-          variant="body2"
-          sx={{
-            mr: 1
-          }}
+       <NextLink
+          style={{width: '100%'}}
+          href="/pending-tasks"
         >
-          16%
-        </Typography>
-        <Typography
-          color="textSecondary"
-          variant="caption"
-        >
-          Since last month
-        </Typography>
+          <Button
+            color="secondary"
+            endIcon={<ArrowRightIcon fontSize="small" />}
+            size="small"
+            variant="text"
+            sx={{mt: 1}}
+          >
+            View all
+          </Button>
+        </NextLink>
       </Box>
     </CardContent>
   </Card>

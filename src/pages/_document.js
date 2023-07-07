@@ -1,14 +1,14 @@
 import { Children } from 'react';
 import Document, { Html, Head, Main, NextScript } from 'next/document';
 import createEmotionServer from '@emotion/server/create-instance';
-import { createEmotionCache } from '../Utils/create-emotion-cache.js'
+import { createEmotionCache } from '../Utils/create-emotion-cache';
 
 class CustomDocument extends Document {
   render() {
     return (
       <Html lang="en">
         <Head>
-          <link
+          <link 
             rel="preconnect"
             href="https://fonts.googleapis.com"
           />

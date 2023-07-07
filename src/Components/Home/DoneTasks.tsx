@@ -1,7 +1,7 @@
-import { Avatar, Box, Button, Card, CardContent, Grid, Typography } from '@mui/material';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
+import { Avatar, Box, Button, Card, CardContent, Grid, Typography, Divider } from '@mui/material';
 import MoneyIcon from '@mui/icons-material/Money';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
+import NextLink from 'next/link';
 
 const DoneTask = (props : any) => (
   <Card
@@ -20,7 +20,7 @@ const DoneTask = (props : any) => (
             gutterBottom
             variant="overline"
           >
-            Done Task
+            Done Tasks
           </Typography>
           <Typography
             color="textPrimary"
@@ -41,28 +41,33 @@ const DoneTask = (props : any) => (
           </Avatar>
         </Grid>
       </Grid>
+      <Divider
+          sx={{
+            borderColor: 'textSecondary',
+            py: 1,
+          }}
+        />
       <Box
         sx={{
-          pt: 2,
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
+          justifyContent: 'flex-start',
         }}
       >
-        <Typography
-          color="textSecondary"
-          variant="caption"
+        <NextLink
+          style={{width: '100%'}}
+          href="/done-tasks"
         >
-          Since last month
-        </Typography>
-        <Button
-        color="primary"
-        endIcon={<ArrowRightIcon fontSize="small" />}
-        size="small"
-        variant="text"
-      >
-        View all
-      </Button>
+          <Button
+            color="secondary"
+            endIcon={<ArrowRightIcon fontSize="small" />}
+            size="small"
+            variant="text"
+            sx={{mt: 1}}
+          >
+            View all
+          </Button>
+        </NextLink>
       </Box>
     </CardContent>
   </Card>

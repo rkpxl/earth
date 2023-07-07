@@ -149,7 +149,7 @@ export const LatestTasks = (props : any) => (
       }}
     >
       <Button
-        color="primary"
+        color="secondary"
         endIcon={<ArrowRightIcon fontSize="small" />}
         size="small"
         variant="text"
