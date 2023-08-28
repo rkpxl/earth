@@ -1,17 +1,19 @@
 import Head from 'next/head';
-import NextLink from 'next/link';
 import Router from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import axios from 'axios'
+import { decode } from 'jsonwebtoken';
+import React from 'react'
 
 
 const Login = () => {
+  const [error, setError] = React.useState('');
   const formik = useFormik({
     initialValues: {
-      email: 'demo@devias.io',
-      password: 'Password123'
+      email: 'ritikjainkkar@gmail.com',
+      password: 'password'
     },
     validationSchema: Yup.object({
       email: Yup
@@ -25,9 +27,38 @@ const Login = () => {
         .required('Password is required')
     }),
     onSubmit: () => {
-      Router
-        .push('/')
-        .catch(console.error);
+      console.log('Onsubmit')
+      axios.post('http://localhost:3000/users/signup', {
+        email: formik.values.email,
+        password: formik.values.password
+      })
+        .then((response) => {
+          console.log('response', response)
+          // Handle the response
+          const token = response.data;
+          const user = decode(token)
+          console.log('user', user)
+
+          // Decode the payload from base64
+          // Store the token in local storage or a secure HTTP-only cookie
+          localStorage.setItem('name', user.name);
+          localStorage.setItem('department', user.department);
+          localStorage.setItem('org', user.org);
+          localStorage.setItem('email', user.email);
+          localStorage.setItem('exp', user.exp);
+          localStorage.setItem('_id', user._id);
+
+          Router
+          .push('/')
+          .catch(console.error);
+
+        })
+        .catch((error) => {
+          setError('An error occurred during login.');
+          // Clear the form values
+          formik.resetForm();
+          console.error(error);
+        });
     }
   });
 
@@ -112,6 +143,7 @@ const Login = () => {
               >
                 or login with email address
               </Typography>
+              {error && <Typography color="error" variant="body2">{error}</Typography>}
             </Box>
             <TextField
               error={Boolean(formik.touched.email && formik.errors.email)}

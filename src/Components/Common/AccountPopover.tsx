@@ -1,21 +1,26 @@
-import { useContext } from 'react';
+import React from 'react'
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import { Box, MenuItem, MenuList, Popover, Typography } from '@mui/material';
 
 export const AccountPopover = (props : any) => {
   const { anchorEl, onClose, open, ...other } = props;
+  const [userName, setUserName] = React.useState('');
+
+  React.useEffect(() => {
+    const storedName = localStorage.getItem('name');
+    setUserName(storedName || '');
+  }, []);
 
   const handleSignOut = async () => {
-    onClose?.();
-
+    localStorage.clear()
     try {
       // This can be call inside AuthProvider component, but we do it here for simplicity
       // Update Auth Context state
 
       // Redirect to sign-in page
       Router
-        .push('/sign-in')
+        .push('/login')
         .catch(console.error);
     } catch (err) {
       console.error(err);
@@ -49,7 +54,7 @@ export const AccountPopover = (props : any) => {
           color="text.secondary"
           variant="body2"
         >
-          Ritik Jain
+          {userName}
         </Typography>
       </Box>
       <MenuList

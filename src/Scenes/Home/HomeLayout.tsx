@@ -4,6 +4,10 @@ import { styled } from '@mui/material/styles';
 // import { DashboardNavbar } from './dashboard-navbar';
 import { Sidebar } from '../../Components/Home/Sidebar';
 import { Navbar } from '../../Components/Home/Navbar'
+import React from 'react';
+import { validateToken } from '../../Utils/signup';
+import { useRouter } from 'next/router';
+import Layout from '../../Components/Layout/Layout';
 
 const HomeLayoutRoot = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -18,6 +22,7 @@ const HomeLayoutRoot = styled('div')(({ theme }) => ({
 const HomeLayout = (props : any) => {
   const { children } = props;
   const [isSidebarOpen, setSidebarOpen] = useState(true);
+  const router = useRouter()
 
   return (
     <>
@@ -27,18 +32,20 @@ const HomeLayout = (props : any) => {
         open={isSidebarOpen}
       />
       <Navbar onSidebarOpen={() => setSidebarOpen(true)} />
-      <HomeLayoutRoot>
-        <Box
-          sx={{
-            display: 'flex',
-            flex: '1 1 auto',
-            flexDirection: 'column',
-            width: '100%'
-          }}
-        >
-          {children}
-        </Box>
-      </HomeLayoutRoot>
+      <Layout>
+        <HomeLayoutRoot>
+          <Box
+            sx={{
+              display: 'flex',
+              flex: '1 1 auto',
+              flexDirection: 'column',
+              width: '100%'
+            }}
+          >
+            {children}
+          </Box>
+        </HomeLayoutRoot>
+      </Layout>
     </>
   );
 };

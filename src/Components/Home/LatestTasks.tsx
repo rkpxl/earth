@@ -24,7 +24,7 @@ const tasks = [
     customer: {
       name: 'Ekaterina Tankova'
     },
-    createdAt: 1555016400000,
+    createdAt: 1691132593839,
     status: 'pending'
   },
   {
@@ -34,7 +34,7 @@ const tasks = [
     customer: {
       name: 'Cao Yu'
     },
-    createdAt: 1555016400000,
+    createdAt: 1681132593839,
     status: 'done'
   },
   {
@@ -44,7 +44,7 @@ const tasks = [
     customer: {
       name: 'Alexa Richardson'
     },
-    createdAt: 1554930000000,
+    createdAt: 1671132593839,
     status: 'reject'
   },
   {
@@ -54,7 +54,7 @@ const tasks = [
     customer: {
       name: 'Anje Keizer'
     },
-    createdAt: 1554757200000,
+    createdAt: 1661132593839,
     status: 'pending'
   },
   {
@@ -64,7 +64,7 @@ const tasks = [
     customer: {
       name: 'Clarke Gillebert'
     },
-    createdAt: 1554670800000,
+    createdAt: 1651132593839,
     status: 'done'
   },
   {
@@ -74,7 +74,7 @@ const tasks = [
     customer: {
       name: 'Adam Denisov'
     },
-    createdAt: 1554670800000,
+    createdAt: 1691132593839,
     status: 'done'
   }
 ];
@@ -91,7 +91,7 @@ export const LatestTasks = (props : any) => (
                 Protocol Id
               </TableCell>
               <TableCell>
-                Customer
+                Student
               </TableCell>
               <TableCell sortDirection="desc">
                 <Tooltip

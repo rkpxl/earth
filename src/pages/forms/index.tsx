@@ -1,5 +1,5 @@
 import Layout from '../../Components/Layout/Layout';
-import Component from '../../Scenes/Login/index'
+import Component from '../../Scenes/Forms'
 
 
 const Login = () => {
@@ -7,6 +7,7 @@ const Login = () => {
     <Layout>
       <Component />
     </Layout>
+    
   );
 };
 

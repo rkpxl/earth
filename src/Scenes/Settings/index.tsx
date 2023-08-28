@@ -6,7 +6,7 @@ const Page = () => (
   <>
     <Head>
       <title>
-        Settings | Material Kit
+        Settings
       </title>
     </Head>
     <Box

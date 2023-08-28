@@ -13,6 +13,7 @@ import ProtocolPopUp from '../../Components/Common/ProtocolDialog'
 const Home = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [popOpen, setPopOpen] = React.useState(false);
+  const [protocolType, setprotocolType] = React.useState('')
 
   const open = Boolean(anchorEl);
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -33,6 +34,11 @@ const Home = () => {
   const handleSubmitProtocol = () : void => {
     handlePopClose()
   } 
+
+  const handleNewProtocolCreation = (type: string) => {
+    setprotocolType(type);
+    handlePopOpen()
+  }
 
   return (
     <>
@@ -83,9 +89,9 @@ const Home = () => {
               horizontal: 'left',
             }}
           >
-            <MenuItem onClick={handlePopOpen}>Chemical</MenuItem>
-            <MenuItem onClick={handlePopOpen}>Computer Science</MenuItem>
-            <MenuItem onClick={handlePopOpen}>Human Ethics</MenuItem>
+            <MenuItem onClick={() => handleNewProtocolCreation('chemical')}>Chemical</MenuItem>
+            <MenuItem onClick={() => handleNewProtocolCreation('IRB')}>IRB</MenuItem> 
+            <MenuItem onClick={() => handleNewProtocolCreation('human ethics')}>Human Ethics</MenuItem>
           </Menu>
         </Box>
         <Container maxWidth={false}>
@@ -107,7 +113,7 @@ const Home = () => {
             </Grid>
           </Grid>
           <LatestTasks />
-          <ProtocolPopUp handleClose={handlePopClose} popOpen={popOpen} handleSubmit={handleSubmitProtocol} />
+          <ProtocolPopUp handleClose={handlePopClose} popOpen={popOpen} handleSubmit={handleSubmitProtocol} protocolType={protocolType}/>
         </Container>
       </Box>
     </>
