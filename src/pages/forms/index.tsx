@@ -1,4 +1,4 @@
-import Layout from '../../Components/Layout/Layout';
+import Layout from '../../Scenes/Home'
 import Component from '../../Scenes/Forms'
 
 

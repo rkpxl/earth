@@ -11,7 +11,7 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { FormLabel, InputLabel, Radio, RadioGroup, Typography } from '@mui/material';
+import { Alert, AlertColor, FormLabel, InputLabel, Radio, RadioGroup, Snackbar, Typography } from '@mui/material';
 
 
 interface Question {
@@ -59,18 +59,6 @@ const data : Array<Question> = [
 
 export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) => {
   const router = useRouter()
-  const onSubmit = (e : React.MouseEvent<HTMLButtonElement>) => {
-    axios.post('http://localhost:3000/task', {
-      
-    })
-    .then((response) => {
-    })
-    .catch((error) => {
-      console.error(error);
-    });
-    
-    router.push('/')
-  }
   const questions = [
     {id: 1, question: '1. what is vision of your study?', answer: '1', options: []},
     {id: 2, question: '2. what is mission of your study?', answer: '2', options: []},
@@ -91,6 +79,57 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
 
   const [departmentAllUser, setDepartmentAllUser] = React.useState([])
   const [result, setResult] = React.useState(questions)
+  const [reviewer, setReviewer] = React.useState('')
+  const [snackMessage, setSnackMessage] = React.useState('')
+  const [snackShow, setSnackShow] = React.useState(false)
+  const [snackType, setSnackType] = React.useState<AlertColor | undefined>('success')
+  const date = new Date()
+
+  const handleSnackbar = (message: string, type : AlertColor) => {
+    setSnackMessage(message)
+    setSnackType(type)
+    setSnackShow(true);
+
+    setTimeout(() => {
+      setSnackShow(false);
+    }, 2000);
+    
+  }
+  
+  const submitHandle = (e : React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if(reviewer) {
+      axios.post('http://localhost:3000/tasks', {
+        org: localStorage.getItem('org'),
+        userId: localStorage.getItem('_id'),
+        rawJson: JSON.stringify({
+          "data": {
+            creator: localStorage.getItem('name'),
+            date: date.getTime(),
+            title: title,
+            dept: dept,
+            description: description,
+            ...result
+          }
+        }),
+        status: "pending",
+        approvals: [ { userId: reviewer } ],
+        currentAssignedTo: reviewer,
+      })
+      .then((response) => {
+        if(response.status < 300) {
+          handleSnackbar('Your protocol created and send', 'success')
+          setTimeout(() => {
+            router.push('/')
+          }, 2000);
+        }        
+      })
+      .catch((error) => {
+        console.error(error);
+        handleSnackbar('Something went wrong', 'error')
+      });
+    }
+  }
 
   const handleAnswerChange = (questionId: number, answer: any) => {
     setResult((prevQuestionState) =>
@@ -145,13 +184,14 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
 
   return (
     <>
-      <form style={{width: "auto", display:'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: '24px'}}>
+      <form 
+        style={{width: "auto", display:'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', marginTop: '24px', marginLeft: '24px', marginRight: '24px'}}
+        onSubmit={submitHandle}
+      >
         
         <Typography variant="h4" gutterBottom maxWidth="1100px">{title}</Typography>
         <Typography variant="subtitle1" maxWidth="1100px">{description}</Typography>
         <Typography variant="subtitle2" gutterBottom maxWidth="1100px" sx={{marginBottom: '48px', textAlign: 'center'}}>{dept}</Typography>
-
-
 
         <Grid container rowSpacing={2} columnSpacing={2} maxWidth="1100px" sx={{ marginLeft: '24px', marginRight: '24px', marginBottom: '24px'}}>
           <Grid item xs={12} lg={6}>
@@ -161,6 +201,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
               variant="outlined"
               fullWidth
               size="small"
+              required
             />
           </Grid>
           <Grid item xs={12} lg={6}>
@@ -170,6 +211,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
               variant="outlined"
               fullWidth
               size="small"
+              required
             />
           </Grid>
           <Grid item xs={12} lg={6}>
@@ -179,6 +221,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
               variant="outlined"
               fullWidth
               size="small"
+              required
             />
           </Grid>
           <Grid item xs={12} lg={6}>
@@ -188,6 +231,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
               variant="outlined"
               fullWidth
               size="small"
+              required
             />
           </Grid>
 
@@ -199,6 +243,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
               fullWidth
               multiline={true}
               size="medium"
+              required
             />
           </Grid>
           <Grid item xs={12}>
@@ -209,6 +254,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
               fullWidth
               multiline={true}
               size="medium"
+              required
             />
           </Grid>
           <Grid item xs={12}>
@@ -218,6 +264,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
               variant="outlined"
               fullWidth
               size="medium"
+              required
             />
           </Grid>
 
@@ -227,6 +274,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
               <FormControl fullWidth variant="outlined" size="small">
                 <Select
                   onChange={(e) => handleAnswerChange(8, e.target.value)}
+                  required
                   >
                   {['None', 'Low', 'Medium', 'Heigh'].map((option, optionIndex) => (
                     <MenuItem key={optionIndex} value={option}>
@@ -241,6 +289,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
               <FormControl fullWidth variant="outlined" size="small">
                 <Select
                   onChange={(e) => handleAnswerChange(9, e.target.value)}
+                  required
                   >
                   {['Inside org', 'Other org same country', 'Other country'].map((option, optionIndex) => (
                     <MenuItem key={optionIndex} value={option}>
@@ -255,6 +304,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
               <FormControl fullWidth variant="outlined" size="small">
                 <Select
                   onChange={(e) => handleAnswerChange(10, e.target.value)}
+                  required
                   >
                   {['18', '21', '28'].map((option, optionIndex) => (
                     <MenuItem key={optionIndex} value={option}>
@@ -269,6 +319,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
               <FormControl fullWidth variant="outlined" size="small">
                 <Select
                   onChange={(e) => handleAnswerChange(11, e.target.value)}
+                  required
                   >
                   {['Less then a month', 'Less then a quater', `Less then a 6 month's`, 'More then a year'].map((option, optionIndex) => (
                     <MenuItem key={optionIndex} value={option}>
@@ -331,6 +382,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
                     value={option}
                     control={
                       <Radio
+                        required
                         checked={Boolean(result[13]?.options[option] || false)}
                         onChange={(e) =>
                           handleRadioBoxChange(questions[13].id, option, e.target.checked)
@@ -348,8 +400,8 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
             <Box sx={{ typography: 'body1', fontWeight: 'medium', marginBottom: '8px', fontSize: '16px' }}>
             {questions[14].question}
             </Box>
-            <FormControl component="fieldset">
-              <RadioGroup>
+            <FormControl component="fieldset" required>
+              <RadioGroup >
                 {['Yes', 'No'].map((option, optionIndex) => (
                   <FormControlLabel
                     key={optionIndex}
@@ -369,9 +421,15 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
           <Grid item xs={12} lg={6}>
             <FormControl
                 fullWidth
+                required
                 >
                 <InputLabel id="select" size="small">Select reviewer</InputLabel>
-                <Select label="Select reviewer" size="small">
+                <Select 
+                  required
+                  label="Select reviewer"
+                  size="small"
+                  onChange={(e : any) => setReviewer(e.target.value)}
+                >
                   {departmentAllUser?.map((option : any) => (
                     <MenuItem key={option._id} value={option?._id}>
                       {option?.name || ''}
@@ -381,10 +439,15 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
               </FormControl>
           </Grid>
           <Grid item xs={12} lg={6} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'end'}}>
-            <Button sx={{ width: '100%' , maxWidth: '148px', fontSize: '18px', height: '100%' }} variant="contained" onClick={onSubmit}>Submit</Button>
+            <Button sx={{ width: '100%' , maxWidth: '148px', fontSize: '18px', height: '100%' }} type="submit" variant="contained">Submit</Button>
           </Grid>
       </Grid>
       </form>
+      <Snackbar open={snackShow} autoHideDuration={2000} onClose={() => setSnackShow(false)}>
+        <Alert onClose={() => setSnackShow(false)} severity={snackType}>
+          {snackMessage}
+        </Alert>
+      </Snackbar>
     </>
   );
 };

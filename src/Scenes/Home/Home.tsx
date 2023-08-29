@@ -8,14 +8,34 @@ import { LatestTasks } from '../../Components/Home/LatestTasks'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import ProtocolPopUp from '../../Components/Common/ProtocolDialog'
+import axios from 'axios';
+import { GetStaticPaths, GetStaticProps } from 'next';
 
+interface TaskData {}
+
+interface TaskPageProps {
+  taskData: any;
+}
 
 const Home = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [popOpen, setPopOpen] = React.useState(false);
   const [protocolType, setprotocolType] = React.useState('')
-
+  const [pendingTask, setPendingTask] = React.useState([])
+  const [doneTask, setApprovedTask] = React.useState([])
   const open = Boolean(anchorEl);
+
+  React.useEffect(() => {
+    axios.get(`http://localhost:3000/tasks/to/${localStorage.getItem('_id')}`).then((response) => {
+      
+      const pending = response.data.filter((e : any) => e.status === "pending")
+      const approved = response.data.filter((e : any) => e.status === "approved")
+      setPendingTask(pending || [])
+      setApprovedTask(approved || [])
+
+    }).catch((e) => console.log(e))
+  }, [])
+
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -100,13 +120,13 @@ const Home = () => {
             spacing={2}
           >
             <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <DoneTask />
+              <DoneTask donetask={doneTask.length}/>
             </Grid>
             <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <PendingTask />
+              <PendingTask pendingtask={pendingTask.length}/>
             </Grid>
             <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <Progress />
+              <Progress progress={Math.round(((pendingTask.length/(doneTask.length || 1)) * 100))}/>
             </Grid>
             <Grid item lg={8} md={12} xl={9} xs={12}>
               {/* <LatestOrders /> */}
@@ -120,4 +140,16 @@ const Home = () => {
   );
 }
 
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths: any[] = [];
+
+  return { paths, fallback: false };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params } : any) => {
+  return {
+    props: {},
+  };
+}
 export default Home;

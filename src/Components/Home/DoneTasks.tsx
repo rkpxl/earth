@@ -3,7 +3,9 @@ import MoneyIcon from '@mui/icons-material/Money';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import NextLink from 'next/link';
 
-const DoneTask = (props : any) => (
+const DoneTask = (props : any) => {
+  const { donetask } = props
+  return (
   <Card
     sx={{ height: '100%' }}
     {...props}
@@ -26,7 +28,7 @@ const DoneTask = (props : any) => (
             color="textPrimary"
             variant="h4"
           >
-            24
+            {donetask}
           </Typography>
         </Grid>
         <Grid item>
@@ -71,5 +73,5 @@ const DoneTask = (props : any) => (
       </Box>
     </CardContent>
   </Card>
-);
+)};
 export default DoneTask;
