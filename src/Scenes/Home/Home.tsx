@@ -21,6 +21,7 @@ const Home = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [popOpen, setPopOpen] = React.useState(false);
   const [protocolType, setprotocolType] = React.useState('')
+  const [allTask, setAllTask] = React.useState([])
   const [pendingTask, setPendingTask] = React.useState([])
   const [doneTask, setApprovedTask] = React.useState([])
   const open = Boolean(anchorEl);
@@ -28,8 +29,11 @@ const Home = () => {
   React.useEffect(() => {
     axios.get(`http://localhost:3000/tasks/to/${localStorage.getItem('_id')}`).then((response) => {
       
-      const pending = response.data.filter((e : any) => e.status === "pending")
-      const approved = response.data.filter((e : any) => e.status === "approved")
+      const pending = response.data.filter((e : any) => e.status === "PENDING")
+      const approved = response.data.filter((e : any) => e.status === "APPROVED")
+
+      console.log('response', response)
+      setAllTask(response.data || [])
       setPendingTask(pending || [])
       setApprovedTask(approved || [])
 
@@ -123,16 +127,16 @@ const Home = () => {
               <DoneTask donetask={doneTask.length}/>
             </Grid>
             <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <PendingTask pendingtask={pendingTask.length}/>
+              <PendingTask length={pendingTask.length} task={pendingTask}/>
             </Grid>
             <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <Progress progress={Math.round(((pendingTask.length/(doneTask.length || 1)) * 100))}/>
+              <Progress progress={Math.round(((doneTask.length/((pendingTask.length + doneTask.length) || 1) ) * 100))}/>
             </Grid>
             <Grid item lg={8} md={12} xl={9} xs={12}>
               {/* <LatestOrders /> */}
             </Grid>
           </Grid>
-          <LatestTasks />
+          <LatestTasks task={allTask}/>
           <ProtocolPopUp handleClose={handlePopClose} popOpen={popOpen} handleSubmit={handleSubmitProtocol} protocolType={protocolType}/>
         </Container>
       </Box>

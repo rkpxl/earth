@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import { Box, Container, Typography } from '@mui/material';
 import PasswordChange from '../../Components/Settings/PasswordChange';
+import { GetStaticPaths, GetStaticProps } from 'next';
 
 const Page = () => (
   <>
@@ -30,5 +31,17 @@ const Page = () => (
     </Box>
   </>
 );
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const paths: any[] = [];
+
+  return { paths, fallback: false };
+};
+
+export const getStaticProps: GetStaticProps = async ({ params } : any) => {
+  return {
+    props: {},
+  };
+}
 
 export default Page;

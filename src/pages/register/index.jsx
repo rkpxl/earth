@@ -1,4 +1,4 @@
-import Component from '../../Scenes/Register'
+import Component from '../../Scenes/Register/Register'
 import Layout from '../../Scenes/Home'
 
 

@@ -4,7 +4,7 @@ import PeopleIcon from '@mui/icons-material/PeopleOutlined';
 import NextLink from 'next/link';
 
 export const PendingTask = (props : any) => {
-  const { pendingtask } = props;
+  const { length, task } = props;
   return(
     <Card {...props} sx={{ height: '100%' }}>
       <CardContent>
@@ -25,7 +25,7 @@ export const PendingTask = (props : any) => {
               color="textPrimary"
               variant="h4"
             >
-              {pendingtask}
+              {length}
             </Typography>
           </Grid>
           <Grid item>

@@ -16,70 +16,12 @@ import {
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { SeverityPill } from '../Common/SeverityPills';
 
-const tasks = [
-  {
-    id: 1,
-    ref: 'CDD1049',
-    amount: 30.5,
-    customer: {
-      name: 'Ekaterina Tankova'
-    },
-    createdAt: 1691132593839,
-    status: 'pending'
-  },
-  {
-    id: 3,
-    ref: 'CDD1048',
-    amount: 25.1,
-    customer: {
-      name: 'Cao Yu'
-    },
-    createdAt: 1681132593839,
-    status: 'done'
-  },
-  {
-    id: 5,
-    ref: 'CDD1047',
-    amount: 10.99,
-    customer: {
-      name: 'Alexa Richardson'
-    },
-    createdAt: 1671132593839,
-    status: 'reject'
-  },
-  {
-    id: 6,
-    ref: 'CDD1046',
-    amount: 96.43,
-    customer: {
-      name: 'Anje Keizer'
-    },
-    createdAt: 1661132593839,
-    status: 'pending'
-  },
-  {
-    id: 8,
-    ref: 'CDD1045',
-    amount: 32.54,
-    customer: {
-      name: 'Clarke Gillebert'
-    },
-    createdAt: 1651132593839,
-    status: 'done'
-  },
-  {
-    id: 9,
-    ref: 'CDD1044',
-    amount: 16.76,
-    customer: {
-      name: 'Adam Denisov'
-    },
-    createdAt: 1691132593839,
-    status: 'done'
-  }
-];
 
-export const LatestTasks = (props : any) => (
+export const LatestTasks = (props : any) => {
+  const { task } = props
+
+  console.log('task', task)
+  return (
   <Card {...props}>
     <CardHeader title="Latest Tasks" />
     <PerfectScrollbar>
@@ -91,7 +33,7 @@ export const LatestTasks = (props : any) => (
                 Protocol Id
               </TableCell>
               <TableCell>
-                Student
+                Creator
               </TableCell>
               <TableCell sortDirection="desc">
                 <Tooltip
@@ -112,31 +54,33 @@ export const LatestTasks = (props : any) => (
             </TableRow>
           </TableHead>
           <TableBody>
-            {tasks.map((order) => (
+            {task.map((e : any) => {
+              const protocol = JSON.parse(e.rawJson).data
+              return (
               <TableRow
                 hover
-                key={order.id}
+                key={e._id}
               >
                 <TableCell>
-                  {order.ref}
+                  {e._id.slice(-6).toString().toUpperCase()}
                 </TableCell>
                 <TableCell>
-                  {order.customer.name}
+                  {protocol.creator}
                 </TableCell>
                 <TableCell>
-                  {format(order.createdAt, 'dd/MM/yyyy')}
+                  {format(protocol.date, 'dd/MM/yyyy')}
                 </TableCell>
                 <TableCell>
                   <SeverityPill
-                    color={(order.status === 'done' && 'success')
-                    || (order.status === 'reject' && 'error')
-                    || 'warning'}
+                    color={(e.status === 'APPROVED' && 'success')
+                    || (e.status === 'REJECT' && 'error')
+                    || (e.status === 'PENDING' && 'warning') || 'warning'}
                   >
-                    {order.status}
+                    {e.status}
                   </SeverityPill>
                 </TableCell>
               </TableRow>
-            ))}
+            ) })}
           </TableBody>
         </Table>
       </Box>
@@ -158,4 +102,4 @@ export const LatestTasks = (props : any) => (
       </Button>
     </Box>
   </Card>
-);
+)};
