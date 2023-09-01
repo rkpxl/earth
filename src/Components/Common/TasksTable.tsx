@@ -18,6 +18,7 @@ import { SeverityPill } from '../Common/SeverityPills';
 import React from 'react';
 import axios from 'axios';
 import { useRouter } from 'next/router';
+import { closestIndexTo } from 'date-fns/esm';
 
 const tableHeader = [
     {
@@ -38,17 +39,17 @@ const tableHeader = [
     },
 ]
 
-const tableHeaderColumn = (title : String) : JSX.Element => {
+const tableHeaderColumn = (title : String, index : number) : JSX.Element => {
   return (
-    <TableCell>
+    <TableCell key={index.toString()}>
       {title}
     </TableCell>
   )
 }
 
-const sortableTableHeader = (title : String) : JSX.Element => {
+const sortableTableHeader = (title : String, index : number) : JSX.Element => {
   return (
-    <TableCell sortDirection="desc">
+    <TableCell sortDirection="desc" key={index.toString()}>
       <Tooltip
         enterDelay={300}
         title="Sort"
@@ -68,8 +69,8 @@ const tableHeaderRow = () : JSX.Element => {
   return (
     <TableHead>
       <TableRow>
-        {tableHeader.map((header : any) => {
-          return header?.isSortable ? sortableTableHeader(header?.headerTitle) : tableHeaderColumn(header?.headerTitle)
+        {tableHeader.map((header : any, index : number) => {
+          return header?.isSortable ? sortableTableHeader(header?.headerTitle, index ) : tableHeaderColumn(header?.headerTitle, index)
         })}
       </TableRow>
     </TableHead>

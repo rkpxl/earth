@@ -19,8 +19,6 @@ import { SeverityPill } from '../Common/SeverityPills';
 
 export const LatestTasks = (props : any) => {
   const { task } = props
-
-  console.log('task', task)
   return (
   <Card {...props}>
     <CardHeader title="Latest Tasks" />

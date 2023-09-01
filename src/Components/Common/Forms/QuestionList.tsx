@@ -67,7 +67,6 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
   
   const submitHandle = (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('result', result)
     if(reviewer) {
       axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/tasks', {
         org: localStorage.getItem('org'),
@@ -111,8 +110,6 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
 
   const getCheckBoxUpdatedValue = (question : any, option: string, isChecked: boolean) => { 
     question.options[option] = isChecked;
-    console.log(question.options)
-    console.log(question)
     return { ...question } 
   }
 
@@ -122,7 +119,6 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
   }
 
   const handleCheckBoxChange = (questionId: number, option: string, isChecked: boolean) => {
-    console.log('calling', questionId, option, isChecked)
     setResult((prevQuestionState) =>
     prevQuestionState.map((question) =>
       question.id === questionId ? getCheckBoxUpdatedValue(question, option, isChecked) : question

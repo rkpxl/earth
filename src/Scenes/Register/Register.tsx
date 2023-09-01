@@ -214,8 +214,8 @@ const Register = () => {
                     onBlur={formik.handleBlur}
                     value={formik.values.accessLevel}
                     >
-                    {accessLevels.map((option) => (
-                      <MenuItem value={option}>
+                    {accessLevels.map((option, index: number) => (
+                      <MenuItem key={index.toString()} value={option}>
                             {option}
                         </MenuItem>
                     ))}

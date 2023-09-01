@@ -14,7 +14,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
       router.push('/login')
     } else {
       const isToeknFine = validateToken()
-      console.log('isToeknFine', isToeknFine)
       if(!isToeknFine) {
         router.push('/login')
       }

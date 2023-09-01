@@ -4,7 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import axios from 'axios'
-import { decode } from 'jsonwebtoken';
+import { decode } from 'jsonwebtoken'
 import React from 'react'
 
 
@@ -12,8 +12,8 @@ const Login = () => {
   const [error, setError] = React.useState('');
   const formik = useFormik({
     initialValues: {
-      email: 'ritikjainkkar@gmail.com',
-      password: 'password'
+      email: '',
+      password: ''
     },
     validationSchema: Yup.object({
       email: Yup
@@ -27,7 +27,6 @@ const Login = () => {
         .required('Password is required')
     }),
     onSubmit: () => {
-      console.log('Onsubmit')
       axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/users/signup', {
         email: formik.values.email,
         password: formik.values.password
@@ -35,16 +34,16 @@ const Login = () => {
         .then((response) => {
           // Handle the response
           const token = response.data;
-          const user = decode(token)
+          const user : any = decode(token)
 
           // Decode the payload from base64
           // Store the token in local storage or a secure HTTP-only cookie
-          localStorage.setItem('name', user.name);
-          localStorage.setItem('department', user.department);
-          localStorage.setItem('org', user.org);
-          localStorage.setItem('email', user.email);
-          localStorage.setItem('exp', user.exp);
-          localStorage.setItem('_id', user._id);
+          localStorage.setItem('name', user?.name);
+          localStorage.setItem('department', user?.department);
+          localStorage.setItem('org', user?.org);
+          localStorage.setItem('email', user?.email);
+          localStorage.setItem('exp', user?.exp);
+          localStorage.setItem('_id', user?._id);
 
           Router
           .push('/')

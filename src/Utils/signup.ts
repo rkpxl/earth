@@ -6,7 +6,6 @@ const  validateToken = () => {
     }
 
     const currentTime = Math.floor(Date.now() / 1000);
-    console.log('exp', exp, currentTime, currentTime < Number(exp));
 
     return currentTime < Number(exp);
 }
