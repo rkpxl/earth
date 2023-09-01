@@ -6,7 +6,7 @@ import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { createEmotionCache } from '../Utils/create-emotion-cache';
-import { theme } from '../theme';
+import { theme } from '../Theme';
 
 const clientSideEmotionCache = createEmotionCache();
 

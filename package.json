@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@types/jsonwebtoken": "^9.0.2",
     "@types/prop-types": "^15.7.5",
     "axios": "^1.4.0",
     "next": "13.4.8",

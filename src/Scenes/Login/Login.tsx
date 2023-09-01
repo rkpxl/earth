@@ -4,9 +4,14 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import axios from 'axios'
-import { decode } from 'jsonwebtoken'
 import React from 'react'
 
+function parseJwt(token : string) {
+  if (!token) { return; }
+  const base64Url = token.split('.')[1];
+  const base64 = base64Url.replace('-', '+').replace('_', '/');
+  return JSON.parse(window.atob(base64));
+}
 
 const Login = () => {
   const [error, setError] = React.useState('');
@@ -34,7 +39,7 @@ const Login = () => {
         .then((response) => {
           // Handle the response
           const token = response.data;
-          const user : any = decode(token)
+          const user : any = parseJwt(token)
 
           // Decode the payload from base64
           // Store the token in local storage or a secure HTTP-only cookie
