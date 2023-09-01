@@ -1,10 +1,11 @@
+import React, { Suspense } from 'react'
 import Head from 'next/head';
 import Router from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
+import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import axios from 'axios'
-import React from 'react'
 
 function parseJwt(token : string) {
   if (!token) { return; }
@@ -15,6 +16,7 @@ function parseJwt(token : string) {
 
 const Login = () => {
   const [error, setError] = React.useState('');
+  const [isLoading, setIsLoading] = React.useState(false)
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -32,12 +34,14 @@ const Login = () => {
         .required('Password is required')
     }),
     onSubmit: () => {
+      setIsLoading(true)
       axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/users/signup', {
         email: formik.values.email,
         password: formik.values.password
       })
         .then((response) => {
           // Handle the response
+          setIsLoading(false)
           const token = response.data;
           const user : any = parseJwt(token)
 
@@ -67,7 +71,7 @@ const Login = () => {
   return (
     <>
       <Head>
-        <title>Login | Material Kit</title>
+        <title>Login</title>
       </Head>
       <Box
         component="main"
@@ -182,7 +186,7 @@ const Login = () => {
                 type="submit"
                 variant="contained"
               >
-                Sign In Now
+                {isLoading ? <CircularProgress color="secondary" sx={{ height: '25px' }}/> : 'Sign In Now'}
               </Button>
             </Box>
             <Typography

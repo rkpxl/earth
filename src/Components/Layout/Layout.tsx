@@ -1,5 +1,6 @@
-import React, { ReactNode } from 'react';
+import React, { ReactNode, Suspense } from 'react';
 import { validateToken } from '../../Utils/signup';
+import CircularProgress from '@mui/material/CircularProgress';
 import { useRouter } from 'next/router';
 
 interface LayoutProps {
@@ -21,7 +22,9 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
   }, [])
 
   return (
-   <>{children}</>
+   <Suspense fallback={<CircularProgress />}>
+    {children}
+   </Suspense>
   );
 };
 

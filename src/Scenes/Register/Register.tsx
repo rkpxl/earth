@@ -106,7 +106,7 @@ const Register = () => {
     <>
       <Head>
         <title>
-          ERS
+          Knowledge Link
         </title>
       </Head>
       <Box

@@ -19,7 +19,7 @@ const App = (props : any) => {
     <CacheProvider value={emotionCache}>
       <Head>
         <title>
-          ERS
+          Knowledge Link
         </title>
         <meta
           name="viewport"

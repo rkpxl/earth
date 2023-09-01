@@ -7,7 +7,7 @@ const Page : React.FC = () : JSX.Element => (
   <>
     <Head>
       <title>
-        404 | Material Kit
+        404
       </title>
     </Head>
     <Box
