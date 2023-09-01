@@ -1,0 +1,115 @@
+import React from 'react';
+import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, TextareaAutosize, Typography, Button } from '@mui/material';
+import { Formik as Formic, Form, Field, ErrorMessage } from 'formik';
+import PopUp from './Dialog'
+import { departments } from '../../data/fixData';
+import { useRouter } from 'next/router';
+
+
+
+interface StyledErrorMessageProps {
+  name: string;
+}
+
+const StyledErrorMessage: React.FC<StyledErrorMessageProps> = ({ name }) => (
+  <div style={{ color: 'red', fontSize: '14px' }}>
+    <ErrorMessage name={name} />
+  </div>
+);
+type FormValues = {
+  name: string;
+  department: string;
+  title: string;
+  description: string;
+};
+
+const initialValues: FormValues = {
+  name: '',
+  department: '',
+  title: '',
+  description: '',
+};
+
+const ProtocolPopUp = (props : any) : JSX.Element => {
+
+  const { protocolType } = props
+  const Router = useRouter()
+
+  const validateForm = (values: FormValues) => {
+    const errors: Partial<FormValues> = {};
+    if (values.title.length < 1) {
+      errors.title = 'Required';
+    }
+    if (values.department.length < 1) {
+      errors.department = 'Required';
+    }
+    if (values.description.length < 1) {
+      errors.description = 'Required';
+    }
+    if (values.description.length > 512) {
+      errors.description = 'Maximum 512 characters allowed';
+    }
+    return errors;
+  };
+
+  const handleSubmit = (values: FormValues, { setSubmitting }: any) => {
+    // Handle form submission logic here
+    Router.push(`/forms?title=${values.title}&dept=${values.department}&description=${values.description}`)
+    setSubmitting(false);
+  };
+
+
+
+  return (
+    <PopUp title={`Create a new ${protocolType} protocol`} {...props} >
+      <Formic initialValues={initialValues} validate={validateForm} onSubmit={handleSubmit}>
+      <Form>
+        <Grid container spacing={2}>
+          <Grid item xs={12} sm={6}>
+            <Field name="name">
+              {({ field } : any) => (
+                <TextField label={localStorage.getItem('name')} disabled fullWidth {...field} />
+              )}
+            </Field>
+            <StyledErrorMessage name="name"  />
+          </Grid>
+          <Grid item xs={12} sm={6}>
+            <Field name="department">
+              {({ field } : any) => (
+                <FormControl fullWidth>
+                  <InputLabel>Department</InputLabel>
+                  <Select {...field} label="Department">
+                    {departments.map((options, index) => (
+                      <MenuItem value={options} key={index.toString()}>{options}</MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+              )}
+            </Field>
+            <StyledErrorMessage name="department"  />
+          </Grid>
+          <Grid item xs={12}>
+            <Field name="title">
+              {({ field } : any) => (
+                <TextField label="Protocol Title" fullWidth {...field} />
+              )}
+            </Field>
+            <StyledErrorMessage name="title" />
+          </Grid>
+          <Grid item xs={12} sx={{ marginBottom: '8px'}}>
+            <Field name="description">
+              {({ field } : any) => (
+                <TextField  inputProps={{ style: { height: '150px' } }} label="Description" fullWidth multiline {...field} />
+              )}
+            </Field>
+            <StyledErrorMessage name="description"  />
+          </Grid>
+        </Grid>
+        <Button type="submit" sx={{marginTop: '16px'}}>Proceed</Button>
+      </Form>
+      </Formic>
+    </PopUp>
+  )
+}
+
+export default ProtocolPopUp

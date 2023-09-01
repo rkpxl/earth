@@ -1,0 +1,112 @@
+[
+    {
+      "tabLabel": "Research Objective",
+      "steps": [
+        {
+          "id": 1,
+          "section": "Study Overview",
+          "title": "Creator Name",
+          "type": "text"
+        },
+        {
+          "id": 2,
+          "section": "Study Overview",
+          "title": "Description",
+          "type": "text"
+        },
+        {
+          "id": 3,
+          "section": "Study Objective",
+          "title": "What is the main goal of this research study?",
+          "type": "text"
+        },
+        {
+          "id": 4,
+          "section": "Study Objective",
+          "title": "Briefly describe the research objective and its significance.",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "tabLabel": "Study Endpoints & Measures",
+      "steps": [
+        {
+          "id": 5,
+          "section": "Primary and Secondary Endpoints",
+          "title": "What are the main outcomes or endpoints you aim to measure?",
+          "type": "text"
+        },
+        {
+          "id": 6,
+          "section": "Primary and Secondary Endpoints",
+          "title": "Are there any secondary endpoints you also want to assess?",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "tabLabel": "Study Procedures & Risks",
+      "steps": [
+        {
+          "id": 7,
+          "section": "Study Procedures",
+          "title": "Will genetic testing be conducted as part of the study?",
+          "type": "yesNo"
+        },
+        {
+          "id": 8,
+          "section": "Study Procedures",
+          "title": "Are there any planned surveys or interviews?",
+          "type": "yesNo"
+        },
+        {
+          "id": 9,
+          "section": "Risks to Participants & Mitigation",
+          "title": "Identify potential risks to study participants.",
+          "type": "text"
+        },
+        {
+          "id": 10,
+          "section": "Risks to Participants & Mitigation",
+          "title": "Describe the measures taken to minimize and manage these risks.",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "tabLabel": "Benefits & Impact",
+      "steps": [
+        {
+          "id": 11,
+          "section": "Direct Benefits & Economic Impact",
+          "title": "Are there any direct benefits for participants in the study?",
+          "type": "yesNo"
+        },
+        {
+          "id": 12,
+          "section": "Direct Benefits & Economic Impact",
+          "title": "Assess the potential economic impact on the study participants.",
+          "type": "text"
+        }
+      ]
+    },
+    {
+      "tabLabel": "Study Duration & Completion",
+      "steps": [
+        {
+          "id": 13,
+          "section": "Enrolment Duration & Completion Date",
+          "title": "How long do you anticipate it will take to enroll all study participants?",
+          "type": "text"
+        },
+        {
+          "id": 14,
+          "section": "Enrolment Duration & Completion Date",
+          "title": "Provide an estimated completion date for the entire research study.",
+          "type": "text"
+        }
+      ]
+    },
+]
+  
