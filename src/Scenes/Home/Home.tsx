@@ -27,12 +27,9 @@ const Home = () => {
   const open = Boolean(anchorEl);
 
   React.useEffect(() => {
-    axios.get(`http://localhost:3000/tasks/to/${localStorage.getItem('_id')}`).then((response) => {
-      
+    axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/to/${localStorage.getItem('_id')}`).then((response) => {
       const pending = response.data.filter((e : any) => e.status === "PENDING")
       const approved = response.data.filter((e : any) => e.status === "APPROVED")
-
-      console.log('response', response)
       setAllTask(response.data || [])
       setPendingTask(pending || [])
       setApprovedTask(approved || [])

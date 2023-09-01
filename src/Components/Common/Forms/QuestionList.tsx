@@ -69,7 +69,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
     e.preventDefault();
     console.log('result', result)
     if(reviewer) {
-      axios.post('http://localhost:3000/tasks', {
+      axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/tasks', {
         org: localStorage.getItem('org'),
         userId: localStorage.getItem('_id'),
         rawJson: JSON.stringify({
@@ -137,7 +137,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
   };
 
   React.useEffect(() => {
-    axios.post('http://localhost:3000/users/usersOf', {
+    axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/users/usersOf', {
       org: localStorage.getItem('org') || 'space'
       })
         .then((response : any) => {

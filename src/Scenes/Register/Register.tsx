@@ -78,7 +78,7 @@ const Register = () => {
         )
     }),
     onSubmit: () => {
-      axios.post('http://localhost:3000/users/register', {
+      axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/users/register', {
         name: formik.values.name,
         email: formik.values.email,
         type: "user",

@@ -39,12 +39,11 @@ const PasswordChange = (props : any) => {
     if(values.password !== values.confirm) {
       handleIncorrectInput()
     } else {
-      axios.put('http://localhost:3000/users/updatePassword', {
+      axios.put(process.env.NEXT_PUBLIC_HOST_URL + '/users/updatePassword', {
         email: localStorage.getItem('email'),
         password: values.password,
         previousPassword: values.previous,
       }).then((response) => {
-        console.log('response', response)
         if(response.status < 300) {
           handleSuccess()
         }

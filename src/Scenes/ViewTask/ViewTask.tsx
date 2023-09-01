@@ -58,7 +58,7 @@ const ViewTask = () : JSX.Element => {
   React.useEffect(() => {
     const id = router.query["id"]
     if(id) {
-      axios.get(`http://localhost:3000/tasks/${id}`).then((response) => {
+      axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/${id}`).then((response) => {
         setQuestionData(JSON.parse(response?.data?.rawJson).data)
         setData(response.data)
       }).catch((e) => { console.log(e) })
@@ -68,7 +68,7 @@ const ViewTask = () : JSX.Element => {
   }, [])
 
   React.useEffect(() => {
-    axios.post('http://localhost:3000/users/usersOf', {
+    axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/users/usersOf', {
       org: localStorage.getItem('org') || 'space'
       })
         .then((response : any) => {
@@ -89,7 +89,7 @@ const ViewTask = () : JSX.Element => {
     e.preventDefault();
     if(reviewer) {
       const isReviewerPerson = !(reviewer === "APPROVED" || reviewer === "REJECT")
-      axios.post('http://localhost:3000/tasks/review', {
+      axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/tasks/review', {
         status: isReviewerPerson ? "PENDING" : reviewer,
         currentUserId: localStorage.getItem('_id'),
         taskId: data._id,

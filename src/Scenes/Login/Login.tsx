@@ -28,16 +28,14 @@ const Login = () => {
     }),
     onSubmit: () => {
       console.log('Onsubmit')
-      axios.post('http://localhost:3000/users/signup', {
+      axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/users/signup', {
         email: formik.values.email,
         password: formik.values.password
       })
         .then((response) => {
-          console.log('response', response)
           // Handle the response
           const token = response.data;
           const user = decode(token)
-          console.log('user', user)
 
           // Decode the payload from base64
           // Store the token in local storage or a secure HTTP-only cookie
