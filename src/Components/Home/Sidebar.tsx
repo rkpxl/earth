@@ -64,8 +64,8 @@ export const Sidebar = (props : any) => {
         }}
       >
         <div>
-          <Box sx={{ px: 3, paddingTop: 3 }}>
-            {/* <NextLink href="/" passHref>
+          {/* <Box sx={{ px: 3, paddingTop: 3 }}>
+            <NextLink href="/" passHref>
               <a>
                 <Logo
                   sx={{
@@ -74,12 +74,12 @@ export const Sidebar = (props : any) => {
                   }}
                 />
               </a>
-            </NextLink> */}
-          </Box>
-          <Box sx={{ px: 3 }}>
+            </NextLink>
+          </Box> */}
+          <Box sx={{ px: 3, paddingTop: 3 }}>
             <div>
               <Typography color="inherit" variant="subtitle1">
-                RkPxl
+                Knowledge Link
               </Typography>
             </div>
           </Box>

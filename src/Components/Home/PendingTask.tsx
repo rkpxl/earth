@@ -29,15 +29,22 @@ export const PendingTask = (props : any) => {
             </Typography>
           </Grid>
           <Grid item>
-            <Avatar
+            <Box
               sx={{
-                backgroundColor: 'success.main',
-                height: 56,
-                width: 56
+                background: 'transparent',
+                height: 68,
+                width: 68
               }}
             >
-              <PeopleIcon />
-            </Avatar>
+              <img
+                alt="Pending tasks"
+                src="/static/images/info.svg"
+                style={{
+                  display: 'inline-block',
+                  maxWidth: '100%',
+                }}
+              />
+            </Box>
           </Grid>
         </Grid>
         <Divider
@@ -53,7 +60,7 @@ export const PendingTask = (props : any) => {
             justifyContent: 'flex-start',
           }}
         >
-        <NextLink
+          <NextLink
             style={{width: '100%'}}
             href="/pending-tasks"
           >

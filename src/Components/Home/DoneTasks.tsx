@@ -2,6 +2,7 @@ import { Avatar, Box, Button, Card, CardContent, Grid, Typography, Divider } fro
 import MoneyIcon from '@mui/icons-material/Money';
 import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import NextLink from 'next/link';
+import { DoneTaskIcon } from '../../icons/doneTask'
 
 const DoneTask = (props : any) => {
   const { donetask } = props
@@ -32,15 +33,22 @@ const DoneTask = (props : any) => {
           </Typography>
         </Grid>
         <Grid item>
-          <Avatar
+          <Box
             sx={{
-              backgroundColor: 'error.main',
-              height: 56,
-              width: 56
+              background: 'transparent',
+              height: 68,
+              width: 68
             }}
           >
-            <MoneyIcon />
-          </Avatar>
+             <img
+              alt="Approved tasks"
+              src="/static/images/tick.svg"
+              style={{
+                display: 'inline-block',
+                maxWidth: '100%',
+              }}
+            />
+          </Box>
         </Grid>
       </Grid>
       <Divider

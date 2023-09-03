@@ -1,6 +1,18 @@
 import { Avatar, Box, Card, CardContent, Grid, LinearProgress, Typography } from '@mui/material';
 import InsertChartIcon from '@mui/icons-material/InsertChartOutlined';
 
+
+const customStyles = {
+  root: {
+    backgroundColor: '#b385fc',
+    color: "black" // Change the background color to black
+  },
+  bar: {
+    backgroundColor: '#b385fc', // Change the progress bar color to black
+    color: "black"
+  },
+};
+
 export const Progress = (props  : any) => {
   const { progress } = props
   return (
@@ -30,21 +42,34 @@ export const Progress = (props  : any) => {
           </Typography>
         </Grid>
         <Grid item>
-          <Avatar
+          <Box
             sx={{
-              backgroundColor: 'warning.main',
-              height: 56,
-              width: 56
+              background: 'transparent',
+              height: 68,
+              width: 68
             }}
           >
-            <InsertChartIcon />
-          </Avatar>
+            <img
+              alt="Task progress"
+              loading='lazy'
+              src="/static/images/paper.svg"
+              style={{
+                display: 'inline-block',
+                maxWidth: '100%',
+              }}
+            />
+          </Box>
         </Grid>
       </Grid>
       <Box sx={{ pt: 3 }}>
         <LinearProgress
           value={progress}
           variant="determinate"
+          sx={{
+            '.MuiLinearProgress-bar': {
+              backgroundColor: '#b385fc', // Change the progress bar color to black
+            },
+          }}
         />
       </Box>
     </CardContent>

@@ -4,7 +4,7 @@ import Router from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, TextField, Typography } from '@mui/material';
 import axios from 'axios'
 
 function parseJwt(token : string) {
@@ -62,11 +62,20 @@ const Login = () => {
         .catch((error) => {
           setError('An error occurred during login.');
           // Clear the form values
+          setIsLoading(false)
           formik.resetForm();
           console.error(error);
         });
     }
   });
+
+  const handleGoogleSubmit =  () => {
+    console.log('hello')
+  }
+
+  const handleFBSubmit =  () => {
+    console.log('hello')
+  }
 
   return (
     <>
@@ -112,7 +121,7 @@ const Login = () => {
                   color="info"
                   fullWidth
                   // startIcon={<FacebookIcon />}
-                  onClick={() => formik.handleSubmit()}
+                  onClick={handleFBSubmit}
                   size="large"
                   variant="contained"
                 >
@@ -127,7 +136,7 @@ const Login = () => {
                 <Button
                   color="error"
                   fullWidth
-                  onClick={() => formik.handleSubmit()}
+                  onClick={handleGoogleSubmit}
                   size="large"
                   // startIcon={<GoogleIcon />}
                   variant="contained"
@@ -186,7 +195,7 @@ const Login = () => {
                 type="submit"
                 variant="contained"
               >
-                {isLoading ? <CircularProgress color="secondary" sx={{ height: '25px' }}/> : 'Sign In Now'}
+                {isLoading ? <CircularProgress size="27px" sx={{ color: '#5048E5' }}/> : 'Sign In Now'}
               </Button>
             </Box>
             <Typography
