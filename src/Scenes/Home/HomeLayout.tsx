@@ -25,7 +25,7 @@ const HomeLayout = (props : any) => {
   const router = useRouter()
 
   return (
-    <>
+    <main>
       {/* <DashboardNavbar onSidebarOpen={() => setSidebarOpen(true)} /> */}
       <Sidebar
         onClose={() => setSidebarOpen(false)}
@@ -46,7 +46,7 @@ const HomeLayout = (props : any) => {
           </Box>
         </HomeLayoutRoot>
       </Layout>
-    </>
+    </main>
   );
 };
 
