@@ -11,10 +11,12 @@ import Grid from '@mui/material/Grid';
 import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Alert, AlertColor, FormLabel, IconButton, InputLabel, Paper, Radio, RadioGroup, Snackbar, Step, StepLabel, Stepper, Tab, Tabs, Typography } from '@mui/material';
+import { Alert, AlertColor, Radio, RadioGroup, Snackbar, Step, StepLabel, Stepper, Tab, Tabs, Typography } from '@mui/material';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import SearchPeople from '../SearchPeople';
-import DeleteIcon from '@mui/icons-material/Delete';
+import DocumentTab from './DocumentTab';
+import SubmitTab from './SubmitTab';
+import PersonnelTab from './PersonnelTab';
 
 interface FormProps {
   title: string | string[] | undefined
@@ -41,10 +43,12 @@ interface TabPanelProps {
 }
 
 interface PersonnelPerson {
-  _id: string | null,
+  userId: string | null,
   name: string | null,
   role: string | null,
   access: string | null,
+  status: string | null,
+  comment: string | null,
 }
 
 
@@ -96,6 +100,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
     {id: 15, question: '15. Will genetic testing be conducted as part of the study?', answer: '', options: {}}
   ]
 
+  const [documents, setDocuments] = React.useState<any>([]);
   const [value, setValue] = React.useState(0);
   const [activeStep, setActiveStep] = React.useState(0);
   const [skipped, setSkipped] = React.useState(new Set<number>());
@@ -108,10 +113,11 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
   const [snackMessage, setSnackMessage] = React.useState('')
   const [snackShow, setSnackShow] = React.useState(false)
   const [snackType, setSnackType] = React.useState<AlertColor | undefined>('success')
+  const [comment, setComment] = React.useState('')
   const date = new Date()
 
-  const addRow = (data: PersonnelPerson) => {
-    const newRow = { _id: data._id, name: data.name, role: data.role, access: data.access };
+  const addRow = (data: any) => {
+    const newRow = { userId: data._id, name: data.name, role: 'External', access: 'Read', comment: '', status: "PENDING" };
     setRows([...rows, newRow]);
     toggelSearchBarToAddPerson()
   };
@@ -175,7 +181,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
 
   React.useEffect(() => {
     if(localStorage && typeof localStorage !== 'undefined') {
-      setRows([{ _id: localStorage.getItem('_id'), name: localStorage.getItem('name'), role: 'Creator', access: 'ALL' }])
+      setRows([{ userId: localStorage.getItem('_id'), name: localStorage.getItem('name'), role: 'Creator', access: 'Admin', status: "APPROVED", comment: '' }])
     }
     axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/users/usersOf', {
       org: localStorage.getItem('org') || 'space'
@@ -194,6 +200,12 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         });
   }, [])
 
+  const updateComment = () => {
+    const updatedRow = [...rows]
+    updatedRow[0].comment = comment
+    setRows(updatedRow)
+  }
+
   const handleSnackbar = (message: string, type : AlertColor) => {
     setSnackMessage(message)
     setSnackType(type)
@@ -204,10 +216,40 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
     }, 2000);
     
   }
+
+  const uploadDoc = async (doc : any) => {
+    const formData = new FormData();
+    formData.append('file', doc.file, doc.file.name);
+    try {
+      const response = await axios.post(process.env.NEXT_PUBLIC_HOST_URL+"/tasks/upload",formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      })
+      return response.data
+    } catch(e) {
+      console.log(e)
+    }
+  }
   
-  const submitHandle = (e : React.FormEvent<HTMLFormElement>) => {
+  const submitHandle = async (e : any) => {
     e.preventDefault();
     if(reviewer) {
+      const updatedDocument = await Promise.all(documents.map(async (doc : any) => {
+        const uri= await uploadDoc(doc)
+        return {...doc, uri: uri}
+      }))
+      updateComment()
+      console.log(rows, {
+        creator: localStorage.getItem('name'),
+        date: date.getTime(),
+        title: title,
+        documents: updatedDocument,
+        dept: dept,
+        description: description,
+        comment: '',
+        ...result
+      })
       axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/tasks', {
         org: localStorage.getItem('org'),
         userId: localStorage.getItem('_id'),
@@ -216,13 +258,15 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
             creator: localStorage.getItem('name'),
             date: date.getTime(),
             title: title,
+            documents: updatedDocument,
             dept: dept,
             description: description,
+            comment: '',
             ...result
           }
         }),
         status: "PENDING",
-        approvals: [ { status: "PENDING", userId: reviewer } ],
+        approvals: rows,
         currentAssignedTo: reviewer,
       })
       .then((response) => {
@@ -296,12 +340,15 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
   };
 
   return (
+   <>
+    <title>Protocol</title>
     <Box sx={{ width: '100%' }}>
       <SearchPeople allPeoples={allPeoples} addedPeoples={rows} addPerson={addRow} open={addPersonDialog} onClose={toggelSearchBarToAddPerson} />
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Question" {...a11yProps(0)} />
           <Tab label="Personnel" {...a11yProps(1)} />
+          <Tab label="Documents" {...a11yProps(1)} />
           <Tab label="Submit" {...a11yProps(2)} />
         </Tabs>
       </Box>
@@ -580,92 +627,29 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         </Box>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
-      <div>
-        {rows.map((row : any, index : number) => (
-          <Paper key={index} elevation={3} style={{ padding: '10px', margin: '10px' }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={5}>
-                <TextField
-                  label="Name"
-                  variant="outlined"
-                  value={row.name}
-                  onChange={(e) => handleInputChange(index, 'name', e.target.value)}
-                  fullWidth
-                  InputProps={{
-                    readOnly: true,
-                  }}
-                />
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <FormControl variant="outlined" fullWidth>
-                  <InputLabel>Role</InputLabel>
-                  <Select
-                    value={row.role}
-                    onChange={(e) => handleInputChange(index, 'role', e.target.value)}
-                    label="Role"
-                  >
-                    <MenuItem value="Admin">Admin</MenuItem>
-                    <MenuItem value="User">User</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <FormControl variant="outlined" fullWidth>
-                  <InputLabel>Access</InputLabel>
-                  <Select
-                    value={row.access}
-                    onChange={(e) => handleInputChange(index, 'access', e.target.value)}
-                    label="Access"
-                  >
-                    <MenuItem value="Read">Read</MenuItem>
-                    <MenuItem value="Write">Write</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={1} sx={{display: 'flex', justifyContent: 'center'}}>
-                <IconButton
-                  onClick={() => removeRow(index)}
-                  color="secondary"
-                  aria-label="delete"
-                  style={{ float: 'left', height: "100%", fontSize: "32px" }}
-                >
-                  <DeleteIcon fontSize="inherit" />
-                </IconButton>
-              </Grid>
-            </Grid>
-          </Paper>
-        ))}
-        <Button variant="contained" color="primary" onClick={toggelSearchBarToAddPerson} sx={{ margin: '8px'}}>
-          Add
-        </Button>
-      </div>
+        <PersonnelTab 
+          rows={rows}
+          handleInputChange={handleInputChange}
+          removeRow={removeRow}
+          toggelSearchBarToAddPerson={toggelSearchBarToAddPerson} 
+          isDisabled={false}
+        />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
-        <Grid container columnSpacing={2} rowSpacing={2} maxWidth="1100px" sx={{ marginBottom: '64px'}}>
-          <Grid item xs={12} lg={6}>
-            <FormControl
-                fullWidth
-                required
-                >
-                <InputLabel id="select" size="small">Select reviewer</InputLabel>
-                <Select 
-                  required
-                  label="Select reviewer"
-                  size="small"
-                  onChange={(e : any) => setReviewer(e.target.value)}
-                >
-                  {departmentAllUser?.map((option : any) => (
-                    <MenuItem key={option._id} value={option?._id}>
-                      {option?.name || ''}
-                    </MenuItem>
-                  ))}
-                </Select>
-              </FormControl>
-            </Grid>
-            <Grid item xs={12} lg={6} sx={{display: 'flex', flexDirection: 'row', justifyContent: 'end'}}>
-              <Button sx={{ width: '100%' , maxWidth: '148px', fontSize: '18px', height: '100%' }} type="submit" variant="contained">Submit</Button>
-            </Grid>
-          </Grid>
+        <DocumentTab 
+          documents={documents} 
+          setDocuments={setDocuments} 
+          isDisabled={false} 
+        />
+      </CustomTabPanel>
+      <CustomTabPanel value={value} index={3}>
+        <SubmitTab 
+          departmentAllUser={rows} 
+          setReviewer={setReviewer} 
+          submitHandle={submitHandle} 
+          setComment={setComment}
+          comment={comment}
+        />
       </CustomTabPanel>
       <Snackbar open={snackShow} autoHideDuration={2000} onClose={() => setSnackShow(false)}>
         <Alert onClose={() => setSnackShow(false)} severity={snackType}>
@@ -673,6 +657,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         </Alert>
       </Snackbar>
     </Box>
+   </>
   );
 };
 
