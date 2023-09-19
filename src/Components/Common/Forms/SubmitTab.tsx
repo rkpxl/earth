@@ -6,11 +6,12 @@ interface SubmitTabProps {
   setReviewer: Function,
   submitHandle: Function,
   comment: string,
-  setComment: Function
+  setComment: Function,
+  isView?: boolean
 }
 
 const SubmitTab = (props : SubmitTabProps) => {
-  const { departmentAllUser, setReviewer, submitHandle, comment, setComment} = props
+  const { departmentAllUser, setReviewer, submitHandle, comment, setComment, isView = true} = props
   return (
     <>
       <Grid container columnSpacing={2} rowSpacing={2} maxWidth="1100px" sx={{ marginBottom: '64px'}}>
@@ -35,9 +36,9 @@ const SubmitTab = (props : SubmitTabProps) => {
               size="small"
               onChange={(e : any) => setReviewer(e.target.value)}
             >
-              {departmentAllUser?.map((option : any, index : number) => (
+              {(isView ? [ {name: "Approve", userId: 'APPROVED'}, {name: "Reject", userId: 'REJECT'}, ...departmentAllUser] : departmentAllUser)?.map((option : any, index : number) => (
                 <MenuItem key={index} value={option?.userId}>
-                  {`${option.name} - ${option.role}`}
+                  {`${option.name} ${option?.role ? '-' : ''} ${option?.role || ''}`}
                 </MenuItem>
               ))}
             </Select>

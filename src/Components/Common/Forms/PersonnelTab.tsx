@@ -1,4 +1,4 @@
-import { Button, FormControl, Grid, IconButton, InputLabel, MenuItem, Paper, Select, TextField } from '@mui/material';
+import { Button, CircularProgress, FormControl, Grid, IconButton, InputLabel, MenuItem, Paper, Select, TextField } from '@mui/material';
 import React from 'react'
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -13,6 +13,10 @@ interface PersonnelTabProps {
 const PersonnelTab = (props : PersonnelTabProps) : JSX.Element => {
 
   const { rows, handleInputChange, removeRow, toggelSearchBarToAddPerson, isDisabled = false } = props
+
+  if(!rows) {
+    return (<><CircularProgress /></>);
+  }
 
   return (
     <>
@@ -56,9 +60,9 @@ const PersonnelTab = (props : PersonnelTabProps) : JSX.Element => {
                     label="Access"
                     disabled={index === 0 || isDisabled}
                   >
-                    <MenuItem value="Admin">Admin</MenuItem>
-                    <MenuItem value="Write">Write</MenuItem>
-                    <MenuItem value="Read">Read</MenuItem>
+                    <MenuItem value="ADMIN">Admin</MenuItem>
+                    <MenuItem value="WRITE">Write</MenuItem>
+                    <MenuItem value="READ">Read</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>
