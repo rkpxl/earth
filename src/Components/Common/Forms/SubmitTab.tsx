@@ -11,7 +11,7 @@ interface SubmitTabProps {
 }
 
 const SubmitTab = (props : SubmitTabProps) => {
-  const { departmentAllUser, setReviewer, submitHandle, comment, setComment, isView = true} = props
+  const { departmentAllUser, setReviewer, submitHandle, comment, setComment, isView = false} = props
   return (
     <>
       <Grid container columnSpacing={2} rowSpacing={2} maxWidth="1100px" sx={{ marginBottom: '64px'}}>
