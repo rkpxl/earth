@@ -91,8 +91,8 @@ export const Sidebar = (props : any) => {
           }}
         />
         <Box sx={{ flexGrow: 1 }}>
-          {items.map((item,index) => (
-            <SidebarItem key={index.toString()} icon={item.icon} href={item.href} title={item.title} />
+          {items.map((item : any,index : number) => (
+            <SidebarItem key={index} icon={item.icon} href={item.href} title={item.title} />
           ))}
         </Box>
         <Divider sx={{ borderColor: '#2D3748' }} />

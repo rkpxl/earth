@@ -4,12 +4,13 @@ import PropTypes from 'prop-types';
 import { Box, Button, ListItem } from '@mui/material';
 
 export const SidebarItem = (props : any) => {
-  const { href, icon, title, ...others } = props;
+  const { key, href, icon, title, ...others } = props;
   const router = useRouter();
   const active = href ? (router.pathname === href) : false;
 
   return (
     <ListItem
+      key={key}
       disableGutters
       sx={{
         display: 'flex',
