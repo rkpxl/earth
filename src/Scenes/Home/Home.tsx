@@ -21,19 +21,21 @@ const Home = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [popOpen, setPopOpen] = React.useState(false);
   const [protocolType, setprotocolType] = React.useState('')
-  const [allTask, setAllTask] = React.useState([])
+  const [allTask, setAllTask] = React.useState<any>([])
   const [pendingTask, setPendingTask] = React.useState([])
   const [doneTask, setApprovedTask] = React.useState([])
   const open = Boolean(anchorEl);
 
   React.useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/to/${localStorage.getItem('_id')}`).then((response) => {
-      const pending = response.data.filter((e : any) => e.status === "PENDING")
-      const approved = response.data.filter((e : any) => e.status === "APPROVED")
-      setAllTask(response.data || [])
-      setPendingTask(pending || [])
-      setApprovedTask(approved || [])
+    axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/by/${localStorage.getItem('_id')}`).then((response) => {
+      setAllTask([...allTask,...response.data])
+      setApprovedTask(response.data || [])
 
+    }).catch((e) => console.log(e))
+
+    axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/to/${localStorage.getItem('_id')}`).then((response) => {
+      setAllTask([...allTask, ...response.data])
+      setPendingTask(response.data || [])
     }).catch((e) => console.log(e))
   }, [])
 

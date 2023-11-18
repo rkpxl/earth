@@ -84,9 +84,15 @@ export const TasksTable = (props : any) => {
   const [allTask, setAllTask] = React.useState([])
 
   React.useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/to/${localStorage.getItem('_id')}`).then((response) => {
-      setAllTask(response.data || [])
-    }).catch((e) => console.log(e))
+    if(props.type === "pending") {
+      axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/to/${localStorage.getItem('_id')}`).then((response) => {
+        setAllTask(response.data || [])
+      }).catch((e) => console.log(e))
+    } else {
+      axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/by/${localStorage.getItem('_id')}`).then((response) => {
+        setAllTask(response.data || [])
+      }).catch((e) => console.log(e))
+    }
   }, [])
 
   
@@ -98,8 +104,9 @@ export const TasksTable = (props : any) => {
           <Table key="table">
             {tableHeaderRow()}
             <TableBody>
-              {allTask.filter((t : any) => (t.status = type || type === 'all')).map(((e : any, index : number) => {
-              const protocol = JSON.parse(e.rawJson).data
+              {allTask.map(((e : any, index : number) => {
+              const protocol = JSON.parse(e.rawJson)
+              console.log('protocol',protocol)
                 return (
                   <TableRow
                     hover
@@ -112,15 +119,15 @@ export const TasksTable = (props : any) => {
                       {e._id.slice(-6).toString().toUpperCase()}
                     </TableCell>
                     <TableCell>
-                      {protocol.creator}
+                      {protocol?.creator}
                     </TableCell>
                     <TableCell>
-                      {format(protocol.date, 'dd/MM/yyyy')}
+                    {protocol?.date ? format(protocol?.date, 'dd/MM/yyyy') : ''}
                     </TableCell>
                     <TableCell>
                       <SeverityPill
-                        color={(e.status === 'approval' && 'success')
-                        || (e.status === 'reject' && 'error')
+                        color={(e.status === 'APPROVED' && 'success')
+                        || (e.status === 'REJECTED' && 'error')
                         || (e.status === 'PENDING' && 'warning') || 'warning'}
                       >
                         {e.status}
@@ -140,7 +147,7 @@ export const TasksTable = (props : any) => {
           p: 2
         }}
       >
-        {allTask.filter((t : any) => (t.status = type || type === 'all')).length > 10 ? <Button
+        {allTask.length > 10 ? <Button
           color="secondary"
           endIcon={<ArrowRightIcon fontSize="small" />}
           size="small"

@@ -23,7 +23,7 @@ const DoneTask = (props : any) => {
             gutterBottom
             variant="overline"
           >
-            Approved Tasks
+            ALL Tasks
           </Typography>
           <Typography
             color="textPrimary"

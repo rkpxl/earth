@@ -248,13 +248,7 @@ const Register = () => {
                   href="#"
                   passHref
                 >
-                  <Link
-                    color="primary"
-                    underline="always"
-                    variant="subtitle2"
-                  >
-                    Terms and Conditions
-                  </Link>
+                  Terms and Conditions
                 </NextLink>
               </Typography>
             </Box>

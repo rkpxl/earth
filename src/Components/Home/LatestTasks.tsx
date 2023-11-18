@@ -53,7 +53,7 @@ export const LatestTasks = (props : any) => {
           </TableHead>
           <TableBody>
             {task.map((e : any) => {
-              const protocol = JSON.parse(e.rawJson).data
+              const protocol = JSON.parse(e.rawJson)
               return (
               <TableRow
                 hover
@@ -63,15 +63,15 @@ export const LatestTasks = (props : any) => {
                   {e._id.slice(-6).toString().toUpperCase()}
                 </TableCell>
                 <TableCell>
-                  {protocol.creator}
+                  {protocol?.creator}
                 </TableCell>
                 <TableCell>
-                  {format(protocol.date, 'dd/MM/yyyy')}
+                  {protocol?.date ? format(protocol?.date, 'dd/MM/yyyy') : ''}
                 </TableCell>
                 <TableCell>
                   <SeverityPill
                     color={(e.status === 'APPROVED' && 'success')
-                    || (e.status === 'REJECT' && 'error')
+                    || (e.status === 'REJECTED' && 'error')
                     || (e.status === 'PENDING' && 'warning') || 'warning'}
                   >
                     {e.status}

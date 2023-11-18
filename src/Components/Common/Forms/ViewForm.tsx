@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Alert, AlertColor, Radio, RadioGroup, Snackbar, Step, StepLabel, Stepper, Tab, Tabs, Typography } from '@mui/material';
+import { Alert, AlertColor, Snackbar, Tab, Tabs } from '@mui/material';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import SearchPeople from '../SearchPeople';
 import DocumentTab from './DocumentTab';
@@ -75,42 +73,26 @@ function a11yProps(index: number) {
 }
 
 
-export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) => {
+export const ViewForm: React.FC = () => {
   const router = useRouter()
-  const questions : Array<Question> = [
-    {id: 1, question: '1. what is vision of your study?', answer: '', options: {}},
-    {id: 2, question: '2. what is mission of your study?', answer: '', options: {}},
-    {id: 3, question: '3. Enumerate the anticipated advantages resulting from the research.', answer: '',options: {}},
-    {id: 4, question: '4. Provide an estimated completion date for the entire research study.', answer: '', options: {}},
-    {id: 5, question: '5. Describe the measures taken to minimize and manage these risks.', answer: '', options: {}},
-    {id: 6, question: '6. Assess the potential economic impact on the study participants.', answer: '', options: {}},
-    {id: 7, question: '7. Outline the sequential actions the research team will undertake with recruited and consented participants.', answer: '', options: {}},
-    {id: 8, question: '8. Identify potential risks to study participants.', answer: '', options: {}},
-    {id: 9, question: `9. Specify the study's location or setting.`, answer: '', options: {}},
-    {id: 10, question: '10. Indicate whether the study encompasses participants under the age of ?', answer: '', options: {}},
-    {id: 11, question: '11. How long do you anticipate it will take to enroll all study participants?', answer: '', options: {}},
-    {id: 12, question: '12. ', answer: '', options: {}},
-    {id: 13, question: '13. Confirm who will have the chance to review their data.', answer: '', options: {}},
-    {id: 14, question: '14. Are there any planned surveys or interviews?', answer: '', options: {}},
-    {id: 15, question: '15. Will genetic testing be conducted as part of the study?', answer: '', options: {}}
-  ]
 
   const [documents, setDocuments] = useState<any>([]);
   const [value, setValue] = useState(0);
   const [rows, setRows] = useState<Array<PersonnelPerson>>([]);
   const [addPersonDialog, setAddPersonDialog] = useState(false);
   const [allPeoples, setAllPeoples] = useState<Array<PersonnelPerson>>([])
-  const [result, setResult] = useState(questions)
+  const [result, setResult] = useState<any>()
   const [reviewer, setReviewer] = useState('')
   const [comment, setComment] = useState('')
   
   const [snackMessage, setSnackMessage] = useState('')
   const [snackShow, setSnackShow] = useState(false)
   const [snackType, setSnackType] = useState<AlertColor | undefined>('success')
-  const date = new Date()
+  const [data, setData] = useState<any>();
+  const [accessType, setAccessType] = useState(true)
 
   const addRow = (data: any) => {
-    const newRow = { userId: data._id, name: data.name, role: 'External', access: 'READ', comment: '', status: "PENDING" };
+    const newRow = { userId: data._id, name: data.name, role: 'External', access: 'Read', comment: '', status: "PENDING" };
     setRows([...rows, newRow]);
     toggelSearchBarToAddPerson()
   };
@@ -134,27 +116,6 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
-
-  useEffect(() => {
-    if(localStorage && typeof localStorage !== 'undefined') {
-      setRows([{ userId: localStorage.getItem('_id'), name: localStorage.getItem('name'), role: 'Creator', access: 'ADMIN', status: "APPROVED", comment: '' }])
-    }
-    axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/users/usersOf', {
-      org: localStorage.getItem('org') || 'space'
-      })
-        .then((response : any) => {
-          // Handle the response
-          // Store the token in local storage or a secure HTTP-only cookie
-          if(response.status < 300) {
-            const userId : string = localStorage.getItem('_id')?.toString() || '';
-            setAllPeoples(response.data)
-          }
-        })
-        .catch((error) => {
-          // Clear the form values
-          console.error(error);
-        });
-  }, [])
 
   const updateComment = () => {
     const updatedRow = [...rows]
@@ -188,44 +149,31 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
     }
   }
   
-  const submitHandle = async (e : any) => {
+  const submitHandle = async (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if(reviewer) {
-      const updatedDocument = await Promise.all(documents.map(async (doc : any) => {
-        const uri= await uploadDoc(doc)
-        return {...doc, uri: uri}
-      }))
-      updateComment()
-      console.log(rows, {
-        creator: localStorage.getItem('name'),
-        date: date.getTime(),
-        title: title,
-        documents: updatedDocument,
-        dept: dept,
-        description: description,
-        comment: '',
-        ...result
-      })
-      axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/tasks', {
-        org: localStorage.getItem('org'),
-        userId: localStorage.getItem('_id'),
+      const taskId = data._id
+      const updatedJson = await axios.post(process.env.NEXT_PUBLIC_HOST_URL + "/tasks/" + taskId +  '/update-raw-json', {
         rawJson: JSON.stringify({
-            creator: localStorage.getItem('name'),
-            date: date.getTime(),
-            title: title,
-            documents: updatedDocument,
-            dept: dept,
-            description: description,
-            comment: '',
-            ...result
-        }),
-        status: "PENDING",
-        approvals: rows,
-        currentAssignedTo: reviewer,
+          updater: localStorage.getItem("_id"),
+          ...result
+        })
+      })
+
+      if(updatedJson.status > 300) {
+        throw "Something went wrong";
+      }
+
+      const isReviewerPerson = !(reviewer === "APPROVED" || reviewer === "REJECTED")
+      axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/tasks/review', {
+        status: isReviewerPerson ? "PENDING" : reviewer,
+        currentUserId: localStorage.getItem('_id'),
+        taskId: data._id,
+        nextPersonId: isReviewerPerson ? reviewer : "",
       })
       .then((response) => {
         if(response.status < 300) {
-          handleSnackbar('Your protocol created and send', 'success')
+          handleSnackbar('task send', 'success')
           setTimeout(() => {
             router.push('/')
           }, 2000);
@@ -239,13 +187,33 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
   }
 
   const handleAnswerChange = (questionId: number, answer: any) => {
-    setResult((prevQuestionState) =>
-      prevQuestionState.map((question) =>
-        question.id === questionId ? { ...question, answer } : question
-      )
-    );
-    console.log(questions)
+    const newAns = {
+      ...result,
+      [questionId-1]: {...result[questionId-1], answer: answer}
+    }
+    setResult(newAns)
   };
+
+  React.useEffect(() => {
+    const id = router.query["id"]
+    if(id) {
+      axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/${id}`).then((response) => {
+        setResult(JSON.parse(response?.data?.rawJson))
+        console.log('result',JSON.parse(response?.data?.rawJson))
+        const filteredPeoples = response?.data?.approvals?.filter((p : any) => !(p.status === "APPROVED" || p.userId === localStorage.getItem("_id")))
+        const selected = response?.data?.approvals?.filter((p : any) => (p.userId === localStorage.getItem("_id")))
+        if(selected[0]?.access === "ADMIN" || selected[0]?.access === "WRITE") {
+            setAccessType(false)
+        } else {
+          setAccessType(true)
+        }
+        setAllPeoples(filteredPeoples)
+        setData(response.data)
+      }).catch((e) => { console.log(e) })
+    } else {
+      router.back()
+    }
+  }, [])
 
   return (
    <>
@@ -262,11 +230,11 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
       </Box>
       <CustomTabPanel value={value} index={0}>
         <QuestionBank 
-          isDisabled={false}
-          title={title}
-          description={description}
-          dept={dept}
-          questions={questions}
+          isDisabled={accessType}
+          title={result?.title || ''}
+          description={result?.description || ''}
+          dept={result?.dept || ''}
+          questions={result}
           result={result}
           handleAnswerChange={handleAnswerChange}
           setValue={setValue} 
@@ -275,27 +243,28 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1}>
         <PersonnelTab 
-          rows={rows}
+          rows={data?.approvals}
           handleInputChange={handleInputChange}
           removeRow={removeRow}
           toggelSearchBarToAddPerson={toggelSearchBarToAddPerson} 
-          isDisabled={false}
+          isDisabled={accessType}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <DocumentTab 
-          documents={documents} 
+          documents={result?.documents} 
           setDocuments={setDocuments} 
-          isDisabled={false} 
+          isDisabled={accessType} 
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={3}>
         <SubmitTab 
-          departmentAllUser={rows.slice(1, rows.length)} 
+          departmentAllUser={allPeoples} 
           setReviewer={setReviewer} 
           submitHandle={submitHandle} 
           setComment={setComment}
           comment={comment}
+          isView={true}
         />
       </CustomTabPanel>
       <Snackbar open={snackShow} autoHideDuration={2000} onClose={() => setSnackShow(false)}>
