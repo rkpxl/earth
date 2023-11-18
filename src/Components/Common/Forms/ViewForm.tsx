@@ -1,11 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Alert, AlertColor, Radio, RadioGroup, Snackbar, Step, StepLabel, Stepper, Tab, Tabs, Typography } from '@mui/material';
+import { Alert, AlertColor, Snackbar, Tab, Tabs } from '@mui/material';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import SearchPeople from '../SearchPeople';
 import DocumentTab from './DocumentTab';
@@ -77,30 +75,13 @@ function a11yProps(index: number) {
 
 export const ViewForm: React.FC = () => {
   const router = useRouter()
-  const questions : Array<Question> = [
-    {id: 1, question: '1. what is vision of your study?', answer: '1', options: {}},
-    {id: 2, question: '2. what is mission of your study?', answer: '2', options: {}},
-    {id: 3, question: '3. Enumerate the anticipated advantages resulting from the research.', answer: '3', options: {}},
-    {id: 4, question: '4. Provide an estimated completion date for the entire research study.', answer: '4', options: {}},
-    {id: 5, question: '5. Describe the measures taken to minimize and manage these risks.', answer: '5', options: {}},
-    {id: 6, question: '6. Assess the potential economic impact on the study participants.', answer: '6', options: {}},
-    {id: 7, question: '7. Outline the sequential actions the research team will undertake with recruited and consented participants.', answer: '7', options: {}},
-    {id: 8, question: '8. Identify potential risks to study participants.', answer: '8', options: {}},
-    {id: 9, question: `9. Specify the study's location or setting.`, answer: '9', options: {}},
-    {id: 10, question: '10. Indicate whether the study encompasses participants under the age of ?', answer: '10', options: {}},
-    {id: 11, question: '11. How long do you anticipate it will take to enroll all study participants?', answer: '11', options: {}},
-    {id: 12, question: '12. ', answer: '12', options: {}},
-    {id: 13, question: '13. Confirm who will have the chance to review their data.', answer: '', options: {}},
-    {id: 14, question: '14. Are there any planned surveys or interviews?', answer: '', options: {}},
-    {id: 15, question: '15. Will genetic testing be conducted as part of the study?', answer: '', options: {}}
-  ]
 
   const [documents, setDocuments] = useState<any>([]);
   const [value, setValue] = useState(0);
   const [rows, setRows] = useState<Array<PersonnelPerson>>([]);
   const [addPersonDialog, setAddPersonDialog] = useState(false);
   const [allPeoples, setAllPeoples] = useState<Array<PersonnelPerson>>([])
-  const [result, setResult] = useState(questions)
+  const [result, setResult] = useState<any>()
   const [reviewer, setReviewer] = useState('')
   const [comment, setComment] = useState('')
   
@@ -108,7 +89,6 @@ export const ViewForm: React.FC = () => {
   const [snackShow, setSnackShow] = useState(false)
   const [snackType, setSnackType] = useState<AlertColor | undefined>('success')
   const [data, setData] = useState<any>();
-  const [jsonData, setJsonData] = useState<any>();
   const [accessType, setAccessType] = useState(true)
 
   const addRow = (data: any) => {
@@ -169,10 +149,22 @@ export const ViewForm: React.FC = () => {
     }
   }
   
-  const submitHandle = (e : React.FormEvent<HTMLFormElement>) => {
+  const submitHandle = async (e : React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     if(reviewer) {
-      const isReviewerPerson = !(reviewer === "APPROVED" || reviewer === "REJECT")
+      const taskId = data._id
+      const updatedJson = await axios.post(process.env.NEXT_PUBLIC_HOST_URL + "/tasks/" + taskId +  '/update-raw-json', {
+        rawJson: JSON.stringify({
+          updater: localStorage.getItem("_id"),
+          ...result
+        })
+      })
+
+      if(updatedJson.status > 300) {
+        throw "Something went wrong";
+      }
+
+      const isReviewerPerson = !(reviewer === "APPROVED" || reviewer === "REJECTED")
       axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/tasks/review', {
         status: isReviewerPerson ? "PENDING" : reviewer,
         currentUserId: localStorage.getItem('_id'),
@@ -195,22 +187,25 @@ export const ViewForm: React.FC = () => {
   }
 
   const handleAnswerChange = (questionId: number, answer: any) => {
-    setResult((prevQuestionState) =>
-      prevQuestionState.map((question) =>
-        question.id === questionId ? { ...question, answer } : question
-      )
-    );
+    const newAns = {
+      ...result,
+      [questionId-1]: {...result[questionId-1], answer: answer}
+    }
+    setResult(newAns)
   };
 
   React.useEffect(() => {
     const id = router.query["id"]
     if(id) {
       axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/${id}`).then((response) => {
-        setJsonData(JSON.parse(response?.data?.rawJson).data)
+        setResult(JSON.parse(response?.data?.rawJson))
+        console.log('result',JSON.parse(response?.data?.rawJson))
         const filteredPeoples = response?.data?.approvals?.filter((p : any) => !(p.status === "APPROVED" || p.userId === localStorage.getItem("_id")))
         const selected = response?.data?.approvals?.filter((p : any) => (p.userId === localStorage.getItem("_id")))
         if(selected[0]?.access === "ADMIN" || selected[0]?.access === "WRITE") {
             setAccessType(false)
+        } else {
+          setAccessType(true)
         }
         setAllPeoples(filteredPeoples)
         setData(response.data)
@@ -236,11 +231,11 @@ export const ViewForm: React.FC = () => {
       <CustomTabPanel value={value} index={0}>
         <QuestionBank 
           isDisabled={accessType}
-          title={jsonData?.title || ''}
-          description={jsonData?.description || ''}
-          dept={jsonData?.dept || ''}
-          questions={jsonData}
-          result={jsonData}
+          title={result?.title || ''}
+          description={result?.description || ''}
+          dept={result?.dept || ''}
+          questions={result}
+          result={result}
           handleAnswerChange={handleAnswerChange}
           setValue={setValue} 
           setResult={setResult}       
@@ -252,12 +247,12 @@ export const ViewForm: React.FC = () => {
           handleInputChange={handleInputChange}
           removeRow={removeRow}
           toggelSearchBarToAddPerson={toggelSearchBarToAddPerson} 
-          isDisabled={true}
+          isDisabled={accessType}
         />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={2}>
         <DocumentTab 
-          documents={jsonData?.documents} 
+          documents={result?.documents} 
           setDocuments={setDocuments} 
           isDisabled={accessType} 
         />

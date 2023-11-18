@@ -62,8 +62,6 @@ const QuestionBank = (props: QuestionBankProps) => {
       prevQuestionState.map((question : any) =>
         question.id === questionId ? getCheckBoxUpdatedValue(question, option, isChecked) : question
       ));
-
-      console.log(result)
     };
   
     const handleRadioBoxChange = (questionId: number, option: string, isChecked: boolean) => {
@@ -113,6 +111,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                         fullWidth
                         size="small"
                         required
+                        InputProps={{ readOnly: isDisabled }}
                       />
                     </Grid>
                     <Grid item xs={12} lg={6}>
@@ -124,6 +123,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                         fullWidth
                         size="small"
                         required
+                        InputProps={{ readOnly: isDisabled }}
                       />
                     </Grid>
                     <Grid item xs={12} lg={6}>
@@ -135,6 +135,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                         fullWidth
                         size="small"
                         required
+                        InputProps={{ readOnly: isDisabled }}
                       />
                     </Grid>
                     <Grid item xs={12} lg={6}>
@@ -146,6 +147,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                         fullWidth
                         size="small"
                         required
+                        InputProps={{ readOnly: isDisabled }}
                       />
                     </Grid>
                     <Grid item xs={12}>
@@ -158,6 +160,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                         multiline={true}
                         size="medium"
                         required
+                        InputProps={{ readOnly: isDisabled }}
                       />
                     </Grid>
                     <Grid item xs={12}>
@@ -170,6 +173,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                         multiline={true}
                         size="medium"
                         required
+                        InputProps={{ readOnly: isDisabled }}
                       />
                     </Grid>
                     <Grid item xs={12}>
@@ -181,6 +185,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                         fullWidth
                         size="medium"
                         required
+                        InputProps={{ readOnly: isDisabled }}
                       />
                     </Grid>
                   </Grid>
@@ -205,6 +210,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                             onChange={(e) => handleAnswerChange(8, e.target.value)}
                             required
                             value={result[7]?.answer || ''}
+                            disabled={isDisabled}
                             >
                             {['None', 'Low', 'Medium', 'Heigh'].map((option, optionIndex) => (
                               <MenuItem key={optionIndex} value={option}>
@@ -221,6 +227,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                             onChange={(e) => handleAnswerChange(9, e.target.value)}
                             required
                             value={result[8]?.answer || ''}
+                            disabled={isDisabled}
                             >
                             {['Inside org', 'Other org same country', 'Other country'].map((option, optionIndex) => (
                               <MenuItem key={optionIndex} value={option}>
@@ -237,6 +244,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                             onChange={(e) => handleAnswerChange(10, e.target.value)}
                             required
                             value={result[9]?.answer || ''}
+                            disabled={isDisabled}
                             >
                             {['18', '21', '28'].map((option, optionIndex) => (
                               <MenuItem key={optionIndex} value={option}>
@@ -253,6 +261,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                             onChange={(e) => handleAnswerChange(11, e.target.value)}
                             required
                             value={result[10]?.answer || ''}
+                            disabled={isDisabled}
                             >
                             {['Less then a month', 'Less then a quater', `Less then a 6 month's`, 'More then a year'].map((option, optionIndex) => (
                               <MenuItem key={optionIndex} value={option}>
@@ -268,6 +277,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                           {[ 'None', 'participants', 'Inside org', 'All'].map((option : any, optionIndex) => (
                             <FormControlLabel
                               key={optionIndex}
+                              disabled={isDisabled}
                               control={
                                 <Checkbox
                                   checked={Boolean(result[12]?.options[option] || false)}
@@ -291,6 +301,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                             <FormControlLabel
                               key={optionIndex}
                               value={option}
+                              disabled={isDisabled}
                               control={
                                 <Radio
                                   required
@@ -316,6 +327,7 @@ const QuestionBank = (props: QuestionBankProps) => {
                             <FormControlLabel
                               key={optionIndex}
                               value={option}
+                              disabled={isDisabled}
                               control={<Radio 
                                 required
                                   checked={Boolean(result[14]?.options[option] || false)}

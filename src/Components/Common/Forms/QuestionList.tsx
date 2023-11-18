@@ -210,7 +210,6 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         org: localStorage.getItem('org'),
         userId: localStorage.getItem('_id'),
         rawJson: JSON.stringify({
-          "data": {
             creator: localStorage.getItem('name'),
             date: date.getTime(),
             title: title,
@@ -219,7 +218,6 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
             description: description,
             comment: '',
             ...result
-          }
         }),
         status: "PENDING",
         approvals: rows,
