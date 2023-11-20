@@ -53,6 +53,7 @@ const Login = () => {
           localStorage.setItem('email', user?.email);
           localStorage.setItem('exp', user?.exp);
           localStorage.setItem('_id', user?._id);
+          localStorage.setItem('type', user?.type);
 
           Router
           .push('/')

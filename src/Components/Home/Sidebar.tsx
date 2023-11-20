@@ -15,11 +15,6 @@ const items = [
     icon: (<ChartBarIcon fontSize="small" />),
     title: 'Home'
   },
-  // {
-  //   href: '/account',
-  //   icon: (<UserIcon fontSize="small" />),
-  //   title: 'Account'
-  // },
   {
     href: '/settings',
     icon: (<CogIcon fontSize="small" />),
@@ -29,7 +24,7 @@ const items = [
     href: '/register',
     icon: (<UserAddIcon fontSize="small" />),
     title: 'Register'
-  }
+  },
 ];
 
 export const Sidebar = (props : any) => {
@@ -42,6 +37,14 @@ export const Sidebar = (props : any) => {
 
   useEffect(
     () => {
+      if((localStorage.getItem('type') === 'superAdmin' || localStorage.getItem('type') === 'admin') && items.length === 3) {
+        items.push({
+          href: '/admin-dashboard',
+          icon: (<UserIcon fontSize="small" />),
+          title: 'Dashboard'
+        })
+      }
+      
       if (!router.isReady) {
         return;
       }

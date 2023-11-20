@@ -196,19 +196,12 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         return {...doc, uri: uri}
       }))
       updateComment()
-      console.log(rows, {
-        creator: localStorage.getItem('name'),
-        date: date.getTime(),
-        title: title,
-        documents: updatedDocument,
-        dept: dept,
-        description: description,
-        comment: '',
-        ...result
-      })
       axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/tasks', {
         org: localStorage.getItem('org'),
         userId: localStorage.getItem('_id'),
+        creator: localStorage.getItem('name'),
+        startDate: new Date(),
+        endDate: '',
         rawJson: JSON.stringify({
             creator: localStorage.getItem('name'),
             date: date.getTime(),
@@ -307,15 +300,3 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
    </>
   );
 };
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths: any[] = [];
-
-  return { paths, fallback: false };
-};
-
-export const getStaticProps: GetStaticProps = async ({ params } : any) => {
-  return {
-    props: {},
-  };
-}
