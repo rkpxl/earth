@@ -101,7 +101,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
   const [addPersonDialog, setAddPersonDialog] = useState(false);
   const [allPeoples, setAllPeoples] = useState<Array<PersonnelPerson>>([])
   const [result, setResult] = useState(questions)
-  const [reviewer, setReviewer] = useState('')
+  const [reviewer, setReviewer] = useState<any>()
   const [comment, setComment] = useState('')
   
   const [snackMessage, setSnackMessage] = useState('')
@@ -201,6 +201,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         userId: localStorage.getItem('_id'),
         creator: localStorage.getItem('name'),
         startDate: new Date(),
+        currentAssigneeName: reviewer?.name,
         endDate: '',
         rawJson: JSON.stringify({
             creator: localStorage.getItem('name'),
@@ -214,7 +215,8 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         }),
         status: "PENDING",
         approvals: rows,
-        currentAssignedTo: reviewer,
+        currentAssignedTo: reviewer?.userId
+        ,
       })
       .then((response) => {
         if(response.status < 300) {

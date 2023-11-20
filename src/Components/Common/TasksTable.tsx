@@ -106,7 +106,6 @@ export const TasksTable = (props : any) => {
             <TableBody>
               {allTask.map(((e : any, index : number) => {
               const protocol = JSON.parse(e.rawJson)
-              console.log('protocol',protocol)
                 return (
                   <TableRow
                     hover

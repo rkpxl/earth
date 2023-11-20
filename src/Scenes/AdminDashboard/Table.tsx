@@ -1,4 +1,5 @@
 import React from 'react';
+import { format } from 'date-fns';
 import {
   Table,
   TableBody,
@@ -13,10 +14,10 @@ import { SeverityPill } from '../../Components/Common/SeverityPills';
 
 interface DataTableComponentProps {
   data: Array<{
-    name: string;
+    creator: string;
     startDate: string;
-    endDate: string;
-    currentAssignment: string;
+    endDate:  string;
+    currentAssigneeName: string;
     status: string;
   }>;
 }
@@ -37,10 +38,10 @@ const DataTable: React.FC<DataTableComponentProps> = ({ data }) => {
         <TableBody>
           {data.map((row, index) => (
             <TableRow key={index}>
-              <TableCell>{row.name}</TableCell>
-              <TableCell>{row.startDate}</TableCell>
-              <TableCell>{row.endDate}</TableCell>
-              <TableCell>{row.currentAssignment}</TableCell>
+              <TableCell>{row.creator}</TableCell>
+              <TableCell>{(row?.startDate) ? format(Number(row?.startDate), 'dd/MM/yyyy') : ''}</TableCell>
+              <TableCell>{row?.endDate ? format(Number(row?.endDate), 'dd/MM/yyyy') : ''}</TableCell>
+              <TableCell>{row.currentAssigneeName}</TableCell>
               <TableCell>
                 <SeverityPill
                   color={(row.status === 'APPROVED' && 'success')
