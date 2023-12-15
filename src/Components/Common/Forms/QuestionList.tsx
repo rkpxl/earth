@@ -200,7 +200,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         org: localStorage.getItem('org'),
         userId: localStorage.getItem('_id'),
         creator: localStorage.getItem('name'),
-        startDate: new Date(),
+        startDate: new Date().getTime(),
         currentAssigneeName: reviewer?.name,
         endDate: '',
         rawJson: JSON.stringify({

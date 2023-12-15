@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
 import PropTypes from 'prop-types';
@@ -8,8 +8,13 @@ import { Cog as CogIcon } from '../../icons/cog';
 import { User as UserIcon } from '../../icons/user';
 import { UserAdd as UserAddIcon } from '../../icons/user-add';
 import { SidebarItem } from './SidebarItem';
+import InboxIcon from '@mui/icons-material/MoveToInbox';
+import DraftsIcon from '@mui/icons-material/Drafts';
+import SendIcon from '@mui/icons-material/Send';
+import StarBorder from '@mui/icons-material/StarBorder';
+import AddChart from '@mui/icons-material/AddChart';
 
-const items = [
+const items : any = [
   {
     href: '/',
     icon: (<ChartBarIcon fontSize="small" />),
@@ -27,8 +32,10 @@ const items = [
   },
 ];
 
+
 export const Sidebar = (props : any) => {
   const { open, onClose } = props;
+  const [isAdmin, setIsAdmin] = useState(false)
   const router = useRouter();
   const lgUp = useMediaQuery((theme : any) => theme?.breakpoints.up('lg'), {
     defaultMatches: true,
@@ -38,10 +45,38 @@ export const Sidebar = (props : any) => {
   useEffect(
     () => {
       if((localStorage.getItem('type') === 'superAdmin' || localStorage.getItem('type') === 'admin') && items.length === 3) {
-        items.push({
+       items.push(
+        {
           href: '/admin-dashboard',
-          icon: (<UserIcon fontSize="small" />),
-          title: 'Dashboard'
+          icon: (<AddChart fontSize="small" />),
+          title: 'Dashboard', 
+          subRoute: [
+            {
+              href: '/admin-dashboard/analytics',
+              icon: (<InboxIcon fontSize="small" />),
+              title: 'Analytics'
+            },
+            {
+              href: '/admin-dashboard/approvals',
+              icon: (<DraftsIcon fontSize="small" />),
+              title: 'Approvals'
+            },
+            {
+              href: '/admin-dashboard/workflows',
+              icon: (<SendIcon fontSize="small" />),
+              title: 'Workflows'
+            },
+            {
+              href: '/admin-dashboard/reports',
+              icon: (<StarBorder fontSize="small" />),
+              title: 'Reports'
+            },
+            {
+              href: '/admin-dashboard/testing',
+              icon: (<ChartBarIcon fontSize="small" />),
+              title: 'testing'
+            },
+          ]
         })
       }
       
@@ -95,7 +130,7 @@ export const Sidebar = (props : any) => {
         />
         <Box sx={{ flexGrow: 1 }}>
           {items.map((item : any,index : number) => (
-            <SidebarItem key={index} icon={item.icon} href={item.href} title={item.title} />
+            <SidebarItem key={index} icon={item.icon} href={item.href} title={item.title} isAdmin={item?.subRoute?.length > 0} subRoute={item?.subRoute || []}/>
           ))}
         </Box>
         <Divider sx={{ borderColor: '#2D3748' }} />
