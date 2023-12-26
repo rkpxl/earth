@@ -35,14 +35,14 @@ const Login = () => {
     }),
     onSubmit: () => {
       setIsLoading(true)
-      axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/users/signup', {
+      axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/auth/signin', {
         email: formik.values.email,
         password: formik.values.password
       })
         .then((response) => {
           // Handle the response
           setIsLoading(false)
-          const token = response.data;
+          const token = response.data.data.token;
           const user : any = parseJwt(token)
 
           // Decode the payload from base64

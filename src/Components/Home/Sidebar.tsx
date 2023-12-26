@@ -76,6 +76,11 @@ export const Sidebar = (props : any) => {
               icon: (<ChartBarIcon fontSize="small" />),
               title: 'testing'
             },
+            {
+              href: '/admin-dashboard/departments',
+              icon: (<UserAddIcon fontSize="small" />),
+              title: 'Departments'
+            },
           ]
         })
       }
@@ -130,7 +135,7 @@ export const Sidebar = (props : any) => {
         />
         <Box sx={{ flexGrow: 1 }}>
           {items.map((item : any,index : number) => (
-            <SidebarItem key={index} icon={item.icon} href={item.href} title={item.title} isAdmin={item?.subRoute?.length > 0} subRoute={item?.subRoute || []}/>
+            <SidebarItem key={index.toString()} icon={item.icon} href={item.href} title={item.title} isAdmin={item?.subRoute?.length > 0} subRoute={item?.subRoute || []}/>
           ))}
         </Box>
         <Divider sx={{ borderColor: '#2D3748' }} />

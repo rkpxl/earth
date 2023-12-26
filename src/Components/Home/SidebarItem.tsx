@@ -74,7 +74,7 @@ export const SidebarItem = (props : any) => {
             {subRoute.map((route : any, index : any) => {
               return (
                 <ListItem
-                  key={index}
+                  key={index.toString()}
                   disableGutters
                   sx={{
                     display: 'flex',
@@ -91,7 +91,7 @@ export const SidebarItem = (props : any) => {
                     passHref
                   >
                     <SidebarItemButton handleClick={() => {}} key={route.title} title={route.title} open={false} isAdmin={false} icon={route.icon} active={router.pathname === route.href ? true : false}/>
-                </NextLink>
+                  </NextLink>
                 </ListItem> 
               )
             })}
