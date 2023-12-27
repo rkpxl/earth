@@ -14,8 +14,35 @@ import SendIcon from '@mui/icons-material/Send';
 import StarBorder from '@mui/icons-material/StarBorder';
 import AddChart from '@mui/icons-material/AddChart';
 
-const items : any = [
-  {
+const ItemCount = 4
+
+// const items : any = [
+//   {
+//     href: '/',
+//     icon: (<ChartBarIcon fontSize="small" />),
+//     title: 'Home'
+//   },
+//   {
+//     href: '/settings',
+//     icon: (<CogIcon fontSize="small" />),
+//     title: 'Settings'
+//   },
+//   {
+//     href: '/settings',
+//     icon: (<CogIcon fontSize="small" />),
+//     title: 'Publication'
+//   },
+// ];
+
+
+export const Sidebar = (props : any) => {
+  const { open, onClose } = props;
+  const router = useRouter();
+  const lgUp = useMediaQuery((theme : any) => theme?.breakpoints.up('lg'), {
+    defaultMatches: true,
+    noSsr: false
+  });
+  const [items, setItems] = useState([{
     href: '/',
     icon: (<ChartBarIcon fontSize="small" />),
     title: 'Home'
@@ -26,63 +53,69 @@ const items : any = [
     title: 'Settings'
   },
   {
-    href: '/register',
-    icon: (<UserAddIcon fontSize="small" />),
-    title: 'Register'
-  },
-];
-
-
-export const Sidebar = (props : any) => {
-  const { open, onClose } = props;
-  const [isAdmin, setIsAdmin] = useState(false)
-  const router = useRouter();
-  const lgUp = useMediaQuery((theme : any) => theme?.breakpoints.up('lg'), {
-    defaultMatches: true,
-    noSsr: false
-  });
+    href: '/settings',
+    icon: (<CogIcon fontSize="small" />),
+    title: 'Publication'
+  },])
 
   useEffect(
     () => {
-      if((localStorage.getItem('type') === 'superAdmin' || localStorage.getItem('type') === 'admin') && items.length === 3) {
-       items.push(
-        {
-          href: '/admin-dashboard',
-          icon: (<AddChart fontSize="small" />),
-          title: 'Dashboard', 
-          subRoute: [
-            {
-              href: '/admin-dashboard/analytics',
-              icon: (<InboxIcon fontSize="small" />),
-              title: 'Analytics'
-            },
-            {
-              href: '/admin-dashboard/approvals',
-              icon: (<DraftsIcon fontSize="small" />),
-              title: 'Approvals'
-            },
-            {
-              href: '/admin-dashboard/workflows',
-              icon: (<SendIcon fontSize="small" />),
-              title: 'Workflows'
-            },
-            {
-              href: '/admin-dashboard/reports',
-              icon: (<StarBorder fontSize="small" />),
-              title: 'Reports'
-            },
-            {
-              href: '/admin-dashboard/testing',
-              icon: (<ChartBarIcon fontSize="small" />),
-              title: 'testing'
-            },
-            {
-              href: '/admin-dashboard/departments',
-              icon: (<UserAddIcon fontSize="small" />),
-              title: 'Departments'
-            },
-          ]
-        })
+      const dashboardItem = {
+        href: '/admin-dashboard',
+        icon: (<AddChart fontSize="small" />),
+        title: 'Dashboard', 
+        subRoute: [
+          {
+            href: '/admin-dashboard/analytics',
+            icon: (<InboxIcon fontSize="small" />),
+            title: 'Analytics'
+          },
+          {
+            href: '/admin-dashboard/approvals',
+            icon: (<DraftsIcon fontSize="small" />),
+            title: 'Approvals'
+          },
+          {
+            href: '/admin-dashboard/workflows',
+            icon: (<SendIcon fontSize="small" />),
+            title: 'Workflows'
+          },
+          {
+            href: '/admin-dashboard/reports',
+            icon: (<StarBorder fontSize="small" />),
+            title: 'Reports'
+          },
+          {
+            href: '/admin-dashboard/testing',
+            icon: (<ChartBarIcon fontSize="small" />),
+            title: 'testing'
+          },
+          {
+            href: '/admin-dashboard/departments',
+            icon: (<UserAddIcon fontSize="small" />),
+            title: 'Departments'
+          },
+          {
+            href: '/admin-dashboard/group',
+            icon: (<UserAddIcon fontSize="small" />),
+            title: 'Gropus'
+          },
+          {
+            href: '/admin-dashboard/register',
+            icon: (<UserAddIcon fontSize="small" />),
+            title: 'Register'
+          },
+        ]
+      }
+
+      if((localStorage.getItem('type') === 'superAdmin' || localStorage.getItem('type') === 'admin')) {
+        setItems((prev) : any => {          
+          const isDashboardItemAdded = prev.some(item => item.href === dashboardItem.href)
+          if(!isDashboardItemAdded) {
+            return [...prev, dashboardItem]
+          }
+          return prev
+        });
       }
       
       if (!router.isReady) {
@@ -135,7 +168,7 @@ export const Sidebar = (props : any) => {
         />
         <Box sx={{ flexGrow: 1 }}>
           {items.map((item : any,index : number) => (
-            <SidebarItem key={index.toString()} icon={item.icon} href={item.href} title={item.title} isAdmin={item?.subRoute?.length > 0} subRoute={item?.subRoute || []}/>
+            <SidebarItem key={item.title} icon={item.icon} href={item.href} title={item.title} isAdmin={item?.subRoute?.length > 0} subRoute={item?.subRoute || []}/>
           ))}
         </Box>
         <Divider sx={{ borderColor: '#2D3748' }} />

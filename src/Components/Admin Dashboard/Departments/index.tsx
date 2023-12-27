@@ -1,8 +1,9 @@
 import React, { useState } from 'react'
 import Grid from '@mui/material/Grid';
-import DepartmentCard from  "./DepartmentCard"
 import PopUp from './PopUp';
-import Header from './Header';
+import Header from '../Common/Header';
+import AdminCard from '../Common/AdminCard';
+
 
 const apiResponse = [
     {
@@ -43,11 +44,11 @@ export default function index() {
   };
   return (
     <Grid>
-      <Header onClickHandle={handleClickOpen} />
+      <Header onClickHandle={handleClickOpen} title="Department" buttonText="Create New Departments"/>
       <PopUp open={open} onClose={handleClose} onSave={handleClose} />
       {apiResponse.map((dep, index) => (
       <div key={index.toString()}>
-        <DepartmentCard department={dep} />
+        <AdminCard card={dep} />
       </div>))}
     </Grid>
   )

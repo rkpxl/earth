@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
 // import { DashboardNavbar } from './dashboard-navbar';
@@ -23,6 +23,15 @@ const HomeLayout = (props : any) => {
   const { children } = props;
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const router = useRouter()
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    // Get the user type from localStorage
+    const userType = localStorage.getItem('type');
+
+    // Update the isAdmin state based on the user type
+    setIsAdmin(userType === 'superAdmin' || userType === 'admin');
+  }, []);
 
   return (
     <main>
@@ -30,6 +39,7 @@ const HomeLayout = (props : any) => {
       <Sidebar
         onClose={() => setSidebarOpen(false)}
         open={isSidebarOpen}
+        isAdmin={isAdmin}
       />
       <Navbar onSidebarOpen={() => setSidebarOpen(true)} />
       <Layout>

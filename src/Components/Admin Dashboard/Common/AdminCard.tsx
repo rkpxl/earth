@@ -1,11 +1,10 @@
 import React, { useState } from 'react';
 import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
 import CardHeader from '@mui/material/CardHeader';
 import Avatar from '@mui/material/Avatar';
 import IconButton from '@mui/material/IconButton';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import { CardActions, Grid, Typography } from '@mui/material';
+import { Grid } from '@mui/material';
 import { getStandatedDate } from '../../../Utils/dateTime';
 import {
   Menu,
@@ -13,11 +12,10 @@ import {
 } from '@mui/material';
 
 
-const DepartmentCard = ({ department } : any) => {
+const AdminCard = ({ card } : any) => {
 
-  const { name, createdAt, updatedAt, primaryEmail, isActive, onDelete } = department
+  const { name, createdAt, updatedAt, isActive } = card
   const avatarLetter = name.charAt(0).toUpperCase();
-  const [toggle, setToggle] = useState(false)
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuClick = (event : any) => {
@@ -27,8 +25,6 @@ const DepartmentCard = ({ department } : any) => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
-
-  const toggleBar = () => { setToggle((prev) => !prev) }
 
   return (
     <Card sx={{ boxShadow: 5, height: "100px", margin: "16px" }}>
@@ -61,4 +57,4 @@ const DepartmentCard = ({ department } : any) => {
   );
 };
 
-export default DepartmentCard;
+export default AdminCard;

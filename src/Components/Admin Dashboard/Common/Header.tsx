@@ -5,13 +5,13 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 
 // Defining the Header component
-const Header = ({ onClickHandle } : any) => {
+const Header = ({ title, buttonText,  onClickHandle } : any) => {
   return (
     <div>
       <Toolbar>
         {/* Left side text */}
         <Typography variant="h6" component="div" sx={{ flexGrow: 1, color: "black", fontSize: "22px" }}>
-          Workflow
+          {title}
         </Typography>
 
         {/* Right side button */}
@@ -19,7 +19,7 @@ const Header = ({ onClickHandle } : any) => {
           color="primary"
           variant="contained"
           onClick={onClickHandle}
-        >Create Approval Rule</Button>
+        >{buttonText}</Button>
       </Toolbar>
     </div>
   );
