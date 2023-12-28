@@ -3,10 +3,10 @@ import ExpandMore from "@mui/icons-material/ExpandMore"
 import { Box, Button } from "@mui/material"
 
 export const SidebarItemButton = (props : any) : JSX.Element => {
-    const {handleClick, key, active, isAdmin, icon, title, open} = props
+    const {handleClick, active, isAdmin, icon, title, open} = props
     return (
     <Button
-      key={key}
+      key={title}
       onClick={handleClick}
       startIcon={icon}
       disableRipple

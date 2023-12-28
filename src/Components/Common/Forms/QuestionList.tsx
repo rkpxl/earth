@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Alert, AlertColor, Radio, RadioGroup, Snackbar, Step, StepLabel, Stepper, Tab, Tabs, Typography } from '@mui/material';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { Alert, AlertColor, Snackbar, Tab, Tabs } from '@mui/material';
 import SearchPeople from '../SearchPeople';
 import DocumentTab from './DocumentTab';
 import SubmitTab from './SubmitTab';
 import PersonnelTab from './PersonnelTab';
 import QuestionBank from './QuestionBank';
+import CustomTabPanel from '../CustomTabPanel';
 
 interface FormProps {
   title: string | string[] | undefined
@@ -44,27 +42,6 @@ interface PersonnelPerson {
   access: string | null,
   status: string | null,
   comment: string | null,
-}
-
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
 }
 
 function a11yProps(index: number) {

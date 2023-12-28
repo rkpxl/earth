@@ -7,7 +7,7 @@ import Collapse from '@mui/material/Collapse';
 import { SidebarItemButton } from './SidebarItemButton'
 
 export const SidebarItem = (props : any) => {
-  const { key, href, icon, title, isAdmin, subRoute, ...others } = props;
+  const { href, icon, title, isAdmin, subRoute, ...others } = props;
   const router = useRouter();
   const [open, setOpen] = React.useState(router.pathname.includes("admin-dashboard"));
   const active = href ? (router.pathname === href) : false;
@@ -24,7 +24,7 @@ export const SidebarItem = (props : any) => {
     <>{
       !isAdmin ? 
       <ListItem
-        key={key}
+        key={title}
         disableGutters
         sx={{
           display: 'flex',
@@ -40,12 +40,12 @@ export const SidebarItem = (props : any) => {
           href={href}
           passHref
         >
-          <SidebarItemButton handleClick={handleClickClose} key={key} title={title} open={false} isAdmin={false} icon={icon} active={active}/>
+          <SidebarItemButton handleClick={handleClickClose} title={title} open={false} isAdmin={false} icon={icon} active={active}/>
       </NextLink>
       </ListItem> 
       :
       <ListItem
-        key={key}
+        key={title}
         disableGutters
         sx={{
           display: 'flex',
@@ -90,7 +90,7 @@ export const SidebarItem = (props : any) => {
                     href={route.href}
                     passHref
                   >
-                    <SidebarItemButton handleClick={() => {}} key={route.title} title={route.title} open={false} isAdmin={false} icon={route.icon} active={router.pathname === route.href ? true : false}/>
+                    <SidebarItemButton handleClick={() => {}} title={route.title} open={false} isAdmin={false} icon={route.icon} active={router.pathname === route.href ? true : false}/>
                   </NextLink>
                 </ListItem> 
               )

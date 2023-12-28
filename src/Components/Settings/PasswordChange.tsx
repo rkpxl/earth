@@ -1,6 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Alert, Box, Button, Card, CardContent, CardHeader, Divider, Snackbar, TextField } from '@mui/material';
 import axios from 'axios';
+import { useRouter } from 'next/router';
+import { parseJwt } from '../../Utils/signin';
 
 const PasswordChange = (props : any) => {
   const [values, setValues] = useState({
@@ -12,6 +14,8 @@ const PasswordChange = (props : any) => {
   const [openIncorrectInput, setOpenIncorrectInput] = useState(false);
   const [openSuccessBar, setOpenSuccessBar] = useState(false);
   const [errorMessage, setErrorMessage] = useState(`Both input isn't equal`);
+  const [token, setToken] = useState<any>(null)
+  const router = useRouter();
 
   const handleIncorrectInput = () => {
     setOpenIncorrectInput(true);
@@ -35,23 +39,60 @@ const PasswordChange = (props : any) => {
     });
   };
 
+  useEffect(() => {
+    const { token } = router.query;
+    if(token) {
+      axios.get(process.env.NEXT_PUBLIC_HOST_URL+"/auth/validate-token", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        }
+      }).then((response) => {})
+      .catch((err) => {
+        setErrorMessage('Please generate url again, your session is expired')
+        handleIncorrectInput()
+        console.log(err)
+      })
+      setToken(token)
+    }
+  }, [router.query])
+
   const handleUpdate = () => {
     if(values.password !== values.confirm) {
       handleIncorrectInput()
     } else {
-      axios.put(process.env.NEXT_PUBLIC_HOST_URL + '/users/updatePassword', {
-        email: localStorage.getItem('email'),
-        password: values.password,
-        previousPassword: values.previous,
-      }).then((response) => {
-        if(response.status < 300) {
-          handleSuccess()
-        }
-      }).catch((e) => {
-        console.log(e)
-        setErrorMessage(e.response.data.message)
-        handleIncorrectInput()
-      })
+      if(token) {
+        const user : any = parseJwt(token)
+        axios.put(process.env.NEXT_PUBLIC_HOST_URL + '/users/reset-password', {
+          email: user.email,
+          password: values.password,
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          }}).then((response) => {
+          if(response.status < 300) {
+            handleSuccess()
+            router.push("/login")
+          }
+        }).catch((e) => {
+          console.log(e)
+          setErrorMessage("Please try again")
+          handleIncorrectInput()
+        })
+      } else {
+        axios.put(process.env.NEXT_PUBLIC_HOST_URL + '/users/updatePassword', {
+          email: localStorage.getItem('email'),
+          password: values.password,
+          previousPassword: values.previous,
+        }).then((response) => {
+          if(response.status < 300) {
+            handleSuccess()
+          }
+        }).catch((e) => {
+          console.log(e)
+          setErrorMessage(e.response.data.message)
+          handleIncorrectInput()
+        })
+      }
     }
   }
 
@@ -60,12 +101,12 @@ const PasswordChange = (props : any) => {
       <form {...props}>
         <Card>
           <CardHeader
-            subheader="Update password"
+            subheader={token ? "Reset Password" : "Update password"}
             title="Password"
           />
           <Divider />
           <CardContent>
-            <TextField
+            { !token ? <TextField
               fullWidth
               label="Previous Password"
               margin="normal"
@@ -74,7 +115,7 @@ const PasswordChange = (props : any) => {
               type="password"
               value={values.previous}
               variant="outlined"
-            />
+            /> : null }
             <TextField
               fullWidth
               label="Password"

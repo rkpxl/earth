@@ -6,13 +6,7 @@ import * as Yup from 'yup';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Button, Container, Grid, TextField, Typography } from '@mui/material';
 import axios from 'axios'
-
-function parseJwt(token : string) {
-  if (!token) { return; }
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace('-', '+').replace('_', '/');
-  return JSON.parse(window.atob(base64));
-}
+import { parseJwt } from '../../Utils/signin';
 
 const Login = () => {
   const [error, setError] = React.useState('');
