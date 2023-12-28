@@ -25,10 +25,6 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
     }
   }, [])
 
-  if( typeof localStorage === 'undefined') {
-    return null
-  }
-
   return (
    <Suspense fallback={<CircularProgress />}>
     {children}
@@ -37,9 +33,3 @@ const Layout: React.FC<LayoutProps> = ({ children }) => {
 };
 
 export default Layout;
-
-export async function getServerSideProps() {
-  return {
-    props: {},
-  };
-}
