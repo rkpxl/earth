@@ -1,13 +1,39 @@
 import React from 'react'
 import Layout from '../../../Scenes/Home'
-import Departments from "../../../Components/Admin Dashboard/Departments";
+import Departments from "../../../Scenes/AdminDashboard/Departments";
+import axiosInstance from '../../../Utils/axiosUtil';
 
-function index() {
+function index({departments, isAuthenticated } : any) {
   return (
-   <Layout><Departments /></Layout>
+   <Layout>
+      <Departments departments={departments}/>
+    </Layout>
   )
 }
 
-index.propTypes = {}
+export const getServerSideProps = async function getServerSideProps(context : any) {
+  axiosInstance.context = context
+  try {
+    const response = await axiosInstance.get('/auth/validate-token', context);
+    if(response.status === 200) {
+      const departments = await axiosInstance.get('/department', context);
+      return {
+        props: {
+          isAuthenticated: true,
+          departments: departments.data
+        },
+      };
+    }
+  } catch (err) {
+    console.error("error", err)
+  }
+
+  return {
+    redirect: {
+      destination: '/login',
+      permanent: false,
+    },
+  };
+}
 
 export default index

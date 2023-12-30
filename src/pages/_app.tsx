@@ -7,6 +7,9 @@ import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import { createEmotionCache } from '../Utils/create-emotion-cache';
 import { theme } from '../Theme';
+import { Provider } from 'react-redux';
+import Store from '../Store';
+import Snackbar from '../Components/Common/Snackbar';
 
 const clientSideEmotionCache = createEmotionCache();
 
@@ -29,7 +32,10 @@ const App = (props : any) => {
       <LocalizationProvider dateAdapter={AdapterDateFns}>
         <ThemeProvider theme={theme}>
           <CssBaseline />
-          {getLayout(<Component {...pageProps} />)}
+          <Provider store={Store}>
+            {getLayout(<Component {...pageProps} />)}
+            <Snackbar />
+          </Provider>
         </ThemeProvider>
       </LocalizationProvider>
     </CacheProvider>

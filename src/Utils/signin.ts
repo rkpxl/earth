@@ -1,8 +1,5 @@
-const  validateToken = () => {
-  if(typeof localStorage === 'undefined') {
-    return false
-  }
-  const exp = localStorage.getItem('exp');
+const  validateToken = (tokenExp = "") => {
+  const exp = tokenExp || localStorage.getItem('exp');
   if (!exp) {
     return false
   }

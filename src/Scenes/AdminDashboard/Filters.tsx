@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { TextField, Button, Grid, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
-import { GetStaticPaths, GetStaticProps } from 'next';
 
 interface FiltersComponentProps {
   handleApplyFilter: Function;

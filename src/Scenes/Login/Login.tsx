@@ -1,16 +1,19 @@
 import React, { Suspense } from 'react'
 import Head from 'next/head';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Button, Container, Grid, TextField, Typography } from '@mui/material';
 import axios from 'axios'
 import { parseJwt } from '../../Utils/signin';
+import { setCookie } from '../../Utils/cookieUtils';
+
 
 const Login = () => {
   const [error, setError] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false)
+  const router = useRouter()
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -39,22 +42,37 @@ const Login = () => {
           const token = response.data.data.token;
           const user : any = parseJwt(token)
 
+          console.log('token', user)
+
           // Decode the payload from base64
           // Store the token in local storage or a secure HTTP-only cookie
           localStorage.setItem('name', user?.name);
-          localStorage.setItem('department', user?.department);
+          localStorage.setItem('primartDepartment', user?.primartDepartment);
           localStorage.setItem('org', user?.org);
+          localStorage.setItem('orgId', user?.orgId);
           localStorage.setItem('email', user?.email);
           localStorage.setItem('exp', user?.exp);
           localStorage.setItem('_id', user?._id);
           localStorage.setItem('type', user?.type);
+          localStorage.setItem('authToken', token);
 
-          Router
-          .push('/')
-          .catch(console.error);
+          setCookie('name', user?.name);
+          setCookie('primartDepartment', user?.primartDepartment);
+          setCookie('org', user?.org);
+          setCookie('orgId', user?.orgId);
+          setCookie('email', user?.email);
+          setCookie('exp', user?.exp);
+          setCookie('_id', user?._id);
+          setCookie('type', user?.type);
+          setCookie('authToken', token);
+
+          router.push('/').catch(console.error);
+
+          console.log("Done")
 
         })
         .catch((error) => {
+          console.log('error', error)
           setError('An error occurred during login.');
           // Clear the form values
           setIsLoading(false)
@@ -64,16 +82,12 @@ const Login = () => {
     }
   });
 
-  const handleGoogleSubmit =  () => {
-    console.log('hello')
-  }
+  const handleGoogleSubmit =  () => {}
 
-  const handleFBSubmit =  () => {
-    console.log('hello')
-  }
+  const handleFBSubmit =  () => {}
 
   return (
-    <>
+    <Suspense fallback={<CircularProgress />}>
       <Head>
         <title>Login</title>
       </Head>
@@ -203,7 +217,7 @@ const Login = () => {
           </form>
         </Container>
       </Box>
-    </>
+    </Suspense>
   );
 };
 

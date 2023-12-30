@@ -3,22 +3,39 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { Grid } from '@mui/material';
+import axiosInstance from '../../../Utils/axiosUtil';
+import { showMessage } from '../../../Store/reducers/snackbar';
+import { useSelector } from 'react-redux';
+import * as type from '../../../Utils/types/type'
+
 
 const Popup = ({ open, onClose, onSave } : any) => {
-  const [newItemText, setNewItemText] = useState('');
+  const [name, setName] = useState('');
+  const [headName, setHeadName] = useState('');
+  const [primaryEmail, setPrimaryEmail] = useState('');
+  const snackbar = useSelector((state : type.RootState) => state.snackbar)
+
+  const onSubmit = async () => {
+    const response = await axiosInstance.post("/departments", {
+      name,
+      headName,
+      primaryEmail
+    })
+    onClose()
+  }
 
   return (
     <Dialog open={open} onClose={onClose} >
       <DialogContent sx={{ padding: 2 }} >
-        <DialogTitle sx={{padding: "0px"}}>New Group Details</DialogTitle>
+        <DialogTitle sx={{padding: "0px"}}>New Department Details</DialogTitle>
         <TextField
           label="Enter Name"
           variant="outlined"
           fullWidth
           margin="normal"
-          value={newItemText}
+          value={name}
           required={true}
-          onChange={(e) => setNewItemText(e.target.value)}
+          onChange={(e) => setName(e.target.value)}
           sx={{ minWidth: "450px" }}
         />
          <TextField
@@ -27,15 +44,26 @@ const Popup = ({ open, onClose, onSave } : any) => {
           fullWidth
           required={false}
           margin="normal"
-          value={newItemText}
-          onChange={(e) => setNewItemText(e.target.value)}
+          value={primaryEmail}
+          onChange={(e) => setPrimaryEmail(e.target.value)}
+          sx={{ minWidth: "450px" }}
+        />
+
+        <TextField
+          label="Head Name"
+          variant="outlined"
+          fullWidth
+          required={false}
+          margin="normal"
+          value={headName}
+          onChange={(e) => setHeadName(e.target.value)}
           sx={{ minWidth: "450px" }}
         />
 
         {/* Buttons */}
         <Grid sx={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
           <Button onClick={onSave} color="primary" sx={{ marginTop: 1 }}>
-            Save
+            Add
           </Button>
           <Button onClick={onClose} color="primary" sx={{ marginTop: 1 }}>
             Close

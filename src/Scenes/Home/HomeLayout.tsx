@@ -42,7 +42,6 @@ const HomeLayout = (props : any) => {
         isAdmin={isAdmin}
       />
       <Navbar onSidebarOpen={() => setSidebarOpen(true)} />
-      <Layout>
         <HomeLayoutRoot>
           <Box
             sx={{
@@ -55,7 +54,6 @@ const HomeLayout = (props : any) => {
             {children}
           </Box>
         </HomeLayoutRoot>
-      </Layout>
     </main>
   );
 };
