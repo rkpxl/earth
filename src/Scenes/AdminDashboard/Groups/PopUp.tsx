@@ -30,7 +30,7 @@ const Popup = ({ open, onClose, onSave } : any) => {
         name,
         primaryEmail
       })
-      if(response.status < 300) {
+      if(response.status <= 201) {
         dispatch(showMessage({ message: 'Group is added', severity: 'success' }));
       } else {
         dispatch(showMessage({ message: 'Somehitng went wrong, please try again', severity: 'error' }));

@@ -38,8 +38,14 @@ export interface Group {
   __v?: number;
 }
 
-export default Group;
+export interface ConfirmationState<T extends any[]> {
+  isOpen: boolean;
+  title?: string;
+  args?: T | null;
+}
 
+
+export default Group;
 
 export type Snackbar_Severity = 'success' | 'error' | 'warning'
 export type RootState = ReturnType<typeof store.getState>;

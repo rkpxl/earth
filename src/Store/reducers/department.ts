@@ -27,6 +27,7 @@ export const fetchDepartments = createAsyncThunk('department/fetchDepartments', 
     throw error || 'Error fetching departments';
   }
 });
+
 const departmentSlice = createSlice({
   name: 'department',
   initialState,

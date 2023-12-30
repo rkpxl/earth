@@ -1,13 +1,10 @@
 import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-// import { DashboardNavbar } from './dashboard-navbar';
 import { Sidebar } from '../../Components/Home/Sidebar';
 import { Navbar } from '../../Components/Home/Navbar'
 import React from 'react';
-import { validateToken } from '../../Utils/signup';
 import { useRouter } from 'next/router';
-import Layout from '../../Components/Layout/Layout';
 
 const HomeLayoutRoot = styled('div')(({ theme }) => ({
   display: 'flex',

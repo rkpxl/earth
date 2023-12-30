@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 
 
-const AdminCard = ({ card } : any) => {
+const AdminCard = ({ card, onDelete } : any) => {
 
   const { name, createdAt, updatedAt, isActive } = card
   const avatarLetter = name.charAt(0).toUpperCase();
@@ -25,6 +25,11 @@ const AdminCard = ({ card } : any) => {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
+  const handleOnDelete = () => {
+    handleMenuClose()
+    onDelete()
+  }
 
   return (
     <Card sx={{ boxShadow: 5, height: "100px", margin: "16px" }}>
@@ -44,7 +49,7 @@ const AdminCard = ({ card } : any) => {
               <MenuItem onClick={() => console.log('Option 1 clicked')}>
               {!(Boolean(isActive)) ? 'Activate' : 'Inactivate'}
               </MenuItem>
-              <MenuItem onClick={() => console.log('Option 2 clicked')}>
+              <MenuItem onClick={handleOnDelete}>
                 Delete
               </MenuItem>
             </Menu>
