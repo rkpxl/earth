@@ -10,7 +10,6 @@ const Snackbar: React.FC = () => {
   const snackbar = useSelector((state: type.RootState) => state.snackbar);
 
   useEffect(() => {
-    console.log("inside snackbar")
     if (snackbar.message) {
       const timer = setTimeout(() => {
         dispatch(hideMessage());

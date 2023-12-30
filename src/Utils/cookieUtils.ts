@@ -11,7 +11,6 @@ export const getCookie = (name: string): string | undefined => {
 };
 
 export const removeAllCookie = () => {
-  console.log('Removing all cookies');
   cookies.remove('name')
   cookies.remove('primartDepartment')
   cookies.remove('org')

@@ -20,7 +20,6 @@ const DocumentComponent = (props : DocumentComponentProps) => {
 
   const handleFileInputChange = (event: any) => {
     const file = event.target.files[0];
-    console.log(file)
     if (file) {
         setDocuments([...documents, {name: file.name, file: file, uri: ''}]);
     }

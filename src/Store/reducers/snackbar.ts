@@ -13,7 +13,6 @@ const snackbarSlice = createSlice({
   initialState,
   reducers: {
     showMessage: (state, action: PayloadAction<{ message: string; duration?: number; severity?: type.Snackbar_Severity}>) => {
-        console.log("inside showmessage")
       const { message, duration = initialState.duration, severity = initialState.severity } = action.payload;
       return { ...state, message, duration, severity };
     },

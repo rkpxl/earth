@@ -216,7 +216,6 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         question.id === questionId ? { ...question, answer } : question
       )
     );
-    console.log(questions)
   };
 
   return (

@@ -42,8 +42,6 @@ const Login = () => {
           const token = response.data.data.token;
           const user : any = parseJwt(token)
 
-          console.log('token', user)
-
           // Decode the payload from base64
           // Store the token in local storage or a secure HTTP-only cookie
           localStorage.setItem('name', user?.name);
@@ -67,12 +65,9 @@ const Login = () => {
           setCookie('authToken', token);
 
           router.push('/').catch(console.error);
-
-          console.log("Done")
-
         })
         .catch((error) => {
-          console.log('error', error)
+          console.error('error', error)
           setError('An error occurred during login.');
           // Clear the form values
           setIsLoading(false)

@@ -3,16 +3,14 @@ import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { Dialog, DialogContent, DialogTitle } from '@mui/material';
 import { Grid } from '@mui/material';
+import { useDispatch } from 'react-redux';
 import axiosInstance from '../../../Utils/axiosUtil';
 import { showMessage } from '../../../Store/reducers/snackbar';
-import { useDispatch, useSelector } from 'react-redux';
-import * as type from '../../../Utils/types/type'
-import { fetchDepartments } from '../../../Store/reducers/department';
-
+import { fetchGroups } from '../../../Store/reducers/group';
+import * as type from '../../../Utils/types/type';
 
 const Popup = ({ open, onClose, onSave } : any) => {
   const [name, setName] = useState('');
-  const [headName, setHeadName] = useState('');
   const [primaryEmail, setPrimaryEmail] = useState('');
   const [nameError, setNameError] = useState('');
   const dispatch: type.AppDispatch = useDispatch()
@@ -28,13 +26,12 @@ const Popup = ({ open, onClose, onSave } : any) => {
       return;
     }
     try {
-      const response = await axiosInstance.post("/department", {
+      const response = await axiosInstance.post("/group", {
         name,
-        headName,
         primaryEmail
       })
       if(response.status < 300) {
-        dispatch(showMessage({ message: 'Department is added', severity: 'success' }));
+        dispatch(showMessage({ message: 'Group is added', severity: 'success' }));
       } else {
         dispatch(showMessage({ message: 'Somehitng went wrong, please try again', severity: 'error' }));
       }
@@ -42,14 +39,14 @@ const Popup = ({ open, onClose, onSave } : any) => {
       console.error(err)
       dispatch(showMessage({ message: 'Internal server error, contact to admin', severity: 'error' }));
     }
-    dispatch(fetchDepartments())
+    dispatch(fetchGroups())
     popUpClose()
   }
 
   return (
     <Dialog open={open} onClose={onClose} >
       <DialogContent sx={{ padding: 2 }} >
-        <DialogTitle sx={{padding: "0px"}}>New Department Details</DialogTitle>
+        <DialogTitle sx={{padding: "0px"}}>New Group Details</DialogTitle>
         <TextField
           label="Enter Name"
           variant="outlined"
@@ -58,9 +55,9 @@ const Popup = ({ open, onClose, onSave } : any) => {
           value={name}
           required={true}
           onChange={(e) => setName(e.target.value)}
-          sx={{ minWidth: "450px" }}
           error={Boolean(nameError)}
           helperText={nameError}
+          sx={{ minWidth: "450px" }}
         />
          <TextField
           label="Primary Email"
@@ -73,16 +70,7 @@ const Popup = ({ open, onClose, onSave } : any) => {
           sx={{ minWidth: "450px" }}
         />
 
-        <TextField
-          label="Head Name"
-          variant="outlined"
-          fullWidth
-          required={false}
-          margin="normal"
-          value={headName}
-          onChange={(e) => setHeadName(e.target.value)}
-          sx={{ minWidth: "450px" }}
-        />
+        {/* Buttons */}
         <Grid sx={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
           <Button type="submit" onClick={onSubmit} color="primary" sx={{ marginTop: 1 }}>
             Add
