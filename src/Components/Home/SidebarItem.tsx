@@ -90,7 +90,7 @@ export const SidebarItem = (props : any) => {
                     href={route.href}
                     passHref
                   >
-                    <SidebarItemButton handleClick={() => {}} title={route.title} open={false} isAdmin={false} icon={route.icon} active={router.pathname === route.href ? true : false}/>
+                    <SidebarItemButton handleClick={() => {}} title={route.title} open={false} isAdmin={false} icon={route.icon} active={router.pathname.startsWith(`${route.href}`)}/>
                   </NextLink>
                 </ListItem> 
               )

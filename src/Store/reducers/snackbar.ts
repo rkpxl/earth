@@ -2,7 +2,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as type from '../../Utils/types/type'
 
-const initialState: type.Snackbar = {
+const initialState: type.ISnackbar = {
     message: null,
     duration: 3000, // Default duration in milliseconds
     severity: 'warning',

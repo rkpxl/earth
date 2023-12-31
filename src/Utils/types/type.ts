@@ -1,7 +1,7 @@
 import store from '../../Store'
 
 
-export interface Snackbar {
+export interface ISnackbar {
   severity: Snackbar_Severity,
   message: string | null,
   duration?: number,
@@ -14,7 +14,7 @@ export interface APIResponse<T = any> {
   error?: string;
 }
 
-export interface Department {
+export interface IDepartment {
   _id?: string;
   name?: string;
   id?: string;
@@ -27,7 +27,7 @@ export interface Department {
   __v?: number;
 }
 
-export interface Group {
+export interface IGroup {
   _id?: string;
   name?: string;
   id?: number;
@@ -38,14 +38,24 @@ export interface Group {
   __v?: number;
 }
 
-export interface ConfirmationState<T extends any[]> {
+export interface IConfirmationState<T extends any[]> {
   isOpen: boolean;
   title?: string;
   args?: T | null;
 }
 
-
-export default Group;
+export interface IMember {
+  _id: string;
+  orgId: string;
+  userId: string;
+  groupId: string;
+  type: string;
+  createdBy: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
 
 export type Snackbar_Severity = 'success' | 'error' | 'warning'
 export type RootState = ReturnType<typeof store.getState>;

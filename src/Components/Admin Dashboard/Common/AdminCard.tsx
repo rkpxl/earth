@@ -12,31 +12,43 @@ import {
 } from '@mui/material';
 
 
-const AdminCard = ({ card, onDelete } : any) => {
+const AdminCard = ({ card, onDelete, onManageClick} : any) => {
 
   const { name, createdAt, updatedAt, isActive } = card
   const avatarLetter = name.charAt(0).toUpperCase();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuClick = (event : any) => {
+    event.preventDefault()
+    event.stopPropagation()
+    console.log('menu handler')
     setAnchorEl(event.currentTarget);
   };
 
-  const handleMenuClose = () => {
+  const handleMenuClose = (event :any) => {
+    event.preventDefault()
     setAnchorEl(null);
   };
 
-  const handleOnDelete = () => {
-    handleMenuClose()
+  const handleOnDelete = (event :any) => {
+    event.preventDefault()
+    handleMenuClose(event)
     onDelete()
   }
 
   return (
-    <Card sx={{ boxShadow: 5, height: "100px", margin: "16px" }}>
+    <Card sx={{ 
+      boxShadow: 5, 
+      height: "100px", 
+      margin: "16px",
+      transition: 'box-shadow 0.3s ease', 
+      '&:hover': {
+      boxShadow: 10,
+    }, }} >
       <CardHeader
         avatar={<Avatar>{avatarLetter}</Avatar>}
         action={
-          <Grid>
+          <Grid sx={{ zIndex: "2"}}>
             <IconButton aria-label="settings" onClick={handleMenuClick}>
               <MoreVertIcon />
             </IconButton>
@@ -49,6 +61,9 @@ const AdminCard = ({ card, onDelete } : any) => {
               <MenuItem onClick={() => console.log('Option 1 clicked')}>
               {!(Boolean(isActive)) ? 'Activate' : 'Inactivate'}
               </MenuItem>
+              { onManageClick ? <MenuItem onClick={onManageClick}>
+                Manage
+              </MenuItem> : null}
               <MenuItem onClick={handleOnDelete}>
                 Delete
               </MenuItem>

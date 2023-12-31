@@ -6,35 +6,35 @@ import axiosInstance from '../../../Utils/axiosUtil';
 function index({group, isAuthenticated } : any) {
   return (
    <Layout>
-        <Groups groups={group}/>
+      <Groups groups={group}/>
     </Layout>
   )
 }
 
 export const getServerSideProps = async function getServerSideProps(context : any) {
-    axiosInstance.context = context
-    try {
-      const response = await axiosInstance.get('/auth/validate-token');
-      if(response.status === 200) {
-        const group = await axiosInstance.get('/group');
-        return {
-          props: {
-            isAuthenticated: true,
-            group: group.data
-          },
-        };
-      }
-    } catch (err) {
-      console.error("error", err)
+  axiosInstance.context = context
+  try {
+    const response = await axiosInstance.get('/auth/validate-token');
+    if(response.status === 200) {
+      const group = await axiosInstance.get('/group');
+      return {
+        props: {
+          isAuthenticated: true,
+          group: group.data
+        },
+      };
     }
-  
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
+  } catch (err) {
+    console.error("error", err)
   }
+  
+  return {
+    redirect: {
+      destination: '/login',
+      permanent: false,
+    },
+  };
+}
 
 index.propTypes = {}
 

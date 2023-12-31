@@ -2,12 +2,12 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as type from '../../Utils/types/type'
 import axiosInstance from '../../Utils/axiosUtil';
-import { Group } from '../../Utils/types/type';
+import { IGroup } from '../../Utils/types/type';
 
 
 
 interface GroupState {
-  data: Group[] | undefined;
+  data: IGroup[] | undefined;
   loading: boolean;
   error: string | null;
 }
@@ -20,7 +20,7 @@ const initialState: GroupState = {
 
 export const fetchGroups = createAsyncThunk('group/fetchGroups', async () => {
   try {
-    const response: type.APIResponse<Array<Group>> = await axiosInstance.get('/group');
+    const response: type.APIResponse<Array<IGroup>> = await axiosInstance.get('/group');
     return response.data;
   } catch (error) {
     throw error || 'Error fetching groups';

@@ -3,12 +3,12 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as type from '../../Utils/types/type'
 import { AnyARecord } from 'dns';
 import axiosInstance from '../../Utils/axiosUtil';
-import { Department } from '../../Utils/types/type';
+import { IDepartment } from '../../Utils/types/type';
 
 
 
 interface DepartmentState {
-  data: Department[] | undefined;
+  data: IDepartment[] | undefined;
   loading: boolean;
   error: string | null;
 }
@@ -21,7 +21,7 @@ const initialState: DepartmentState = {
 
 export const fetchDepartments = createAsyncThunk('department/fetchDepartments', async () => {
   try {
-    const response: type.APIResponse<Array<Department>> = await axiosInstance.get('/department');
+    const response: type.APIResponse<Array<IDepartment>> = await axiosInstance.get('/department');
     return response.data;
   } catch (error) {
     throw error || 'Error fetching departments';

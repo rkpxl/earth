@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { ConfirmationState } from '../../Utils/types/type';
+import { IConfirmationState } from '../../Utils/types/type';
 
 
-const initialState: ConfirmationState<any[]> = {
+const initialState: IConfirmationState<any[]> = {
   isOpen: false,
   title: 'Confirmation',
   args: null,
