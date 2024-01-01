@@ -13,15 +13,12 @@ import {
 
 
 const AdminCard = ({ card, onDelete, onManageClick} : any) => {
-
-  const { name, createdAt, updatedAt, isActive } = card
-  const avatarLetter = name.charAt(0).toUpperCase();
+  const { name, createdAt, updatedAt, isActive, title } = card
+  const avatarLetter = name ? name.charAt(0).toUpperCase() : title.charAt(0).toUpperCase();
   const [anchorEl, setAnchorEl] = useState(null);
 
   const handleMenuClick = (event : any) => {
     event.preventDefault()
-    event.stopPropagation()
-    console.log('menu handler')
     setAnchorEl(event.currentTarget);
   };
 
@@ -36,6 +33,11 @@ const AdminCard = ({ card, onDelete, onManageClick} : any) => {
     onDelete()
   }
 
+  const onManageClickHandle = (e: any) => {
+    handleMenuClose(e)
+    onManageClick()
+  }
+
   return (
     <Card sx={{ 
       boxShadow: 5, 
@@ -44,11 +46,11 @@ const AdminCard = ({ card, onDelete, onManageClick} : any) => {
       transition: 'box-shadow 0.3s ease', 
       '&:hover': {
       boxShadow: 10,
-    }, }} >
+      }, }} >
       <CardHeader
         avatar={<Avatar>{avatarLetter}</Avatar>}
         action={
-          <Grid sx={{ zIndex: "2"}}>
+          <Grid sx={{ zIndex: "2", display: "flex", justifyContent: "center", alignItems: "center"}}>
             <IconButton aria-label="settings" onClick={handleMenuClick}>
               <MoreVertIcon />
             </IconButton>
@@ -61,7 +63,7 @@ const AdminCard = ({ card, onDelete, onManageClick} : any) => {
               <MenuItem onClick={() => console.log('Option 1 clicked')}>
               {!(Boolean(isActive)) ? 'Activate' : 'Inactivate'}
               </MenuItem>
-              { onManageClick ? <MenuItem onClick={onManageClick}>
+              { onManageClick ? <MenuItem onClick={onManageClickHandle}>
                 Manage
               </MenuItem> : null}
               <MenuItem onClick={handleOnDelete}>
@@ -70,8 +72,8 @@ const AdminCard = ({ card, onDelete, onManageClick} : any) => {
             </Menu>
           </Grid>
         }
-        title={name}
-        subheader={`Created Date: ${getStandatedDate(createdAt)} | Modified Date: ${getStandatedDate(updatedAt)}`}
+        title={name ? name : title}
+        subheader={`${card?.id ? 'Id' + ' ' + card.id +' | ' : ''}Created Date: ${getStandatedDate(createdAt)} | Modified Date: ${getStandatedDate(updatedAt)}`}
       />
     </Card>
   );

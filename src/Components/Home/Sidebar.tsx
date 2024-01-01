@@ -5,7 +5,6 @@ import PropTypes from 'prop-types';
 import { Box, Divider, Drawer, Typography, useMediaQuery } from '@mui/material';
 import { ChartBar as ChartBarIcon } from '../../icons/chart-bar';
 import { Cog as CogIcon } from '../../icons/cog';
-import { User as UserIcon } from '../../icons/user';
 import { UserAdd as UserAddIcon } from '../../icons/user-add';
 import { SidebarItem } from './SidebarItem';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
@@ -13,27 +12,13 @@ import DraftsIcon from '@mui/icons-material/Drafts';
 import SendIcon from '@mui/icons-material/Send';
 import StarBorder from '@mui/icons-material/StarBorder';
 import AddChart from '@mui/icons-material/AddChart';
+import TableViewIcon from '@mui/icons-material/TableView';
+import ShieldIcon from '@mui/icons-material/Shield';
+import GroupIcon from '@mui/icons-material/Group';
+import ApartmentIcon from '@mui/icons-material/Apartment';
+import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
 
 const ItemCount = 4
-
-// const items : any = [
-//   {
-//     href: '/',
-//     icon: (<ChartBarIcon fontSize="small" />),
-//     title: 'Home'
-//   },
-//   {
-//     href: '/settings',
-//     icon: (<CogIcon fontSize="small" />),
-//     title: 'Settings'
-//   },
-//   {
-//     href: '/settings',
-//     icon: (<CogIcon fontSize="small" />),
-//     title: 'Publication'
-//   },
-// ];
-
 
 export const Sidebar = (props : any) => {
   const { open, onClose } = props;
@@ -54,7 +39,7 @@ export const Sidebar = (props : any) => {
   },
   {
     href: '/settings',
-    icon: (<CogIcon fontSize="small" />),
+    icon: (<LibraryBooksIcon fontSize="small" />),
     title: 'Publication'
   },])
 
@@ -86,19 +71,19 @@ export const Sidebar = (props : any) => {
             title: 'Reports'
           },
           {
-            href: '/admin-dashboard/testing',
-            icon: (<ChartBarIcon fontSize="small" />),
-            title: 'testing'
-          },
-          {
             href: '/admin-dashboard/departments',
-            icon: (<UserAddIcon fontSize="small" />),
+            icon: (<ApartmentIcon fontSize="small" />),
             title: 'Departments'
           },
           {
             href: '/admin-dashboard/groups',
-            icon: (<UserAddIcon fontSize="small" />),
+            icon: (<GroupIcon fontSize="small" />),
             title: 'Gropus'
+          },
+          {
+            href: '/admin-dashboard/compliance',
+            icon: (<ShieldIcon fontSize="small" />),
+            title: 'Compliance'
           },
           {
             href: '/admin-dashboard/register',

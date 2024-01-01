@@ -1,0 +1,148 @@
+import React, { useEffect, useState } from 'react'
+import axiosInstance from '../../../Utils/axiosUtil'
+import { AppDispatch, IQuestion } from '../../../Utils/types/type'
+import Grid from '@mui/material/Grid';
+import CreateComplianceDialog from './CreateComplianceDialog';
+import Header from '../../../Components/Admin Dashboard/Common/Header';
+import AdminCard from '../../../Components/Admin Dashboard/Common/AdminCard';
+import { CircularProgress } from '@mui/material';
+import { showMessage } from '../../../Store/reducers/snackbar';
+import { useDispatch } from 'react-redux';
+import { useRouter } from 'next/router';
+import { openConfirmation } from '../../../Store/reducers/confirm';
+import ConfirmationPopup from '../../../Components/Common/ConfirmationDialog';
+import CreateUpdateQuestionDialog from './CreateUpdateQuestionDialog';
+
+interface IProps {
+  id: string | string[] | undefined,
+  position: string | number,
+  title?: string,
+}
+
+const apiResponse: Array<IQuestion> = [
+	{
+    "_id": "658ef289553ad59c3c58ab7e",
+		"title": "question first", 
+    "id": "1",
+    "orgId": "1",
+    "isActive": true,
+    "type": "question",
+		"questionType": "dropdown",
+		"questionValues": "",
+    "createdBy": "6589ce624f6f205bafe5bf3d",
+    "complianceId": "1",
+    "stepNumber": 1,
+    "priority": "1",
+    "createdAt": "2023-12-29T16:23:37.541Z",
+    "updatedAt": "2023-12-29T16:23:37.541Z",
+    "__v": 0
+	},
+	{
+    "_id": "658ef289553ad59c3c58ab7e",
+		"title": "question second", 
+    "id": "2",
+    "orgId": "1",
+    "isActive": true,
+    "type": "question",
+		"questionType": "dropdown",
+		"questionValues": "",
+    "createdBy": "6589ce624f6f205bafe5bf3d",
+    "complianceId": "1",
+    "stepNumber": 1,
+    "priority": "1",
+    "createdAt": "2023-12-29T16:23:37.541Z",
+    "updatedAt": "2023-12-29T16:23:37.541Z",
+    "__v": 0
+	},
+	{
+    "_id": "658ef289553ad59c3c58ab7e",
+		"title": "question thrid", 
+    "id": "3",
+    "orgId": "1",
+    "isActive": true,
+    "type": "question",
+		"questionType": "dropdown",
+		"questionValues": "",
+    "createdBy": "6589ce624f6f205bafe5bf3d",
+    "complianceId": "1",
+    "stepNumber": 1,
+    "priority": "1",
+    "createdAt": "2023-12-29T16:23:37.541Z",
+    "updatedAt": "2023-12-29T16:23:37.541Z",
+    "__v": 0
+	},
+]
+
+
+export default function ManageComplianceMember(props: IProps) {
+  const { id, title, position } = props
+  const [data, setData] = useState<Array<IQuestion>|null>(null)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [open, setOpen] = useState<IQuestion|null|boolean>();
+  const dispatch : AppDispatch = useDispatch();
+  const router = useRouter()
+
+  useEffect(() => {
+    (async () => {
+      setLoading(true)
+      // const response = await axiosInstance.get('/question')
+      setData(apiResponse)
+      setLoading(false)
+    })()
+  })
+
+
+  const handleOpenConfirmation = (args: any) => {
+    dispatch(
+      openConfirmation({
+        args,
+      })
+    );
+  };
+
+  const handleConfirmation = async (id : string) => {
+    try {
+      const response = await axiosInstance.delete(`/compliance/${id}`);
+      if(response.status === 200) {
+        dispatch(showMessage({ message: 'Department is deleted', severity: 'success' }));
+      } else {
+        dispatch(showMessage({ message: 'Somehitng went wrong, please try again', severity: 'error' }));
+      }
+    } catch (err) {
+      console.error(err)
+      dispatch(showMessage({ message: 'Internal server error, contact to admin', severity: 'error' }));
+    }
+  }
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(null);
+  };
+
+	const redirectToGroup = (id: string) => {
+    router.push(`/admin-dashboard/compliance/${id}`)
+  }
+
+  if(loading) {
+    return (
+    <>
+      <CircularProgress />
+    </>);
+  }
+
+  return (
+    <Grid>
+      <Header onClickHandle={handleClickOpen} title={title + " Details"} buttonText="Create New Question"/>
+      <CreateUpdateQuestionDialog open={Boolean(open)} data={typeof open === 'boolean' ? undefined : open} onClose={handleClose}/>
+      {data?.map((question : IQuestion) => (
+        <div key={question.id}>
+          <AdminCard card={question} onDelete={() => handleOpenConfirmation(question.id)} onManageClick={() => setOpen(question)}/>
+        </div>
+      ))}
+      <ConfirmationPopup handleConfirm={handleConfirmation} />
+    </Grid>
+  )
+}
