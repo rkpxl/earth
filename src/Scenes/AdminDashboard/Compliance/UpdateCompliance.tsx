@@ -110,7 +110,7 @@ export default function UpdateCompliance(props: IProps) {
     dispatch({ type: 'change',  field: 'stepCount', value: count });
 
     // Update stepNames array when stepCount changes
-    const stepNames = Array(count).fill('').map((_, index) => state.stepNames[index] || '');
+    const stepNames = Array(count).fill('').map((_, ind) => ((state?.stepNames && state.stepNames[ind]) ? state.stepNames[ind] : ''));
     dispatch({ type: 'change', field: 'stepNames', value: stepNames });
   };
 

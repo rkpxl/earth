@@ -17,65 +17,12 @@ interface IProps {
   id: string | string[] | undefined,
   position: string | number,
   title?: string,
+  stepNumber: number,
 }
-
-const apiResponse: Array<IQuestion> = [
-	{
-    "_id": "658ef289553ad59c3c58ab7e",
-		"title": "question first", 
-    "id": "1",
-    "orgId": "1",
-    "isActive": true,
-    "type": "question",
-		"questionType": "dropdown",
-		"questionValues": "",
-    "createdBy": "6589ce624f6f205bafe5bf3d",
-    "complianceId": "1",
-    "stepNumber": 1,
-    "priority": "1",
-    "createdAt": "2023-12-29T16:23:37.541Z",
-    "updatedAt": "2023-12-29T16:23:37.541Z",
-    "__v": 0
-	},
-	{
-    "_id": "658ef289553ad59c3c58ab7e",
-		"title": "question second", 
-    "id": "2",
-    "orgId": "1",
-    "isActive": true,
-    "type": "question",
-		"questionType": "dropdown",
-		"questionValues": "",
-    "createdBy": "6589ce624f6f205bafe5bf3d",
-    "complianceId": "1",
-    "stepNumber": 1,
-    "priority": "1",
-    "createdAt": "2023-12-29T16:23:37.541Z",
-    "updatedAt": "2023-12-29T16:23:37.541Z",
-    "__v": 0
-	},
-	{
-    "_id": "658ef289553ad59c3c58ab7e",
-		"title": "question thrid", 
-    "id": "3",
-    "orgId": "1",
-    "isActive": true,
-    "type": "question",
-		"questionType": "dropdown",
-		"questionValues": "",
-    "createdBy": "6589ce624f6f205bafe5bf3d",
-    "complianceId": "1",
-    "stepNumber": 1,
-    "priority": "1",
-    "createdAt": "2023-12-29T16:23:37.541Z",
-    "updatedAt": "2023-12-29T16:23:37.541Z",
-    "__v": 0
-	},
-]
 
 
 export default function ManageComplianceMember(props: IProps) {
-  const { id, title, position } = props
+  const { id, title, position, stepNumber } = props
   const [data, setData] = useState<Array<IQuestion>|null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [open, setOpen] = useState<IQuestion|null|boolean>();
@@ -85,11 +32,11 @@ export default function ManageComplianceMember(props: IProps) {
   useEffect(() => {
     (async () => {
       setLoading(true)
-      // const response = await axiosInstance.get('/question')
-      setData(apiResponse)
+      const response = await axiosInstance.get(`/questions/compliance/${id}?stepNumber=${stepNumber}`)
+      setData(response.data)
       setLoading(false)
     })()
-  })
+  },[])
 
 
   const handleOpenConfirmation = (args: any) => {
@@ -136,7 +83,13 @@ export default function ManageComplianceMember(props: IProps) {
   return (
     <Grid>
       <Header onClickHandle={handleClickOpen} title={title + " Details"} buttonText="Create New Question"/>
-      <CreateUpdateQuestionDialog open={Boolean(open)} data={typeof open === 'boolean' ? undefined : open} onClose={handleClose}/>
+      <CreateUpdateQuestionDialog 
+        open={Boolean(open)} 
+        data={typeof open === 'boolean' ? undefined : open} 
+        onClose={handleClose}
+        complianceId={id}
+        stepNumber={stepNumber}
+      />
       {data?.map((question : IQuestion) => (
         <div key={question.id}>
           <AdminCard card={question} onDelete={() => handleOpenConfirmation(question.id)} onManageClick={() => setOpen(question)}/>

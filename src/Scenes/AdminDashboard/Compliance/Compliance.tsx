@@ -14,59 +14,6 @@ import { showMessage } from '../../../Store/reducers/snackbar';
 import { useRouter } from 'next/router';
 import { fetchCompliances } from '../../../Store/reducers/compliance';
 
-const apiResponse: Array<type.IQuestion> = [
-	{
-    "_id": "658ef289553ad59c3c58ab7e",
-		"title": "question first", 
-    "id": "1",
-    "orgId": "1",
-    "isActive": true,
-    "type": "question",
-		"questionType": "dropdown",
-		"questionValues": "",
-    "createdBy": "6589ce624f6f205bafe5bf3d",
-    "complianceId": "1",
-    "stepNumber": 1,
-    "priority": "1",
-    "createdAt": "2023-12-29T16:23:37.541Z",
-    "updatedAt": "2023-12-29T16:23:37.541Z",
-    "__v": 0
-	},
-	{
-    "_id": "658ef289553ad59c3c58ab7e",
-		"title": "question second", 
-    "id": "1",
-    "orgId": "1",
-    "isActive": true,
-    "type": "question",
-		"questionType": "dropdown",
-		"questionValues": "",
-    "createdBy": "6589ce624f6f205bafe5bf3d",
-    "complianceId": "1",
-    "stepNumber": 1,
-    "priority": "1",
-    "createdAt": "2023-12-29T16:23:37.541Z",
-    "updatedAt": "2023-12-29T16:23:37.541Z",
-    "__v": 0
-	},
-	{
-    "_id": "658ef289553ad59c3c58ab7e",
-		"title": "question thrid", 
-    "id": "1",
-    "orgId": "1",
-    "isActive": true,
-    "type": "question",
-		"questionType": "dropdown",
-		"questionValues": "",
-    "createdBy": "6589ce624f6f205bafe5bf3d",
-    "complianceId": "1",
-    "stepNumber": 1,
-    "priority": "1",
-    "createdAt": "2023-12-29T16:23:37.541Z",
-    "updatedAt": "2023-12-29T16:23:37.541Z",
-    "__v": 0
-	},
-]
 
 export default function Compliance(props: any) {
   const [open, setOpen] = useState(false);

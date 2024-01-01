@@ -15,9 +15,9 @@ interface State {
   title: string;
   description: string;
   questionType: QuestionType;
-  priority: number;
+  priority: any;
   valueCount: number;
-  values: string[] ;
+  values: any ;
   isActive: boolean;
   errors: {
     title?: string;
@@ -87,11 +87,11 @@ const reducer = (state: State, action: Action): State => {
         errors.title = 'Name is required';
       }
       if (state.questionType !== 'text' && state && state?.valueCount < 1) {
-        errors.valueCount = 'Step Count should be greater than 0';
+        errors.valueCount = 'Value Count should be greater than 0';
       }
-      const isValid = state.questionType !== 'text' ? state?.values.filter(title => title === '') : []
+      const isValid = state.questionType !== 'text' ? state?.values.filter((title : any) => title === '') : []
       if(isValid.length > 0) {
-        errors.values = "Step Name can't be empty";
+        errors.values = "Value Name can't be empty";
       }
       if(state.description === '') {
         errors.description = "Description can't be empty";
@@ -110,10 +110,23 @@ interface IProps {
   onClose: () => void;
   onSubmit?: () => void;
   maxPriority?: number;
+  complianceId: string | string[] | undefined;
+  stepNumber: number;
 }
 
-const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onSubmit, maxPriority = 10 }) => {
+const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onSubmit, complianceId, stepNumber,  maxPriority = 10 }) => {
   const isUpdate = Boolean(data)
+
+  if(isUpdate) {
+    initialState.title = data?.title || ''
+    initialState.description = data?.description || ''
+    initialState.questionType = data?.questionType || 'text'
+    initialState.priority = data?.priority || 1
+    initialState.valueCount = data?.values?.length || 1
+    initialState.isActive = data?.isActive || true
+    initialState.values = data?.values || []
+  }
+
   const priorities: number [] = Array.from({ length: maxPriority }, (_, index) => index + 1);
   const [state, dispatch] = useReducer(reducer, initialState);
   const [isEditing, setIsEditing] = useState<boolean>()
@@ -147,29 +160,33 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
     await dispatch({ type: 'validate' });
 
     // Check if there are any errors
-    const isValid = state.values.filter(name => name === '')
+    const isValid = state.values.filter((name :  any) => name === '')
     if (!state.title) {
       return;
     } else {
       try {
-        // TODO: Replace the following API call with your actual API endpoint and payload
-        const finalStepName = state.values.map((step, index) =>  {
-          return {
-          name: step,
-          position: index + 1,
-        } })
-        const response = await axiosInstance.post('/compliance', {
+        if(!complianceId || !stepNumber || !data?.id) {
+          dispatcher(showMessage({ message: "Somehitng went wrong, compliance Id Doesn't exist", severity: 'error' }));
+        }
+        const finalStepName = state?.values
+        const response = !isUpdate ? await axiosInstance.post('/questions', {
+          complianceId: complianceId,
+          stepNumber: stepNumber,
+          depedent: {},
           title: state.title,
           description: state.description || '',
           questionType: state.questionType,
-          priority: state.priority,
+          priority: state.priority+"",
           isActive: state.isActive,
           values: finalStepName,
+        }) : await axiosInstance.put(`/questions/${ data?.id}`, {
+          title: state.title,
+          description: state.description,
         });
   
         if (response.status < 300) {
           // TODO: Handle success, e.g., show a success message
-          dispatcher(showMessage({ message: 'Compliance is added', severity: 'success' }));
+          dispatcher(showMessage({ message: isUpdate ? 'Question is updated' :'Question is added', severity: 'success' }));
           dispatcher(fetchCompliances())
           dispatch({ type: 'reset' });
           onClose();
@@ -268,7 +285,7 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
             disabled={isUpdate ? true : !(state.questionType !== 'text' && state.questionType !== 'yesno')}
           />
         </Box>
-        {state.values.map((v, index) => (
+        {state.values.map((v : any, index : number) => (
           <Box key={index} marginBottom={2}>
             <TextField
               label={`Value ${index + 1}`}

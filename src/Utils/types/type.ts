@@ -87,12 +87,13 @@ export interface IQuestion {
   _id?: string;
   id: string;
   orgId?: string;
+  description?: string;
   isActive?: boolean;
   type?: string; // You might want to replace this with a more specific type
   createdBy?: string;
   title?: string;
   questionType?: QuestionType;
-  questionValues?: Array<string> | string | null;
+  values?: Array<string> | string | null;
   complianceId?: string;
   stepNumber?: number;
   priority?: string;
