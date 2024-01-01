@@ -15,6 +15,7 @@ import { showMessage } from '../../../Store/reducers/snackbar';
 import { openConfirmation } from '../../../Store/reducers/confirm';
 import { fetchGroups } from '../../../Store/reducers/group';
 import { useRouter } from 'next/router';
+import EditableGroup from './updateGroup';
 
 function a11yProps(index: number) {
   return {
@@ -23,8 +24,9 @@ function a11yProps(index: number) {
   };
 }
 
-export default function ManageGroup(props: any) {
+export default function ManageGroup(props: type.IGroup) {
   const router = useRouter()
+
   const [value, setValue] = useState<number>(0);
   const { data , loading, error } = useSelector((state: RootState) => state.group);
   const dispatch : type.AppDispatch = useDispatch();
@@ -57,7 +59,7 @@ export default function ManageGroup(props: any) {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0} sx={{p: 0}}>
-        Group detai
+        <EditableGroup {...props}/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1} sx={{p: 0}}>
         Group Members
