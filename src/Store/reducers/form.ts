@@ -17,7 +17,7 @@ const formSlice = createSlice({
     },
     updateAnswer: (
       state,
-      action: PayloadAction<{ tabIndex: string; id: number; answer: string }>
+      action: PayloadAction<{ tabIndex: number; id: number; answer: string }>
     ) => {
       const { tabIndex, id, answer } = action.payload;
       state.answers = {

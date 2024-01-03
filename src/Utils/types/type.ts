@@ -67,9 +67,11 @@ export interface ICompliance {
   title: string;
   description: string;
   version?: string;
-  stepCount: number;
+  stepCount?: number;
+  tabCount: number;
   isParallelApproval: boolean;
   stepNames: Array<IStepName>
+  tabNames: Array<ITabName>
   isExternalSubmission: boolean;
   approvalRulesId?: string | null;
   rules?: any; // You may replace 'any' with a more specific type if you know the structure
@@ -78,10 +80,16 @@ export interface ICompliance {
   __v?: number;
 }
 
+export interface ITabName {
+  values?: any[] | undefined;
+  name: string,
+  position: number,
+}
 export interface IStepName {
   values: any[] | undefined;
   name: string,
-  position: number
+  position: number,
+  tabId: number,
 }
 
 export interface IQuestion {
@@ -98,6 +106,7 @@ export interface IQuestion {
   dependent?: any;
   complianceId?: string;
   stepNumber?: number;
+  tabNumber?: number;
   priority?: string;
   createdAt?: string;
   updatedAt?: string;

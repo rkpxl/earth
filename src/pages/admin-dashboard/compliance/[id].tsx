@@ -12,6 +12,7 @@ interface IProps {
 
 const GroupDetail = (props : IProps) => {
   const {isAuthenticated, compliance} = props
+
   const router = useRouter();
   const { id } = router.query;
 

@@ -17,14 +17,14 @@ interface IProps {
 interface State {
   name: string;
   description: string;
-  stepCount: number;
+  tabCount: number;
   isParallelApproval: boolean;
   isExternalSubmission: boolean;
   approvalRulesId: string;
-  stepNames: any[];
+  tabNames: any[];
   errors?: {
     name?: string;
-    stepCount?: string;
+    tabCount?: string;
     general?: string;
     stepName?: string,
     description?: string,
@@ -40,11 +40,11 @@ type Action =
 const initialState: State = {
   name: '',
   description: '',
-  stepCount: 1,
+  tabCount: 1,
   isParallelApproval: false,
   isExternalSubmission: false,
   approvalRulesId: '',
-  stepNames: Array(1).fill(''),
+  tabNames: Array(1).fill(''),
   errors: {},
 };
 
@@ -65,12 +65,12 @@ const reducer = (state: State, action: Action): State => {
       if (!state.name.trim()) {
         errors.name = 'Name is required';
       }
-      if (state.stepCount < 1) {
-        errors.stepCount = 'Step Count should be greater than 0';
+      if (state.tabCount < 1) {
+        errors.tabCount = 'Tab Count should be greater than 0';
       }
-      const isValid = state.stepNames.filter(name => name === '')
+      const isValid = state.tabNames.filter(name => name === '')
       if(isValid.length > 0) {
-        errors.stepName = "Step Name can't be empty";
+        errors.stepName = "Tab Name can't be empty";
       }
       if(state.description === '') {
         errors.description = "Description can't be empty";
@@ -97,21 +97,21 @@ export default function UpdateCompliance(props: IProps) {
     dispatch({ type: 'update', value: {
       name: compliance.title,
       description: compliance.description || '',
-      stepCount: compliance.stepCount,
+      tabCount: compliance.tabCount,
       isParallelApproval: compliance.isParallelApproval,
       isExternalSubmission: compliance.isExternalSubmission,
       approvalRulesId: compliance.approvalRulesId || '',
-      stepNames: compliance.stepNames,
+      tabNames: compliance.tabNames,
     }})
   }, [])
 
-  const handleStepCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleTabCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const count = parseInt(event.target.value, 10) || 1;
-    dispatch({ type: 'change',  field: 'stepCount', value: count });
+    dispatch({ type: 'change',  field: 'tabCount', value: count });
 
-    // Update stepNames array when stepCount changes
-    const stepNames = Array(count).fill('').map((_, ind) => ((state?.stepNames && state.stepNames[ind]) ? state.stepNames[ind] : ''));
-    dispatch({ type: 'change', field: 'stepNames', value: stepNames });
+    // Update tabNames array when tabCount changes
+    const tabNames = Array(count).fill('').map((_, ind) => ((state?.tabNames && state.tabNames[ind]) ? state.tabNames[ind] : ''));
+    dispatch({ type: 'change', field: 'tabNames', value: tabNames });
   };
 
   const handleSwitchChange = (field: keyof State) => {
@@ -127,7 +127,7 @@ export default function UpdateCompliance(props: IProps) {
 
   const handleSave = async (id: string) => {
     try {
-      const finalSteps = state.stepNames.map((step, index) => {
+      const finalTabs = state.tabNames.map((step, index) => {
         return isObject(step) ? step : {
           name: step,
           positions: index+1
@@ -136,11 +136,11 @@ export default function UpdateCompliance(props: IProps) {
       const response = await axiosInstance.put(`/compliance/${id}`, {
         title: state.name,
         description: state.description || '',
-        stepCount: state.stepCount,
+        tabCount: state.tabCount,
         isParallelApproval: state.isParallelApproval,
         isExternalSubmission: state.isExternalSubmission,
         approvalRulesId: state.approvalRulesId,
-        stepNames: finalSteps,
+        tabNames: finalTabs,
       });
 
       if (response.status < 300) {
@@ -178,8 +178,8 @@ export default function UpdateCompliance(props: IProps) {
     await dispatch({ type: 'validate' });
 
     // Check if there are any errors
-    const isValid = state.stepNames.filter(name => name === '')
-    if (!state.name || state.stepCount < 1 || isValid.length > 0) {
+    const isValid = state.tabNames.filter(name => name === '')
+    if (!state.name || state.tabCount < 1 || isValid.length > 0) {
       return;
     } else {
       dispatcher(
@@ -221,30 +221,30 @@ export default function UpdateCompliance(props: IProps) {
             disabled={!isEditing}
           />
           <TextField
-            label="Step Count"
+            label="Tab Count"
             type="number"
             fullWidth
             margin="normal"
-            value={state.stepCount}
-            onChange={handleStepCountChange}
-            error={!!state?.errors?.stepCount}
-            helperText={state?.errors?.stepCount}
+            value={state.tabCount}
+            onChange={handleTabCountChange}
+            error={!!state?.errors?.tabCount}
+            helperText={state?.errors?.tabCount}
             disabled={!isEditing}
           />
           <Grid container spacing={2}>
-            {state?.stepNames?.map((stepName, index) => (
+            {state?.tabNames?.map((stepName, index) => (
               <Grid key={index} item xs={12} md={6}>
                 <TextField
-                  label={`Step ${index + 1} Name`}
+                  label={`Tab ${index + 1} Name`}
                   fullWidth
                   margin="normal"
                   value={stepName.name}
                   error={!!state?.errors?.stepName}
                   helperText={state?.errors?.stepName}
                   onChange={(e) => {
-                    const newStepNames = [...state.stepNames];
-                    newStepNames[index] = e.target.value;
-                    handleTextChange('stepNames', newStepNames);
+                    const newTabNames = [...state.tabNames];
+                    newTabNames[index] = e.target.value;
+                    handleTextChange('tabNames', newTabNames);
                   }}
                   disabled={!isEditing}
                 />

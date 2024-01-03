@@ -36,7 +36,7 @@ export default function DynamicForm(props : IProps) {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Summary" {...a11yProps(0)} />
-          {compliance?.stepNames?.sort((a : any, b : any) => parseInt(a.position) - parseInt(b.position)).map((step) => {
+          {compliance?.tabNames?.sort((a : any, b : any) => parseInt(a.position) - parseInt(b.position)).map((step) => {
             return (<Tab key={step.position} label={step.name} {...a11yProps(step.position)} />)
           })}
           <Tab label="Attachment" {...a11yProps(0)} />
@@ -44,19 +44,19 @@ export default function DynamicForm(props : IProps) {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>Summary</CustomTabPanel>
-      {compliance?.stepNames?.sort((a : any, b : any) => parseInt(a.position) - parseInt(b.position)).map((step, index: number) => {
+      {compliance?.tabNames?.sort((a : any, b : any) => parseInt(a.position) - parseInt(b.position)).map((step, index: number) => {
         return (<CustomTabPanel key={step.name} value={value} index={index+1}>
             <Protocol 
               key={step.name} 
               compliance={compliance} 
               complianceId={id} 
-              stepNumber={index+1} 
+              tabNumber={index+1} 
               values={step.values}
             />
           </CustomTabPanel>)
       })}
-      <CustomTabPanel value={value} index={compliance?.stepNames?.length + 1}>Attachment</CustomTabPanel>
-      <CustomTabPanel value={value} index={compliance?.stepNames?.length + 2}>Submit</CustomTabPanel>
+      <CustomTabPanel value={value} index={compliance?.tabNames?.length + 1}>Attachment</CustomTabPanel>
+      <CustomTabPanel value={value} index={compliance?.tabNames?.length + 2}>Submit</CustomTabPanel>
     </Layout>
   )
 }

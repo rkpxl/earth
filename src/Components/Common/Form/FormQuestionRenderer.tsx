@@ -20,7 +20,7 @@ interface FormQuestionRendererProps {
   question: any;
   questionNumber: number;
   values?: any[];
-  tabId: string
+  tabId: number
 }
 
 const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, question, questionNumber }) => {

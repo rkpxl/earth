@@ -8,7 +8,7 @@ import FormQuestionRenderer from '../../Components/Common/Form/FormQuestionRende
 interface IProps {
   compliance: ICompliance;
   complianceId: string | string[] | undefined;
-  stepNumber: number;
+  tabNumber: number;
   values?: any[];
 }
 
@@ -25,7 +25,7 @@ const questionContainerStyle = {
 
 
 export default function Protocol(props: IProps) {
-  const { complianceId, stepNumber, compliance, values } = props;
+  const { complianceId, tabNumber, compliance, values } = props;
   const [data, setData] = useState<any>(null);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -41,7 +41,7 @@ export default function Protocol(props: IProps) {
         }
 
         // Fetch data from the API
-        const response = await axiosInstance.get(`/questions/compliance/${complianceId}?stepNumber=${stepNumber}`);
+        const response = await axiosInstance.get(`/questions/compliance/${complianceId}?tabNumber=${tabNumber}`);
         setData(response.data);
       } catch (error) {
         console.error('Error fetching data:', error);
@@ -52,7 +52,7 @@ export default function Protocol(props: IProps) {
 
     // Fetch data when the component mounts
     fetchData();
-  }, [complianceId, stepNumber]);
+  }, [complianceId, tabNumber]);
 
 
   return (
@@ -69,7 +69,7 @@ export default function Protocol(props: IProps) {
                   question={question} 
                   questionNumber={index+1} 
                   values={values}
-                  tabId={stepNumber}
+                  tabId={tabNumber}
                 />
               ))}
           </Grid>

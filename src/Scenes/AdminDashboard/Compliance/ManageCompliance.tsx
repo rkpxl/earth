@@ -51,7 +51,7 @@ export default function ManageCompliance(props: IProps) {
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Compliances" {...a11yProps(0)} />
-          {compliance?.stepNames?.sort((a : any, b : any) => parseInt(a.position) - parseInt(b.position)).map((step) => {
+          {compliance?.tabNames?.sort((a : any, b : any) => parseInt(a.position) - parseInt(b.position)).map((step) => {
             return (<Tab key={step.position} label={step.name} {...a11yProps(step.position)} />)
           })}
         </Tabs>
@@ -59,12 +59,12 @@ export default function ManageCompliance(props: IProps) {
       <CustomTabPanel value={value} index={0} sx={{p: 0}}>
         <UpdateCompliance compliance={compliance}/>
       </CustomTabPanel>
-      {compliance?.stepNames?.sort((a : any, b : any) => parseInt(a.position) - parseInt(b.position)).map((step, index) => {
-        return (<>
+      {compliance?.tabNames?.sort((a : any, b : any) => parseInt(a.position) - parseInt(b.position)).map((step, index) => {
+        return (
           <CustomTabPanel key={index.toString()} value={value} index={index+1} sx={{p: 0}}>
-            <ManageComplianceStep id={id} stepNumber={index + 1} position={step.position} title={step.name} values={[]}/>
+            <ManageComplianceStep key={id?.toString()} id={id} tabNumber={index + 1} position={step.position} title={step.name} values={[]}/>
           </CustomTabPanel>
-        </>)
+        )
       })}
     </Grid>
   )

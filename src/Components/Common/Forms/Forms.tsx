@@ -25,7 +25,7 @@ const Forms: React.FC = () : JSX.Element => {
 
     return (
        <>
-            <QuestionList title={title} dept={dept} description={description}/>
+          <QuestionList title={title} dept={dept} description={description}/>
        </>
     )
 }

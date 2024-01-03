@@ -17,13 +17,13 @@ interface IProps {
   id: string | string[] | undefined,
   position: string | number,
   title?: string,
-  stepNumber: number,
+  tabNumber: number,
   values: string[],
 }
 
 
 export default function ManageComplianceMember(props: IProps) {
-  const { id, title, position, stepNumber } = props
+  const { id, title, position, tabNumber } = props
   const [data, setData] = useState<Array<IQuestion>|null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [open, setOpen] = useState<IQuestion|null|boolean>();
@@ -33,7 +33,7 @@ export default function ManageComplianceMember(props: IProps) {
   useEffect(() => {
     (async () => {
       setLoading(true)
-      const response = await axiosInstance.get(`/questions/compliance/${id}?stepNumber=${stepNumber}`)
+      const response = await axiosInstance.get(`/questions/compliance/${id}?tabNumber=${tabNumber}`)
       setData(response.data)
       setLoading(false)
     })()
@@ -52,7 +52,7 @@ export default function ManageComplianceMember(props: IProps) {
     try {
       const response = await axiosInstance.delete(`/compliance/${id}`);
       if(response.status === 200) {
-        dispatch(showMessage({ message: 'Department is deleted', severity: 'success' }));
+        dispatch(showMessage({ message: 'Compliance is deleted', severity: 'success' }));
       } else {
         dispatch(showMessage({ message: 'Somehitng went wrong, please try again', severity: 'error' }));
       }
@@ -89,7 +89,7 @@ export default function ManageComplianceMember(props: IProps) {
         data={typeof open === 'boolean' ? undefined : open} 
         onClose={handleClose}
         complianceId={id}
-        stepNumber={stepNumber}
+        tabNumber={tabNumber}
       />
       {data?.map((question : IQuestion) => (
         <div key={question.id}>

@@ -119,10 +119,10 @@ interface IProps {
   onSubmit?: () => void;
   maxPriority?: number;
   complianceId: string | string[] | undefined;
-  stepNumber: number;
+  tabNumber: number;
 }
 
-const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onSubmit, complianceId, stepNumber,  maxPriority = 10 }) => {
+const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onSubmit, complianceId, tabNumber,  maxPriority = 10 }) => {
   const isUpdate = Boolean(data)
   if(isUpdate) {
     initialState.title = data?.title || ''
@@ -175,13 +175,14 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
       return;
     } else {
       try {
-        if((!complianceId || !stepNumber || !data?.id) && isUpdate) {
+        if((!complianceId || !tabNumber || !data?.id) && isUpdate) {
           dispatcher(showMessage({ message: "Somehitng went wrong, compliance Id Doesn't exist", severity: 'error' }));
         }
         const finalStepName = state?.answerOptions
         const response = !isUpdate ? await axiosInstance.post('/questions', {
           complianceId: complianceId,
-          stepNumber: stepNumber,
+          tabNumber: tabNumber,
+          stepNumber: 1,
           dependent: (state.depId && state.depValue) ? {
             key: state.depId,
             value: state.depValue
