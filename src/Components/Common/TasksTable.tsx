@@ -87,11 +87,11 @@ export const TasksTable = (props : any) => {
     if(props.type === "pending") {
       axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/to/${localStorage.getItem('_id')}`).then((response) => {
         setAllTask(response.data || [])
-      }).catch((e) => console.log(e))
+      }).catch((e) => console.error(e))
     } else {
       axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/by/${localStorage.getItem('_id')}`).then((response) => {
         setAllTask(response.data || [])
-      }).catch((e) => console.log(e))
+      }).catch((e) => console.error(e))
     }
   }, [])
 

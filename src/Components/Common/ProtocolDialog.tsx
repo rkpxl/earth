@@ -4,6 +4,8 @@ import { Formik as Formic, Form, Field, ErrorMessage } from 'formik';
 import PopUp from './Dialog'
 import { departments } from '../../data/fixData';
 import { useRouter } from 'next/router';
+import { useHomeContext } from '../../pages';
+import { ICompliance, IDepartment } from '../../Utils/types/type';
 
 
 
@@ -30,9 +32,17 @@ const initialValues: FormValues = {
   description: '',
 };
 
-const ProtocolPopUp = (props : any) : JSX.Element => {
+interface IProps {
+  complianceType: ICompliance | undefined;
+  handleClose: Function;
+  popOpen: boolean;
+  handleSubmit: Function
+}
 
-  const { protocolType } = props
+const ProtocolPopUp = (props : IProps) : JSX.Element => {
+  const homeContext = useHomeContext()
+  const { departments } = homeContext
+  const { complianceType } = props
   const Router = useRouter()
 
   const validateForm = (values: FormValues) => {
@@ -54,14 +64,16 @@ const ProtocolPopUp = (props : any) : JSX.Element => {
 
   const handleSubmit = (values: FormValues, { setSubmitting }: any) => {
     // Handle form submission logic here
-    Router.push(`/forms?title=${values.title}&dept=${values.department}&description=${values.description}`)
-    setSubmitting(false);
+    if(complianceType?.id) {
+      Router.push(`/forms/${complianceType?.id}?title=${values.title}&dept=${values.department}&description=${values.description}`)
+      setSubmitting(false);
+    }
   };
 
 
 
   return (
-    <PopUp title={`Create a new ${protocolType} protocol`} {...props} >
+    <PopUp title={`Create a new ${complianceType?.title || ''} protocol`} {...props} >
       <Formic initialValues={initialValues} validate={validateForm} onSubmit={handleSubmit}>
       <Form>
         <Grid container spacing={2}>
@@ -79,8 +91,8 @@ const ProtocolPopUp = (props : any) : JSX.Element => {
                 <FormControl fullWidth>
                   <InputLabel>Department</InputLabel>
                   <Select {...field} label="Department">
-                    {departments.map((options, index) => (
-                      <MenuItem value={options} key={index.toString()}>{options}</MenuItem>
+                    {departments.map((dep : IDepartment, index : number) => (
+                      <MenuItem value={dep.id} key={index.toString()}>{dep.name}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>

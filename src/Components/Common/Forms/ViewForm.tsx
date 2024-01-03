@@ -145,7 +145,7 @@ export const ViewForm: React.FC = () => {
       })
       return response.data
     } catch(e) {
-      console.log(e)
+      console.error(e)
     }
   }
   
@@ -208,7 +208,7 @@ export const ViewForm: React.FC = () => {
         }
         setAllPeoples(filteredPeoples)
         setData(response.data)
-      }).catch((e) => { console.log(e) })
+      }).catch((e) => { console.error(e) })
     } else {
       router.back()
     }

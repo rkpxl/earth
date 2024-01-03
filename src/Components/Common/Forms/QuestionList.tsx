@@ -161,7 +161,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
       })
       return response.data
     } catch(e) {
-      console.log(e)
+      console.error(e)
     }
   }
   

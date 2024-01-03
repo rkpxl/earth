@@ -32,10 +32,9 @@ export default function Compliance(props: any) {
 
   const handleConfirmation = async (id : string) => {
     try {
-			console.log("id", id)
       const response = await axiosInstance.delete(`/compliance/${id}`);
       if(response.status === 200) {
-        dispatch(showMessage({ message: 'Department is deleted', severity: 'success' }));
+        dispatch(showMessage({ message: 'Compliance is deleted', severity: 'success' }));
       } else {
         dispatch(showMessage({ message: 'Somehitng went wrong, please try again', severity: 'error' }));
       }

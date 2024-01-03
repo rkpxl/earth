@@ -50,7 +50,7 @@ const PasswordChange = (props : any) => {
       .catch((err) => {
         setErrorMessage('Please generate url again, your session is expired')
         handleIncorrectInput()
-        console.log(err)
+        console.error(err)
       })
       setToken(token)
     }
@@ -74,7 +74,7 @@ const PasswordChange = (props : any) => {
             router.push("/login")
           }
         }).catch((e) => {
-          console.log(e)
+          console.error(e)
           setErrorMessage("Please try again")
           handleIncorrectInput()
         })
@@ -88,7 +88,7 @@ const PasswordChange = (props : any) => {
             handleSuccess()
           }
         }).catch((e) => {
-          console.log(e)
+          console.error(e)
           setErrorMessage(e.response.data.message)
           handleIncorrectInput()
         })

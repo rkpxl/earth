@@ -1,6 +1,5 @@
 import React from 'react'
 import Layout from '../../../Scenes/Home'
-import Groups from "../../../Scenes/AdminDashboard/Groups";
 import axiosInstance from '../../../Utils/axiosUtil';
 import Compliance from '../../../Scenes/AdminDashboard/Compliance';
 

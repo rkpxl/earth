@@ -4,6 +4,7 @@ import departmentReducer from './department'
 import groupReducer from './group'
 import confirmationReducer from './confirm'
 import complianceReducer from './compliance'
+import formReducer from './form'
 
 const rootReducer = combineReducers({
   snackbar: snackbarReducer,
@@ -11,6 +12,7 @@ const rootReducer = combineReducers({
   group: groupReducer,
   confirmation: confirmationReducer,
   compliance: complianceReducer,
+  form: formReducer
 });
 
 export default rootReducer;

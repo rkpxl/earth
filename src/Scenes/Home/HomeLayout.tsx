@@ -36,7 +36,6 @@ const HomeLayout = (props : any) => {
       <Sidebar
         onClose={() => setSidebarOpen(false)}
         open={isSidebarOpen}
-        isAdmin={isAdmin}
       />
       <Navbar onSidebarOpen={() => setSidebarOpen(true)} />
         <HomeLayoutRoot>

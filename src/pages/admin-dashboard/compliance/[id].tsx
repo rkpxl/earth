@@ -7,17 +7,17 @@ import ManageCompliance from '../../../Scenes/AdminDashboard/Compliance/ManageCo
 
 interface IProps {
   isAuthenticated: boolean,
-  compliace: ICompliance
+  compliance: ICompliance
 }
 
 const GroupDetail = (props : IProps) => {
-  const {isAuthenticated, compliace} = props
+  const {isAuthenticated, compliance} = props
   const router = useRouter();
   const { id } = router.query;
 
   return (
     <Layout>
-      <ManageCompliance id={id} compliance={compliace} />
+      <ManageCompliance id={id} compliance={compliance} />
     </Layout>
   );
 };
@@ -28,11 +28,11 @@ export const getServerSideProps = async function getServerSideProps(context : an
   try {
     const response = await axiosInstance.get('/auth/validate-token');
     if(response.status === 200) {
-      const compliace = await axiosInstance.get(`/compliance/${id}`);
+      const compliance = await axiosInstance.get(`/compliance/${id}`);
       return {
         props: {
           isAuthenticated: true,
-          compliace: compliace.data,
+          compliance: compliance.data,
         },
       };
     }

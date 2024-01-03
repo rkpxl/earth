@@ -1,23 +1,17 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import type { NextPage } from 'next'
-import styles from '../../styles/Home.module.css'
-import { useRouter } from 'next/router'
-import Component from '../Scenes/Home'
+import Layout from '../Scenes/Home/HomeLayout'
 import HomePage from '../Scenes/Home/Home'
-import Layout from '../Components/Layout/Layout'
-import { validateToken } from '../Utils/signin'
-import { CircularProgress } from '@mui/material'
-import axios from 'axios'
 import axiosInstance from '../Utils/axiosUtil'
 
+const HomeContext = React.createContext<any>(null);
 
-
-const Home: NextPage = ({ isAuthenticated } : any) => {
+const Home: NextPage = ({ isAuthenticated, compliances, departments } : any) => {
   return (
     <Layout>
-      <Component>
+      <HomeContext.Provider value={{ isAuthenticated, compliances, departments }}>
         <HomePage />
-      </Component>
+      </HomeContext.Provider>
     </Layout>
   )
 }
@@ -27,9 +21,13 @@ export const getServerSideProps = async function getServerSideProps(context : an
   try {
     const response = await axiosInstance.get('/auth/validate-token', context);
     if(response.status === 200) {
+      const compliances = await axiosInstance.get('/compliance');
+      const departments = await axiosInstance.get('/department');
       return {
         props: {
           isAuthenticated: true,
+          compliances: compliances.data,
+          departments: departments.data
         },
       };
     }
@@ -46,3 +44,7 @@ export const getServerSideProps = async function getServerSideProps(context : an
 }
 
 export default Home
+
+export const useHomeContext = () => {
+  return useContext(HomeContext);
+};

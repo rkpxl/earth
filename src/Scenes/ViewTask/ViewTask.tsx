@@ -56,63 +56,6 @@ const ViewTask = () : JSX.Element => {
     
   }
 
-  // React.useEffect(() => {
-  //   const id = router.query["id"]
-  //   if(id) {
-  //     axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/${id}`).then((response) => {
-  //       setQuestionData(JSON.parse(response?.data?.rawJson).data)
-
-  //       setData(response.data)
-  //     }).catch((e) => { console.log(e) })
-  //   } else {
-  //     router.back()
-  //   }
-  // }, [])
-
-  // React.useEffect(() => {
-  //   axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/users/usersOf', {
-  //     org: localStorage.getItem('org') || 'space'
-  //     })
-  //       .then((response : any) => {
-  //         // Handle the response
-  //         // Store the token in local storage or a secure HTTP-only cookie
-  //         if(response.status < 300) {
-  //           const userId : string = localStorage.getItem('_id')?.toString() || '';
-  //           setDepartmentAllUser(response.data.filter((obj : any) => obj?._id != userId))
-  //         }
-  //       })
-  //       .catch((error) => {
-  //         // Clear the form values
-  //         console.error(error);
-  //       });
-  // }, [])
-
-  // const submitHandle = (e : React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if(reviewer) {
-  //     const isReviewerPerson = !(reviewer === "APPROVED" || reviewer === "REJECT")
-  //     axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/tasks/review', {
-  //       status: isReviewerPerson ? "PENDING" : reviewer,
-  //       currentUserId: localStorage.getItem('_id'),
-  //       taskId: data._id,
-  //       isNextPerson: isReviewerPerson,
-  //       nextPersonId: isReviewerPerson ? reviewer : "",
-  //     })
-  //     .then((response) => {
-  //       if(response.status < 300) {
-  //         handleSnackbar('task send', 'success')
-  //         setTimeout(() => {
-  //           router.push('/')
-  //         }, 2000);
-  //       }        
-  //     })
-  //     .catch((error) => {
-  //       console.error(error);
-  //       handleSnackbar('Something went wrong', 'error')
-  //     });
-  //   }
-  // }
-
   return (
     <>
      <ViewForm />

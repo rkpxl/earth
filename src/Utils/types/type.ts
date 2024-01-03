@@ -79,6 +79,7 @@ export interface ICompliance {
 }
 
 export interface IStepName {
+  values: any[] | undefined;
   name: string,
   position: number
 }
@@ -93,12 +94,14 @@ export interface IQuestion {
   createdBy?: string;
   title?: string;
   questionType?: QuestionType;
-  values?: Array<string> | string | null;
+  answerOptions?: Array<string> | string | null;
+  dependent?: any;
   complianceId?: string;
   stepNumber?: number;
   priority?: string;
   createdAt?: string;
   updatedAt?: string;
+  isFullWidth?: boolean;
   __v?: number;
 }
 

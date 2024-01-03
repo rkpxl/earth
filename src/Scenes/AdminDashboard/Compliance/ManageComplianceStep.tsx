@@ -18,6 +18,7 @@ interface IProps {
   position: string | number,
   title?: string,
   stepNumber: number,
+  values: string[],
 }
 
 

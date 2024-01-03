@@ -3,7 +3,7 @@ import {
   Dialog, DialogTitle, DialogContent,
   TextField, Button, FormControlLabel,
   Switch, FormHelperText, FormControl,
-  InputLabel, Select,  MenuItem, Box,
+  InputLabel, Select,  MenuItem, Box, Grid,
 } from '@mui/material';
 import axiosInstance from '../../../Utils/axiosUtil';
 import { showMessage } from '../../../Store/reducers/snackbar';
@@ -17,15 +17,18 @@ interface State {
   questionType: QuestionType;
   priority: any;
   valueCount: number;
-  values: any ;
+  answerOptions: any ;
   isActive: boolean;
+  depId?: number | null;
+  depValue?: any;
+  isFullWidth?: boolean;
   errors: {
     title?: string;
     description?: string;
     questionType?: string;
     priority?: string;
     valueCount?: string;
-    values?: string;
+    answerOptions?: string;
     general?: string,
   };
 }
@@ -65,7 +68,10 @@ const initialState: State = {
   priority: 10,
   valueCount: 0,
   isActive: true,
-  values: Array(1).fill(''),
+  depId: null,
+  depValue: null,
+  isFullWidth: false,
+  answerOptions: Array(1).fill(''),
   errors: {},
 };
 
@@ -74,7 +80,7 @@ const reducer = (state: State, action: Action): State => {
     case 'change':
       if(action.field === 'questionType') {
         state.valueCount = 0
-        state.values = []
+        state.answerOptions = []
       }
       return {
         ...state,
@@ -86,12 +92,14 @@ const reducer = (state: State, action: Action): State => {
       if (!state.title.trim()) {
         errors.title = 'Name is required';
       }
-      if (state.questionType !== 'text' && state && state?.valueCount < 1) {
-        errors.valueCount = 'Value Count should be greater than 0';
+      if ((state.questionType !== 'text') && state && state?.valueCount < 1) {
+        if(state.questionType !== 'yesno' ) {
+          errors.valueCount = 'Value Count should be greater than 0';
+        }
       }
-      const isValid = state.questionType !== 'text' ? state?.values.filter((title : any) => title === '') : []
+      const isValid = state.questionType !== 'text' ? state?.answerOptions.filter((title : any) => title === '') : []
       if(isValid.length > 0) {
-        errors.values = "Value Name can't be empty";
+        errors.answerOptions = "Value Name can't be empty";
       }
       if(state.description === '') {
         errors.description = "Description can't be empty";
@@ -116,15 +124,17 @@ interface IProps {
 
 const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onSubmit, complianceId, stepNumber,  maxPriority = 10 }) => {
   const isUpdate = Boolean(data)
-
   if(isUpdate) {
     initialState.title = data?.title || ''
     initialState.description = data?.description || ''
+    initialState.depId = data?.dependent?.key
+    initialState.depValue = data?.dependent?.value
     initialState.questionType = data?.questionType || 'text'
     initialState.priority = data?.priority || 1
-    initialState.valueCount = data?.values?.length || 1
+    initialState.valueCount = data?.answerOptions?.length || 1
     initialState.isActive = data?.isActive || true
-    initialState.values = data?.values || []
+    initialState.answerOptions = data?.answerOptions || []
+    initialState.isFullWidth = data?.isFullWidth
   }
 
   const priorities: number [] = Array.from({ length: maxPriority }, (_, index) => index + 1);
@@ -141,8 +151,8 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
     dispatch({ type: 'change',  field: 'valueCount', value: count });
 
     // Update stepNames array when stepCount changes
-    const values = Array(count).fill('').map((_, index) => state.values[index] || '');
-    dispatch({ type: 'change', field: 'values', value: values });
+    const answerOptions = Array(count).fill('').map((_, index) => state.answerOptions[index] || '');
+    dispatch({ type: 'change', field: 'answerOptions', value: answerOptions });
   };
 
   const handleSwitchChange = (field: keyof State) => {
@@ -160,25 +170,29 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
     await dispatch({ type: 'validate' });
 
     // Check if there are any errors
-    const isValid = state.values.filter((name :  any) => name === '')
-    if (!state.title) {
+    const isValid = state.answerOptions.filter((name :  any) => name === '')
+    if (!state.title || !state.description) {
       return;
     } else {
       try {
-        if(!complianceId || !stepNumber || !data?.id) {
+        if((!complianceId || !stepNumber || !data?.id) && isUpdate) {
           dispatcher(showMessage({ message: "Somehitng went wrong, compliance Id Doesn't exist", severity: 'error' }));
         }
-        const finalStepName = state?.values
+        const finalStepName = state?.answerOptions
         const response = !isUpdate ? await axiosInstance.post('/questions', {
           complianceId: complianceId,
           stepNumber: stepNumber,
-          depedent: {},
+          dependent: (state.depId && state.depValue) ? {
+            key: state.depId,
+            value: state.depValue
+          } : {},
           title: state.title,
           description: state.description || '',
           questionType: state.questionType,
           priority: state.priority+"",
+          answerOptions: finalStepName,
           isActive: state.isActive,
-          values: finalStepName,
+          isFullWidth: state.isFullWidth,
         }) : await axiosInstance.put(`/questions/${ data?.id}`, {
           title: state.title,
           description: state.description,
@@ -188,7 +202,6 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
           // TODO: Handle success, e.g., show a success message
           dispatcher(showMessage({ message: isUpdate ? 'Question is updated' :'Question is added', severity: 'success' }));
           dispatcher(fetchCompliances())
-          dispatch({ type: 'reset' });
           onClose();
         } else {
           // TODO: Handle failure, e.g., show an error message
@@ -198,6 +211,8 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
       } catch (error) {
         dispatcher(showMessage({ message: 'Internal server error, contact to admin', severity: 'error' }));
         console.error('Error adding item:', error);
+      } finally {
+        dispatch({ type: 'reset' });
       }
     }
   };
@@ -222,7 +237,7 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
             helperText={state.errors.title}
           />
         </Box>
-        <Box marginBottom={2}>
+        <Box>
           <TextField
             label="Description"
             fullWidth
@@ -235,6 +250,34 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
             disabled={isUpdate ? isEditing : false}
           />
         </Box>
+        <Grid container spacing={2}>
+          <Grid item xs={6}>
+            <Box sx={{ my: 2}}>
+              <TextField
+                label="Depedent ID"
+                fullWidth
+                value={state.depId}
+                onChange={(e) => handleTextChange('depId', e.target.value)}
+                disabled={isUpdate ? isEditing : false}
+                error={!!state.errors.title}
+                helperText={state.errors.title}
+              />
+            </Box>
+          </Grid>
+          <Grid item xs={6}>
+            <Box sx={{ my: 2}}>
+              <TextField
+                label="Depedent Value"
+                fullWidth
+                value={state.depValue}
+                onChange={(e) => handleTextChange('depValue', e.target.value)}
+                disabled={isUpdate ? isEditing : false}
+                error={!!state.errors.title}
+                helperText={state.errors.title}
+              />
+            </Box>
+          </Grid>
+        </Grid>
         <Box marginBottom={2}>
           <FormControl fullWidth>
             <InputLabel id="dropdown-label">Question Type</InputLabel>
@@ -273,7 +316,7 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
             </Select>
           </FormControl>
         </Box>
-        <Box marginBottom={2}>
+        {(state.questionType !== 'text' && state.questionType !== 'yesno' && state.questionType !== 'bigtext') && <Box marginBottom={2}>
           <TextField
             label="Value Count"
             type="number"
@@ -282,22 +325,22 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
             onChange={handleValueCountChange}
             error={!!state.errors.valueCount}
             helperText={state.errors.valueCount}
-            disabled={isUpdate ? true : !(state.questionType !== 'text' && state.questionType !== 'yesno')}
+            disabled={isUpdate ? true : false}
           />
-        </Box>
-        {state.values.map((v : any, index : number) => (
+        </Box>}
+        {(state.questionType !== 'text' && state.questionType !== 'yesno' && state.questionType !== 'bigtext') && state.answerOptions.map((v : any, index : number) => (
           <Box key={index} marginBottom={2}>
             <TextField
               label={`Value ${index + 1}`}
               fullWidth
               value={v}
-              error={!!state.errors.values}
-              helperText={state.errors.values}
+              error={!!state.errors.answerOptions}
+              helperText={state.errors.answerOptions}
               disabled={isUpdate ? true : !(state.questionType !== 'text' && state.questionType !== 'yesno')}
               onChange={(e) => {
-                const newValues = [...state.values];
+                const newValues = [...state.answerOptions];
                 newValues[index] = e.target.value;
-                handleTextChange('values', newValues);
+                handleTextChange('answerOptions', newValues);
               }}
             />
           </Box>
@@ -312,6 +355,16 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
             }
             disabled={isUpdate ? isEditing : false}
             label="Is Active"
+          />
+           <FormControlLabel
+            control={
+              <Switch
+                checked={state.isFullWidth}
+                onChange={() => handleSwitchChange('isFullWidth')}
+              />
+            }
+            disabled={isUpdate ? isEditing : false}
+            label="Fill Width"
           />
         </Box>
         <FormHelperText sx={{ mb: 2 }} error>{state.errors.general}</FormHelperText>

@@ -62,7 +62,7 @@ export default function ManageCompliance(props: IProps) {
       {compliance?.stepNames?.sort((a : any, b : any) => parseInt(a.position) - parseInt(b.position)).map((step, index) => {
         return (<>
           <CustomTabPanel key={index.toString()} value={value} index={index+1} sx={{p: 0}}>
-            <ManageComplianceStep id={id} stepNumber={index+1} position={step.position} title={step.name}/>
+            <ManageComplianceStep id={id} stepNumber={index + 1} position={step.position} title={step.name} values={[]}/>
           </CustomTabPanel>
         </>)
       })}
