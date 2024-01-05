@@ -59,7 +59,11 @@ export default function Group(props: any) {
   };
 
   const redirectToGroup = (id: string) => {
-    router.push(`/admin-dashboard/groups/${id}`)
+    if(id) {
+      router.push(`/admin-dashboard/groups/${id}`)
+    } else {
+      dispatch(showMessage({message: 'Contact to admin', severity: 'warning', duration: 2000}))
+    }
   }
 
   if(loading) {

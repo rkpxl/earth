@@ -13,7 +13,7 @@ import {
 
 
 const AdminCard = ({ card, onDelete, onManageClick} : any) => {
-  const { name, createdAt, updatedAt, isActive, title } = card
+  const { name, createdAt, updatedAt, isActive, manageActive, title } = card
   const avatarLetter = name ? name.charAt(0).toUpperCase() : title.charAt(0).toUpperCase();
   const [anchorEl, setAnchorEl] = useState(null);
 
@@ -60,9 +60,9 @@ const AdminCard = ({ card, onDelete, onManageClick} : any) => {
               onClose={handleMenuClose}
             >
               {/* Add your dropdown menu items here */}
-              <MenuItem onClick={() => console.log('Option 1 clicked')}>
+              {manageActive ? <MenuItem onClick={manageActive}>
               {!(Boolean(isActive)) ? 'Activate' : 'Inactivate'}
-              </MenuItem>
+              </MenuItem> : null }
               { onManageClick ? <MenuItem onClick={onManageClickHandle}>
                 Manage
               </MenuItem> : null}
