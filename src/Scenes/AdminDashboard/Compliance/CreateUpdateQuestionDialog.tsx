@@ -59,6 +59,10 @@ const questionDropDown = [
     name: 'Multi Select',
     value: 'multiselect',
   },
+  {
+    name: 'Info',
+    value: 'info',
+  },
 ]
 
 const initialState: State = {
@@ -317,7 +321,7 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
             </Select>
           </FormControl>
         </Box>
-        {(state.questionType !== 'text' && state.questionType !== 'yesno' && state.questionType !== 'bigtext') && <Box marginBottom={2}>
+        {(state.questionType === 'dropdown' || state.questionType === 'multiselect') && <Box marginBottom={2}>
           <TextField
             label="Value Count"
             type="number"

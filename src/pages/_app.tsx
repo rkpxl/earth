@@ -1,4 +1,7 @@
-import { Fragment } from 'react';
+ import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
 import Head from 'next/head';
 import { CacheProvider } from '@emotion/react';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
@@ -10,20 +13,19 @@ import { theme } from '../Theme';
 import { Provider } from 'react-redux';
 import Store from '../Store';
 import Snackbar from '../Components/Common/Snackbar';
+import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+
 
 const clientSideEmotionCache = createEmotionCache();
+const queryClient = new QueryClient();
 
-const App = (props : any) => {
-  const { Component, emotionCache = clientSideEmotionCache, pageProps } = props;
-
-  const getLayout = Component.getLayout ?? ((page : any) => page);
+function MyApp({ Component, pageProps }: any) {
+  const getLayout = Component.getLayout ?? ((page: any) => page);
 
   return (
-    <CacheProvider value={emotionCache}>
+    <CacheProvider value={clientSideEmotionCache}>
       <Head>
-        <title>
-          Knowledge Link
-        </title>
+        <title>Knowledge Link</title>
         <meta
           name="viewport"
           content="initial-scale=1, width=device-width"
@@ -33,13 +35,17 @@ const App = (props : any) => {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <Provider store={Store}>
-            {getLayout(<Component {...pageProps} />)}
-            <Snackbar />
+            <QueryClientProvider client={queryClient}>
+              {/* For hydration */}
+                {getLayout(<Component {...pageProps} />)}
+                <Snackbar />
+                <ReactQueryDevtools initialIsOpen={true} />
+            </QueryClientProvider>
           </Provider>
         </ThemeProvider>
       </LocalizationProvider>
     </CacheProvider>
   );
-};
+}
 
-export default App;
+export default MyApp;
