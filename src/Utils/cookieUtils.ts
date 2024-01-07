@@ -3,7 +3,7 @@ import { Cookies } from 'react-cookie';
 const cookies = new Cookies();
 
 export const setCookie = (name: string, value: string, options = {}): void => {
-  cookies.set(name, value, options);
+  cookies.set(name, value, { path: '/' ,domain: '', ...options });
 };
 
 export const getCookie = (name: string): string | undefined => {
@@ -11,14 +11,17 @@ export const getCookie = (name: string): string | undefined => {
 };
 
 export const removeAllCookie = () => {
-  cookies.remove('name')
-  cookies.remove('primartDepartment')
-  cookies.remove('org')
-  cookies.remove('orgId')
-  cookies.remove('email')
-  cookies.remove('exp')
-  cookies.remove('_id')
-  cookies.remove('type')
-  cookies.remove('authToken')
-}
+  Object.keys(cookies.getAll()).forEach((cookieName) => {
+    console.log('cookieName', cookieName)
+    cookies.remove(cookieName, { path: '/' });
+  });
+  Object.keys(localStorage).forEach((key) => {
+    console.log('key', key)
+    localStorage.removeItem(key);
+  });
+};
+
+// export const removeAllCookies = () => {
+//   cookies.remove(undefined, { path: '/' });
+// };
 

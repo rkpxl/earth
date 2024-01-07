@@ -12,7 +12,7 @@ export default function MemberCard({ title, subtitle }: IProps) {
     <CardHeader
     avatar={
     <>
-      <Avatar>{title[0]}</Avatar>
+      <Avatar>{title[0] || ''}</Avatar>
     </>}
     sx={{m:0, p:1.5}}
     title={title}

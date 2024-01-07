@@ -11,13 +11,12 @@ interface IProps {
 }
 
 const GroupDetail = (props : IProps) => {
-  const {isAuthenticated, group, members} = props
+  const { group } = props
   const router = useRouter();
-  const { id } = router.query;
 
   return (
     <Layout>
-      <ManageGroup />
+      <ManageGroup group={group}/>
     </Layout>
   );
 };
@@ -29,12 +28,10 @@ export const getServerSideProps = async function getServerSideProps(context : an
     const response = await axiosInstance.get('/auth/validate-token');
     if(response.status === 200) {
       const group = await axiosInstance.get(`/group/${id}`);
-      const members = await axiosInstance.get(`/member/group/${id}`);
       return {
         props: {
           isAuthenticated: true,
           group: group.data,
-          members: members.data,
         },
       };
     }

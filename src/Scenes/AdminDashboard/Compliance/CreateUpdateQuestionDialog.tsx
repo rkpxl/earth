@@ -184,7 +184,7 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
         }
         const finalStepName = state?.answerOptions
         const response = !isUpdate ? await axiosInstance.post('/questions', {
-          complianceId: complianceId,
+          complianceId: parseInt(complianceId as string),
           tabNumber: tabNumber,
           stepNumber: 1,
           dependent: (state.depId && state.depValue) ? {

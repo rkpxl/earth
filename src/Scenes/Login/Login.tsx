@@ -55,7 +55,7 @@ const Login = () => {
           localStorage.setItem('authToken', token);
 
           setCookie('name', user?.name);
-          setCookie('primartDepartment', user?.primartDepartment);
+          setCookie('primaryDepartment', user?.primaryDepartment);
           setCookie('org', user?.org);
           setCookie('orgId', user?.orgId);
           setCookie('email', user?.email);
@@ -67,9 +67,7 @@ const Login = () => {
           router.push('/').catch(console.error);
         })
         .catch((error) => {
-          console.error('error', error)
           setError('An error occurred during login.');
-          // Clear the form values
           setIsLoading(false)
           formik.resetForm();
           console.error(error);
