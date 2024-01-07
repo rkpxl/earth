@@ -13,7 +13,6 @@ import {
   TableSortLabel,
   Tooltip
 } from '@mui/material';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import { SeverityPill } from '../Common/SeverityPills';
 
 
@@ -42,7 +41,7 @@ export const LatestTasks = (props : any) => {
                     active
                     direction="desc"
                   >
-                    Date
+                    Start Date
                   </TableSortLabel>
                 </Tooltip>
               </TableCell>
@@ -83,7 +82,7 @@ export const LatestTasks = (props : any) => {
         </Table>
       </Box>
     </PerfectScrollbar>
-    <Box
+    {/* <Box
       sx={{
         display: 'flex',
         justifyContent: 'flex-end',
@@ -98,6 +97,6 @@ export const LatestTasks = (props : any) => {
       >
         View all
       </Button>
-    </Box>
+    </Box> */}
   </Card>
 )};

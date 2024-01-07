@@ -37,7 +37,7 @@ const SubmitTab = (props : SubmitTabProps) => {
               onChange={(e : any) => setReviewer(e.target.value)}
             >
               {(isView ? [ {name: "Approve", userId: 'APPROVED'}, {name: "Reject", userId: 'REJECTED'}, ...departmentAllUser] : departmentAllUser)?.map((option : any, index : number) => (
-                <MenuItem key={index} value={option?.userId}>
+                <MenuItem key={index} value={option}>
                   {`${option.name} ${option?.role ? '-' : ''} ${option?.role || ''}`}
                 </MenuItem>
               ))}

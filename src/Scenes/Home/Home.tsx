@@ -10,6 +10,8 @@ import MenuItem from '@mui/material/MenuItem';
 import ProtocolPopUp from '../../Components/Common/ProtocolDialog'
 import axios from 'axios';
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { useHomeContext } from '../../pages';
+import { ICompliance } from '../../Utils/types/type';
 
 interface TaskData {}
 
@@ -18,25 +20,19 @@ interface TaskPageProps {
 }
 
 const Home = () => {
+  const homeContext = useHomeContext()
+  const {  isAuthenticated, compliances } = homeContext
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [popOpen, setPopOpen] = React.useState(false);
-  const [protocolType, setprotocolType] = React.useState('')
+  const [complianceType, setComplianceType] = React.useState<ICompliance>()
   const [allTask, setAllTask] = React.useState<any>([])
   const [pendingTask, setPendingTask] = React.useState([])
   const [doneTask, setApprovedTask] = React.useState([])
   const open = Boolean(anchorEl);
 
   React.useEffect(() => {
-    axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/by/${localStorage.getItem('_id')}`).then((response) => {
-      setAllTask([...allTask,...response.data])
-      setApprovedTask(response.data || [])
-
-    }).catch((e) => console.log(e))
-
-    axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/to/${localStorage.getItem('_id')}`).then((response) => {
-      setAllTask([...allTask, ...response.data])
-      setPendingTask(response.data || [])
-    }).catch((e) => console.log(e))
+    setAllTask([])
+    setApprovedTask([])
   }, [])
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -58,8 +54,8 @@ const Home = () => {
     handlePopClose()
   } 
 
-  const handleNewProtocolCreation = (type: string) => {
-    setprotocolType(type);
+  const onComplienceClick = (comp: ICompliance) => {
+    setComplianceType(comp);
     handlePopOpen()
   }
 
@@ -112,9 +108,7 @@ const Home = () => {
               horizontal: 'left',
             }}
           >
-            <MenuItem onClick={() => handleNewProtocolCreation('chemical')}>Chemical</MenuItem>
-            <MenuItem onClick={() => handleNewProtocolCreation('IRB')}>IRB</MenuItem> 
-            <MenuItem onClick={() => handleNewProtocolCreation('human ethics')}>Human Ethics</MenuItem>
+            {compliances.map((comp : ICompliance) => (<MenuItem key={comp._id} onClick={() => onComplienceClick(comp)}>{comp.title}</MenuItem>))}
           </Menu>
         </Box>
         <Container maxWidth={false}>
@@ -136,7 +130,7 @@ const Home = () => {
             </Grid>
           </Grid>
           <LatestTasks task={allTask}/>
-          <ProtocolPopUp handleClose={handlePopClose} popOpen={popOpen} handleSubmit={handleSubmitProtocol} protocolType={protocolType}/>
+          <ProtocolPopUp handleClose={handlePopClose} popOpen={popOpen} handleSubmit={handleSubmitProtocol} complianceType={complianceType}/>
         </Container>
       </Box>
     </>

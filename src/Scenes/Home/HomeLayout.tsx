@@ -1,13 +1,10 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Box } from '@mui/material';
 import { styled } from '@mui/material/styles';
-// import { DashboardNavbar } from './dashboard-navbar';
 import { Sidebar } from '../../Components/Home/Sidebar';
 import { Navbar } from '../../Components/Home/Navbar'
 import React from 'react';
-import { validateToken } from '../../Utils/signup';
 import { useRouter } from 'next/router';
-import Layout from '../../Components/Layout/Layout';
 
 const HomeLayoutRoot = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -23,6 +20,15 @@ const HomeLayout = (props : any) => {
   const { children } = props;
   const [isSidebarOpen, setSidebarOpen] = useState(true);
   const router = useRouter()
+  const [isAdmin, setIsAdmin] = useState(false);
+
+  useEffect(() => {
+    // Get the user type from localStorage
+    const userType = localStorage.getItem('type');
+
+    // Update the isAdmin state based on the user type
+    setIsAdmin(userType === 'superAdmin' || userType === 'admin');
+  }, []);
 
   return (
     <main>
@@ -32,7 +38,6 @@ const HomeLayout = (props : any) => {
         open={isSidebarOpen}
       />
       <Navbar onSidebarOpen={() => setSidebarOpen(true)} />
-      <Layout>
         <HomeLayoutRoot>
           <Box
             sx={{
@@ -45,7 +50,6 @@ const HomeLayout = (props : any) => {
             {children}
           </Box>
         </HomeLayoutRoot>
-      </Layout>
     </main>
   );
 };

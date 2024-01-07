@@ -1,22 +1,19 @@
 import React, { Suspense } from 'react'
 import Head from 'next/head';
-import Router from 'next/router';
+import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import CircularProgress from '@mui/material/CircularProgress';
 import { Box, Button, Container, Grid, TextField, Typography } from '@mui/material';
 import axios from 'axios'
+import { parseJwt } from '../../Utils/signin';
+import { setCookie } from '../../Utils/cookieUtils';
 
-function parseJwt(token : string) {
-  if (!token) { return; }
-  const base64Url = token.split('.')[1];
-  const base64 = base64Url.replace('-', '+').replace('_', '/');
-  return JSON.parse(window.atob(base64));
-}
 
 const Login = () => {
   const [error, setError] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false)
+  const router = useRouter()
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -35,33 +32,42 @@ const Login = () => {
     }),
     onSubmit: () => {
       setIsLoading(true)
-      axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/users/signup', {
+      axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/auth/signin', {
         email: formik.values.email,
         password: formik.values.password
       })
         .then((response) => {
           // Handle the response
           setIsLoading(false)
-          const token = response.data;
+          const token = response.data.data.token;
           const user : any = parseJwt(token)
 
           // Decode the payload from base64
           // Store the token in local storage or a secure HTTP-only cookie
           localStorage.setItem('name', user?.name);
-          localStorage.setItem('department', user?.department);
+          localStorage.setItem('primartDepartment', user?.primartDepartment);
           localStorage.setItem('org', user?.org);
+          localStorage.setItem('orgId', user?.orgId);
           localStorage.setItem('email', user?.email);
           localStorage.setItem('exp', user?.exp);
           localStorage.setItem('_id', user?._id);
+          localStorage.setItem('type', user?.type);
+          localStorage.setItem('authToken', token);
 
-          Router
-          .push('/')
-          .catch(console.error);
+          setCookie('name', user?.name);
+          setCookie('primaryDepartment', user?.primaryDepartment);
+          setCookie('org', user?.org);
+          setCookie('orgId', user?.orgId);
+          setCookie('email', user?.email);
+          setCookie('exp', user?.exp);
+          setCookie('_id', user?._id);
+          setCookie('type', user?.type);
+          setCookie('authToken', token);
 
+          router.push('/').catch(console.error);
         })
         .catch((error) => {
           setError('An error occurred during login.');
-          // Clear the form values
           setIsLoading(false)
           formik.resetForm();
           console.error(error);
@@ -69,16 +75,12 @@ const Login = () => {
     }
   });
 
-  const handleGoogleSubmit =  () => {
-    console.log('hello')
-  }
+  const handleGoogleSubmit =  () => {}
 
-  const handleFBSubmit =  () => {
-    console.log('hello')
-  }
+  const handleFBSubmit =  () => {}
 
   return (
-    <>
+    <Suspense fallback={<CircularProgress />}>
       <Head>
         <title>Login</title>
       </Head>
@@ -208,7 +210,7 @@ const Login = () => {
           </form>
         </Container>
       </Box>
-    </>
+    </Suspense>
   );
 };
 

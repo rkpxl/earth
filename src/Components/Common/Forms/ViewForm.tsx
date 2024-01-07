@@ -145,7 +145,7 @@ export const ViewForm: React.FC = () => {
       })
       return response.data
     } catch(e) {
-      console.log(e)
+      console.error(e)
     }
   }
   
@@ -199,7 +199,6 @@ export const ViewForm: React.FC = () => {
     if(id) {
       axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/${id}`).then((response) => {
         setResult(JSON.parse(response?.data?.rawJson))
-        console.log('result',JSON.parse(response?.data?.rawJson))
         const filteredPeoples = response?.data?.approvals?.filter((p : any) => !(p.status === "APPROVED" || p.userId === localStorage.getItem("_id")))
         const selected = response?.data?.approvals?.filter((p : any) => (p.userId === localStorage.getItem("_id")))
         if(selected[0]?.access === "ADMIN" || selected[0]?.access === "WRITE") {
@@ -209,7 +208,7 @@ export const ViewForm: React.FC = () => {
         }
         setAllPeoples(filteredPeoples)
         setData(response.data)
-      }).catch((e) => { console.log(e) })
+      }).catch((e) => { console.error(e) })
     } else {
       router.back()
     }

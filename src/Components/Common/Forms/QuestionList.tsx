@@ -1,17 +1,15 @@
 import React, { useEffect, useState } from 'react';
 
 import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-import Button from '@mui/material/Button';
 import { useRouter } from 'next/router';
 import axios from 'axios';
-import { Alert, AlertColor, Radio, RadioGroup, Snackbar, Step, StepLabel, Stepper, Tab, Tabs, Typography } from '@mui/material';
-import { GetStaticPaths, GetStaticProps } from 'next';
+import { Alert, AlertColor, Snackbar, Tab, Tabs } from '@mui/material';
 import SearchPeople from '../SearchPeople';
 import DocumentTab from './DocumentTab';
 import SubmitTab from './SubmitTab';
 import PersonnelTab from './PersonnelTab';
 import QuestionBank from './QuestionBank';
+import CustomTabPanel from '../CustomTabPanel';
 
 interface FormProps {
   title: string | string[] | undefined
@@ -44,27 +42,6 @@ interface PersonnelPerson {
   access: string | null,
   status: string | null,
   comment: string | null,
-}
-
-
-function CustomTabPanel(props: TabPanelProps) {
-  const { children, value, index, ...other } = props;
-
-  return (
-    <div
-      role="tabpanel"
-      hidden={value !== index}
-      id={`simple-tabpanel-${index}`}
-      aria-labelledby={`simple-tab-${index}`}
-      {...other}
-    >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          {children}
-        </Box>
-      )}
-    </div>
-  );
 }
 
 function a11yProps(index: number) {
@@ -101,7 +78,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
   const [addPersonDialog, setAddPersonDialog] = useState(false);
   const [allPeoples, setAllPeoples] = useState<Array<PersonnelPerson>>([])
   const [result, setResult] = useState(questions)
-  const [reviewer, setReviewer] = useState('')
+  const [reviewer, setReviewer] = useState<any>()
   const [comment, setComment] = useState('')
   
   const [snackMessage, setSnackMessage] = useState('')
@@ -184,7 +161,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
       })
       return response.data
     } catch(e) {
-      console.log(e)
+      console.error(e)
     }
   }
   
@@ -196,19 +173,13 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         return {...doc, uri: uri}
       }))
       updateComment()
-      console.log(rows, {
-        creator: localStorage.getItem('name'),
-        date: date.getTime(),
-        title: title,
-        documents: updatedDocument,
-        dept: dept,
-        description: description,
-        comment: '',
-        ...result
-      })
       axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/tasks', {
         org: localStorage.getItem('org'),
         userId: localStorage.getItem('_id'),
+        creator: localStorage.getItem('name'),
+        startDate: new Date().getTime(),
+        currentAssigneeName: reviewer?.name,
+        endDate: '',
         rawJson: JSON.stringify({
             creator: localStorage.getItem('name'),
             date: date.getTime(),
@@ -221,7 +192,8 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         }),
         status: "PENDING",
         approvals: rows,
-        currentAssignedTo: reviewer,
+        currentAssignedTo: reviewer?.userId
+        ,
       })
       .then((response) => {
         if(response.status < 300) {
@@ -244,7 +216,6 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         question.id === questionId ? { ...question, answer } : question
       )
     );
-    console.log(questions)
   };
 
   return (
@@ -307,15 +278,3 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
    </>
   );
 };
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths: any[] = [];
-
-  return { paths, fallback: false };
-};
-
-export const getStaticProps: GetStaticProps = async ({ params } : any) => {
-  return {
-    props: {},
-  };
-}
