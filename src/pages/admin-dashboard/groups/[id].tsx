@@ -17,7 +17,7 @@ const GroupDetail = (props : IProps) => {
 
   return (
     <Layout>
-      <ManageGroup />
+      <ManageGroup {...group} />
     </Layout>
   );
 };

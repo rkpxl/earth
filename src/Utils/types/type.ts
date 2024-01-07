@@ -30,7 +30,7 @@ export interface IDepartment {
 export interface IGroup {
   _id?: string;
   name?: string;
-  id?: number;
+  id: number;
   orgId?: string;
   type?: string;
   departmentId?: string;
