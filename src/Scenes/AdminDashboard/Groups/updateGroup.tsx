@@ -2,22 +2,28 @@ import React, { useState } from 'react';
 import { TextField, Button, Grid, Paper, Typography } from '@mui/material';
 import axiosInstance from '../../../Utils/axiosUtil';
 import { IGroup } from '../../../Utils/types/type';
+import { showMessage } from '../../../Store/reducers/snackbar';
+import { useDispatch } from 'react-redux';
 
-const EditableGroup = (props: IGroup) => {
-  const [name, setName] = useState(props.name);
-  const [email, setEmail] = useState(props.primaryEmail);
+const EditableGroup = ({ group }: any) => {
+  const dispatch = useDispatch()
+  const [name, setName] = useState(group.name);
+  const [email, setEmail] = useState(group.primaryEmail);
   const [isEditing, setIsEditing] = useState(false);
 
   const handleEdit = () => {
     setIsEditing(true);
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     try {
-        const response = axiosInstance.put(`/group/${props.id}`, { name, primaryEmail: email });
-        console.log(' -- response -- ', response);
+        const response = await axiosInstance.put(`/group/${group.id}`, { name, primaryEmail: email });
+        if(response.status < 300) {
+          dispatch(showMessage({ message: "Group info saved", severity: 'success'}))
+        } 
     } catch(err) {
-        console.log(' --- error ---  ', err)
+        console.error(err)
+        dispatch(showMessage({ message: "Group info not updated, try again", severity: 'error'}))
     }
 
     setIsEditing(false);
@@ -61,7 +67,7 @@ const EditableGroup = (props: IGroup) => {
               ) : (
                 <>
                   <Grid item>
-                    <Button variant="contained" color="primary" onClick={handleSave} disabled={!(props.name !== name || props.primaryEmail !== email)}>
+                    <Button variant="contained" color="primary" onClick={handleSave} disabled={!(group.name !== name || group.primaryEmail !== email)}>
                       Save
                     </Button>
                   </Grid>
