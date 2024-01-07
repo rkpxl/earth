@@ -5,6 +5,7 @@ import { Box, Tab, Tabs } from '@mui/material';
 import CustomTabPanel from '../../../Components/Common/CustomTabPanel';
 import AddGroupMember from './AddGroupMember';
 import RemoveGroupMember from './RemoveGroupMember';
+import EditableGroup from './updateGroup';
 
 function a11yProps(index: number) {
   return {
@@ -32,7 +33,7 @@ export default function ManageGroup(props: any) {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0} sx={{p: 0}}>
-        Group detai
+        <EditableGroup {...props}/>
       </CustomTabPanel>
       <CustomTabPanel value={value} index={1} sx={{p: 0}}>
         <AddGroupMember group={group}/>
