@@ -11,8 +11,6 @@ import InboxIcon from '@mui/icons-material/MoveToInbox';
 import DraftsIcon from '@mui/icons-material/Drafts';
 import SendIcon from '@mui/icons-material/Send';
 import StarBorder from '@mui/icons-material/StarBorder';
-import AddChart from '@mui/icons-material/AddChart';
-import TableViewIcon from '@mui/icons-material/TableView';
 import ShieldIcon from '@mui/icons-material/Shield';
 import GroupIcon from '@mui/icons-material/Group';
 import ApartmentIcon from '@mui/icons-material/Apartment';
@@ -47,7 +45,7 @@ export const Sidebar = (props : any) => {
     () => {
       const dashboardItem = {
         href: '/admin-dashboard',
-        icon: (<AddChart fontSize="small" />),
+        icon: (<InboxIcon fontSize="small" />),
         title: 'Dashboard', 
         subRoute: [
           {
