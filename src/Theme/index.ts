@@ -1,4 +1,12 @@
 import { createTheme } from '@mui/material';
+import { Roboto } from 'next/font/google';
+
+
+export const roboto = Roboto({
+  weight: ['300', '400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const theme = createTheme({
   breakpoints: {
@@ -132,6 +140,7 @@ export const theme = createTheme({
     }
   },
   palette: {
+    // @ts-ignore
     neutral: {
       100: '#F3F4F6',
       200: '#E5E7EB',
@@ -297,3 +306,5 @@ export const theme = createTheme({
     }
   }
 });
+
+export default theme
