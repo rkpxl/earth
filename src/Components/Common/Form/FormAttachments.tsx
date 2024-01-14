@@ -1,39 +1,51 @@
-import React, { useState, useRef } from 'react';
-import Grid from '@mui/material/Grid';
-import TextField from '@mui/material/TextField';
-import Button from '@mui/material/Button';
-import IconButton from '@mui/material/IconButton';
+import React, { useRef, useState } from 'react'
+import { useProtocolContext } from '../../../Scenes/Protocol/Protocol'
+import { ICompliance, IDocument, IProtocol } from '../../../Utils/types/type';
+import { useQuery } from '@tanstack/react-query';
+import axiosInstance from '../../../Utils/axiosUtil';
+import { Button, CircularProgress, Grid, IconButton, TextField } from '@mui/material';
+import Loading from '../Loading';
 import DeleteIcon from '@mui/icons-material/Delete';
-import { CircularProgress } from '@mui/material';
+import DocumentAttachDialog from './DocumentAttachDialog';
 
-
-interface DocumentComponentProps {
-  documents: Array<any>,
-  setDocuments: Function,
-  isDisabled: boolean,
+interface IProps {
+  compliance: ICompliance;
+  tabNumber?: number;
+  protocol: IProtocol;
 }
 
-const DocumentComponent = (props : DocumentComponentProps) => {
-  const { documents, setDocuments, isDisabled = true } = props;
+export default function FormAttachment({ compliance, protocol }: IProps) {
+  
   const fileInputRef = useRef<any>(null);
-
-
-  const handleFileInputChange = (event: any) => {
-    const file = event.target.files[0];
-    if (file) {
-        setDocuments([...documents, {name: file.name, file: file, uri: ''}]);
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const [documents, setDocuments] = useState([]);
+  const isDisabled = false
+  const { data, isLoading, isError } = useQuery({
+    queryKey: [`compliance-document-${protocol?._id}`],
+    queryFn: async () => {
+      try {
+        const response = await axiosInstance.get('/document',{
+          params: {
+            protocol_id: protocol?._id
+          }
+        })
+        return response.data
+      } catch (err) {
+        console.error(err)
+      }
     }
-  };
+  })
 
   const handlInputChange = (event:any, index: number, type: string) => {
     const updatedDocuments = [...documents];
-    updatedDocuments[index][type] = event.target.value;
+    // updatedDocuments[index][type] = event.target.value;
     setDocuments(updatedDocuments);
   };
   
 
   const handleAddButtonClick = () => {
-    fileInputRef?.current?.click();
+    // fileInputRef?.current?.click();
+    setIsOpen((prev) => !prev)
   };
 
   const handleDeleteDocument = (index: any) => {
@@ -42,18 +54,18 @@ const DocumentComponent = (props : DocumentComponentProps) => {
     setDocuments(updatedDocuments);
   };
 
-  if(!documents) {
-    return (<><CircularProgress /></>);
+  if(isLoading) {
+    return (<Loading />)
   }
 
   return (
-    <div style={{ padding: '16px' }}>
-        {documents.map((document: any, index: any) => (
+    <div style={{ padding: '0px' }}>
+        {data.map((document: IDocument, index: any) => (
           <Grid container key={index} spacing={2} style={{ marginBottom: '16px'}}>
             <Grid item xs={12} sm={5}>
               <TextField
                   label="Document Name"
-                  value={document.name}
+                  value={document.title}
                   onChange={(e) => handlInputChange(e, index, 'name')}
                   fullWidth
                   variant="outlined"
@@ -64,7 +76,7 @@ const DocumentComponent = (props : DocumentComponentProps) => {
             <Grid item xs={12} sm={5}>
               <TextField
                   label="Additional info"
-                  value={document.info}
+                  value={document.description}
                   onChange={(e) => handlInputChange(e, index, 'info')}
                   fullWidth
                   variant="outlined"
@@ -73,7 +85,7 @@ const DocumentComponent = (props : DocumentComponentProps) => {
               />
             </Grid>
             <Grid item xs={6} sm={1}>
-              <a href={document.uri} target="_blank" rel="noopener noreferrer" style={{ height: '100%', textAlign: 'center', display: 'flex', alignItems: 'center'  }}>
+              <a href={document.docLink} target="_blank" rel="noopener noreferrer" style={{ height: '100%', textAlign: 'center', display: 'flex', alignItems: 'center'  }}>
                 View
               </a>
             </Grid>
@@ -92,14 +104,7 @@ const DocumentComponent = (props : DocumentComponentProps) => {
     <Button variant="contained" color="primary" onClick={handleAddButtonClick} disabled={isDisabled}>
       Add Document
     </Button>
-      <input
-        type="file"
-        ref={fileInputRef}
-        style={{ display: 'none' }}
-        onChange={handleFileInputChange}
-      />
+    <DocumentAttachDialog open={isOpen} onClose={() => setIsOpen((prev) => !prev)} onAddDocument={() => console.log('add')} protocolId={protocol._id} complianceId={compliance.id || 1} />
     </div>
   );
-};
-
-export default DocumentComponent;
+}

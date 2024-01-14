@@ -19,7 +19,6 @@ export const getServerSideProps = async function getServerSideProps(context : an
     const response = await axiosInstance.get('/auth/validate-token', context);
     console.log("response", response)
     if(response.status === 200) {
-      console.log("inside response")
       return {
         redirect: {
           destination: '/',

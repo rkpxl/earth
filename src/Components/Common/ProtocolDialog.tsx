@@ -6,6 +6,10 @@ import { departments } from '../../data/fixData';
 import { useRouter } from 'next/router';
 import { useHomeContext } from '../../pages';
 import { ICompliance, IDepartment } from '../../Utils/types/type';
+import axiosInstance from '../../Utils/axiosUtil';
+import { getCookie } from '../../Utils/cookieUtils';
+import { showMessage } from '../../Store/reducers/snackbar';
+import { useDispatch } from 'react-redux';
 
 
 
@@ -44,6 +48,7 @@ const ProtocolPopUp = (props : IProps) : JSX.Element => {
   const { departments } = homeContext
   const { complianceType } = props
   const Router = useRouter()
+  const dispatch = useDispatch()
 
   const validateForm = (values: FormValues) => {
     const errors: Partial<FormValues> = {};
@@ -62,10 +67,21 @@ const ProtocolPopUp = (props : IProps) : JSX.Element => {
     return errors;
   };
 
-  const handleSubmit = (values: FormValues, { setSubmitting }: any) => {
+  const handleSubmit = async (values: FormValues, { setSubmitting }: any) => {
     // Handle form submission logic here
     if(complianceType?.id) {
-      Router.push(`/forms/${complianceType?.id}?title=${values.title}&dept=${values.department}&description=${values.description}`)
+      const response : any = await axiosInstance.post('/protocol', {
+        title: values.title,
+        description: values.description,
+        department: values.department,
+        complianceId: complianceType.id
+      })
+      if(response.status < 300) {
+        dispatch(showMessage({ message: 'Protocol is drafted', severity: 'success' }));
+        Router.push(`/forms/${response._id}`)
+      } else {
+        dispatch(showMessage({ message: 'Somehitng went wrong, please try again', severity: 'error' }));
+      }
       setSubmitting(false);
     }
   };
@@ -92,7 +108,7 @@ const ProtocolPopUp = (props : IProps) : JSX.Element => {
                   <InputLabel>Department</InputLabel>
                   <Select {...field} label="Department">
                     {departments.map((dep : IDepartment, index : number) => (
-                      <MenuItem value={dep.id} key={index.toString()}>{dep.name}</MenuItem>
+                      <MenuItem value={dep.name} key={index.toString()}>{dep.name}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>

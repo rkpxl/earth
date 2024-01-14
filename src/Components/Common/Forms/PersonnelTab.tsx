@@ -42,12 +42,12 @@ const PersonnelTab = (props : PersonnelTabProps) : JSX.Element => {
                     label="Role"
                     disabled={index === 0 || isDisabled}
                   >
-                    <MenuItem value="Creator">Creator</MenuItem>
-                    <MenuItem value="Co-Creator">Co-Creator</MenuItem>
-                    <MenuItem value="Advisor">Advisor</MenuItem>
-                    <MenuItem value="Assistance">Assistance</MenuItem>
-                    <MenuItem value="Lab-Assistance">Lab-Assistance</MenuItem>
-                    <MenuItem value="External">External</MenuItem>
+                    <MenuItem value="pi">PI</MenuItem>
+                    <MenuItem value="copi">Co-PI</MenuItem>
+                    <MenuItem value="advisor">Advisor</MenuItem>
+                    <MenuItem value="assistance">Assistance</MenuItem>
+                    <MenuItem value="labassistance">Lab-Assistance</MenuItem>
+                    <MenuItem value="external">External</MenuItem>
                   </Select>
                 </FormControl>
               </Grid>

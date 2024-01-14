@@ -12,6 +12,7 @@ import axios from 'axios';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useHomeContext } from '../../pages';
 import { ICompliance } from '../../Utils/types/type';
+import axiosInstance from '../../Utils/axiosUtil';
 
 interface TaskData {}
 

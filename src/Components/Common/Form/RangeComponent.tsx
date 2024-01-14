@@ -1,17 +1,15 @@
 import React from 'react';
 import { Grid, Slider, TextField } from '@mui/material';
 import CommentJustification from './CommentJustification';
+import { useProtocolQuestionContext } from './FormQuestionRenderer';
 
 interface RangeComponentProps {
-  questionTitle: string;
-  comment?: string;
-  justification?: string;
   questionNumber?: number;
-  handleAnswerChange: Function;
 }
 
-const RangeComponent: React.FC<RangeComponentProps> = ({ questionTitle, comment, justification }) => {
+const RangeComponent: React.FC<RangeComponentProps> = ({ questionNumber }) => {
   const [value, setValue] = React.useState<number>(5);
+  const { title, handleAnswerChange, handleQuestionSubmit, compliance, answers, question } = useProtocolQuestionContext()
 
   const handleChange = (event: Event, newValue: number | number[]) => {
     setValue(newValue as number);
@@ -20,7 +18,7 @@ const RangeComponent: React.FC<RangeComponentProps> = ({ questionTitle, comment,
   return (
     <Grid container spacing={1}>
       <Grid item xs={11}>
-        <h3>{questionTitle}</h3>
+        <h3>{title}</h3>
         <Slider
           value={value}
           onChange={handleChange}
@@ -31,7 +29,7 @@ const RangeComponent: React.FC<RangeComponentProps> = ({ questionTitle, comment,
           max={10}
         />
       </Grid>
-      <CommentJustification comment={comment} justification={justification}/>
+      <CommentJustification comment={''} justification={''} question_id={''} complianceId={1} />
     </Grid>
   );
 };

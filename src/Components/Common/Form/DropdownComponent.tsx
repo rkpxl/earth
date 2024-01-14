@@ -1,21 +1,14 @@
 import React from 'react';
 import { Grid, FormControl, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material';
 import CommentJustification from './CommentJustification';
+import { useProtocolQuestionContext } from './FormQuestionRenderer';
 
 interface DropdownComponentProps {
-  questionTitle: string;
-  options: string[];
-  title: string,
-  comment?: string;
-  justification?: string;
-  values?: any[]
   questionNumber?: number;
-  handleAnswerChange: Function;
-  answer: string;
 }
 
-const DropdownComponent: React.FC<DropdownComponentProps> = (props) => {
-  const { title, answer, questionNumber, comment, justification, values, handleAnswerChange } = props
+const DropdownComponent: React.FC<DropdownComponentProps> = ({questionNumber} : DropdownComponentProps) => {
+  const { title, handleAnswerChange, handleQuestionSubmit, compliance, answers, question } = useProtocolQuestionContext()
 
   const handleChange = (event: any) => {
     handleAnswerChange(event.target.value as string);
@@ -27,20 +20,20 @@ const DropdownComponent: React.FC<DropdownComponentProps> = (props) => {
         <Typography sx={{ fontWeight: "420", fontSize: "16px", marginBottom: "6px" }} variant="h6">{questionNumber ? 'Q' + questionNumber + ' ': ''} {title}</Typography>
       </Grid>
       <Grid item xs={11}>
-        <FormControl fullWidth variant="outlined">
+        <FormControl fullWidth variant="outlined"  onBlur={(e) => handleQuestionSubmit(e)}>
           <InputLabel>Select an option</InputLabel>
           <Select
-            value={answer}
+            value={answers[question?._id]}
             onChange={handleChange}
             label="Select an option"
           >
-            {values?.map((option, index) => (
+            {question?.answerOptions?.map((option : any, index : any) => (
               <MenuItem key={index} value={option}>{option}</MenuItem>
             ))}
           </Select>
         </FormControl>
       </Grid>
-      <CommentJustification comment={comment} justification={justification}/>
+      <CommentJustification comment={''} justification={''} question_id={question?._id} complianceId={compliance.id} />
     </Grid>
   );
 };

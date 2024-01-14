@@ -59,7 +59,7 @@ export interface IMember {
 
 export interface ICompliance {
   _id?: string;
-  id?: string;
+  id?: number;
   orgId?: string;
   isActive?: boolean;
   type?: string;
@@ -112,6 +112,90 @@ export interface IQuestion {
   updatedAt?: string;
   isFullWidth?: boolean;
   __v?: number;
+}
+
+export interface IUser {
+  _id: string;
+  email: string;
+  type: string;
+  accessLevel: string;
+  name: string;
+  secondaryDepartmentsId?: string[]; // Adjust the type accordingly
+  orgId: number;
+  isActive: boolean;
+  createdBy: string;
+  createdAt: string; // Assuming it's a string in ISO date format
+  updatedAt: string; // Assuming it's a string in ISO date format
+  __v: number;
+  primaryDepartmentId: number;
+}
+
+export interface IProtocol {
+  _id: string;
+  piName: string;
+  pi_id: string;
+  title: string;
+  description: string;
+  status: string;
+  actionStatus: string;
+  protocolAction: string;
+  currentAssignee_id: string;
+  department: string;
+  approvers: Array<Object>;
+  complianceId: number;
+  isActive: boolean;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface IAnswer {
+  _id: string;
+  answer: string;
+  lastWriterName: string;
+  complianceId: number;
+  tabId: number;
+  question_id: string;
+  protocol_id: string;
+  type: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  previousAnswer: string;
+}
+
+export interface IComment {
+  comment: string;
+  writerName: string;
+  complianceId: number;
+  tabId: number;
+  question_id: string;
+  protocol_id: string;
+  type: string;
+  createdBy: string;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface IDocument {
+  _id: string;
+  docLink: string;
+  title: string;
+  description?: string;
+  protocol_id: string;
+  complianceId: number;
+  tabId: number;
+  createdBy: string;
+  providerName: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  previousDocLink: string;
+  markedUpVersion?: string;
 }
 
 export type QuestionType = 'text' | 'dropdown' | 'yesno' | 'bigtext' | 'multiselect' 

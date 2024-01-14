@@ -1,18 +1,16 @@
 import React from 'react';
 import { Grid, TextField, Typography } from '@mui/material';
 import CommentJustification from './CommentJustification';
+import { useProtocolQuestionContext } from './FormQuestionRenderer';
 
 interface TextFieldComponentProps {
-  title: string;
   questionNumber?: number;
-  comment?: string;
-  justification?: string;
   bigBox?: boolean;
-  handleAnswerChange: any;
-  answer: string;
 }
 
-const TextFieldComponent: React.FC<TextFieldComponentProps> = ({ title, comment, questionNumber, answer, justification, bigBox, handleAnswerChange }) => {
+const TextFieldComponent: React.FC<TextFieldComponentProps> = ({ questionNumber, bigBox }) => {
+
+  const { title, handleAnswerChange, handleQuestionSubmit, compliance, answers, question } = useProtocolQuestionContext()
   return (
     <Grid container spacing={1}>
       <Grid item xs={12} sm={12}>
@@ -25,10 +23,11 @@ const TextFieldComponent: React.FC<TextFieldComponentProps> = ({ title, comment,
           fullWidth multiline
           inputProps={{ style: bigBox ? { minHeight: '100px' } : {} }} 
           onChange={(e) => handleAnswerChange(e.target.value)}
-          value={answer}
+          onBlur={handleQuestionSubmit}
+          value={answers[question?._id] || ''}
         />
       </Grid>
-      <CommentJustification comment={comment} justification={justification}/>
+      <CommentJustification comment={''} justification={''} question_id={question?._id} complianceId={compliance.id} />
     </Grid>
   );
 };

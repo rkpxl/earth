@@ -1,22 +1,19 @@
 import React from 'react';
 import { Grid, FormControl, FormGroup, FormControlLabel, Checkbox, TextField, Typography } from '@mui/material';
 import CommentJustification from './CommentJustification';
+import { useProtocolQuestionContext } from './FormQuestionRenderer';
 
 interface MultiSelectComponentProps {
-  title: string;
-  answerOptions: string[];
-  comment?: string;
-  justification?: string;
   questionNumber?: number;
-  handleAnswerChange: Function;
-  answer: any;
 }
 
-const MultiSelectComponent: React.FC<MultiSelectComponentProps> = ({ answer, title, questionNumber, answerOptions, comment, justification, handleAnswerChange }) => {
+const MultiSelectComponent: React.FC<MultiSelectComponentProps> = ({ questionNumber }) => {
+  const { title, handleAnswerChange, handleQuestionSubmit, compliance, answers, question } = useProtocolQuestionContext()
+
   const handleOptionChange = (option: string) => {
-    const updatedOptions = answer.includes(option)
-      ? answer.filter((selectedOption: string) => selectedOption !== option)
-      : [...answer, option];
+    const updatedOptions = answers[question?._id].includes(option)
+      ? answers[question?._id].filter((selectedOption: string) => selectedOption !== option)
+      : [...answers[question?._id], option];
       handleAnswerChange(updatedOptions);
   };
 
@@ -26,14 +23,14 @@ const MultiSelectComponent: React.FC<MultiSelectComponentProps> = ({ answer, tit
         <Typography sx={{ fontWeight: "420", fontSize: "16px", marginBottom: "6px" }} variant="h6">{questionNumber ? 'Q' + questionNumber + ' ': ''} {title}</Typography>
       </Grid>
       <Grid item xs={11}>
-        <FormControl component="fieldset">
+        <FormControl component="fieldset"  onBlur={(e) => handleQuestionSubmit(e)}>
           <FormGroup>
-            {answerOptions?.map((option, index) => (
+            {question?.answerOptions?.map((option : any, index : any) => (
               <FormControlLabel
                 key={index}
                 control={
                   <Checkbox
-                    checked={answer.includes(option)}
+                    checked={answers[question?._id]?.includes(option)}
                     onChange={() => handleOptionChange(option)}
                   />
                 }
@@ -43,7 +40,7 @@ const MultiSelectComponent: React.FC<MultiSelectComponentProps> = ({ answer, tit
           </FormGroup>
         </FormControl>
       </Grid>
-      <CommentJustification comment={comment} justification={justification}/>
+      <CommentJustification comment={''} justification={''} question_id={question?._id} complianceId={compliance.id} />
     </Grid>
   );
 };

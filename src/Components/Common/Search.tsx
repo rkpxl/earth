@@ -30,6 +30,7 @@ const SearchPage: React.FC<IProps> = ( { setText } ) => {
           borderRadius: '20px',
           padding: '2px 4px',
         }}
+        elevation={18}
       >
         <IconButton sx={{ p: '10px' }} aria-label="search">
           <SearchIcon />

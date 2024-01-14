@@ -44,23 +44,23 @@ const Login = () => {
 
           // Decode the payload from base64
           // Store the token in local storage or a secure HTTP-only cookie
-          localStorage.setItem('name', user?.name);
+          localStorage.setItem('name', user.name);
           localStorage.setItem('primartDepartment', user?.primartDepartment);
           localStorage.setItem('org', user?.org);
           localStorage.setItem('orgId', user?.orgId);
           localStorage.setItem('email', user?.email);
           localStorage.setItem('exp', user?.exp);
-          localStorage.setItem('_id', user?._id);
+          localStorage.setItem('_id', user._id);
           localStorage.setItem('type', user?.type);
           localStorage.setItem('authToken', token);
 
-          setCookie('name', user?.name);
+          setCookie('name', user.name);
           setCookie('primaryDepartment', user?.primaryDepartment);
           setCookie('org', user?.org);
           setCookie('orgId', user?.orgId);
           setCookie('email', user?.email);
           setCookie('exp', user?.exp);
-          setCookie('_id', user?._id);
+          setCookie('_id', user._id);
           setCookie('type', user?.type);
           setCookie('authToken', token);
 
