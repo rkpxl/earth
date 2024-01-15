@@ -22,7 +22,7 @@ interface TaskPageProps {
 
 const Home = () => {
   const homeContext = useHomeContext()
-  const {  isAuthenticated, compliances } = homeContext
+  const {  isAuthenticated, compliances, allProtocols } = homeContext
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [popOpen, setPopOpen] = React.useState(false);
   const [complianceType, setComplianceType] = React.useState<ICompliance>()
@@ -118,10 +118,11 @@ const Home = () => {
             spacing={2}
           >
             <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <DoneTask donetask={doneTask.length}/>
+              <DoneTask donetask={allProtocols?.length}/>
+              {/* <Table data={allProtocols} /> */}
             </Grid>
             <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <PendingTask length={pendingTask.length} task={pendingTask}/>
+              <PendingTask length={pendingTask.length} task={pendingTask} />
             </Grid>
             <Grid item lg={4} sm={6} xl={3} xs={12}>
               <Progress progress={Math.round(((doneTask.length/((pendingTask.length + doneTask.length) || 1) ) * 100))}/>

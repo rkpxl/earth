@@ -275,31 +275,37 @@ export const theme = createTheme({
       lineHeight: 1.66
     },
     h1: {
+      color: 'black',
       fontWeight: 700,
       fontSize: '3.5rem',
       lineHeight: 1.375
     },
     h2: {
+      color: 'black',
       fontWeight: 700,
       fontSize: '3rem',
       lineHeight: 1.375
     },
     h3: {
+      color: 'black',
       fontWeight: 700,
       fontSize: '2.25rem',
       lineHeight: 1.375
     },
     h4: {
+      color: 'black',
       fontWeight: 700,
       fontSize: '2rem',
       lineHeight: 1.375
     },
     h5: {
+      color: 'black',
       fontWeight: 600,
       fontSize: '1.5rem',
       lineHeight: 1.375
     },
     h6: {
+      color: 'black',
       fontWeight: 600,
       fontSize: '1.125rem',
       lineHeight: 1.375

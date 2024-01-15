@@ -10,7 +10,7 @@ const NoDataFound = () => {
       flexDirection="column"
       alignItems="center"
       justifyContent="center"
-      height="100%"
+      height="60vh"
     >
       <SentimentVeryDissatisfiedIcon fontSize="large" color="primary" />
       <Typography variant="h5" component="div" gutterBottom>

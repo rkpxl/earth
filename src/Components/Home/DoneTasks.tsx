@@ -23,7 +23,7 @@ const DoneTask = (props : any) => {
             gutterBottom
             variant="overline"
           >
-            ALL Tasks
+            ALL Protocols
           </Typography>
           <Typography
             color="textPrimary"

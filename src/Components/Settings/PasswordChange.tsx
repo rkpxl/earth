@@ -70,7 +70,10 @@ const PasswordChange = (props : any) => {
           const response = await axiosInstance.put('/user/update-reset-password',{
             email: user.email,
             password: values.password,
-          })
+          }, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }})
   
           if(response.status < 300) {
             dispatch(showMessage({message: "Updated Successfully", severity: "success"}));
