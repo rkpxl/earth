@@ -1,13 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Layout from '../../../Scenes/Home'
 import Workflows from "../../../Components/Admin Dashboard/Workflows"
+import { useRouter } from 'next/router'
 
-function index() {
+function Index() {
+  const router = useRouter()
+
+  useEffect(() => {
+    router.push("/admin-dashboard/departments")
+  },[])
+  
   return (
    <Layout><Workflows /></Layout>
   )
 }
 
-index.propTypes = {}
+Index.propTypes = {}
 
-export default index
+export default Index

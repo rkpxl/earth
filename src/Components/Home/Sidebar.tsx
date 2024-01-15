@@ -36,7 +36,7 @@ export const Sidebar = (props : any) => {
     title: 'Settings'
   },
   {
-    href: '/settings',
+    href: '/publication',
     icon: (<LibraryBooksIcon fontSize="small" />),
     title: 'Publication'
   },])
@@ -48,27 +48,32 @@ export const Sidebar = (props : any) => {
         icon: (<InboxIcon fontSize="small" />),
         title: 'Dashboard', 
         subRoute: [
+          // {
+          //   href: '/admin-dashboard/dashboard',
+          //   icon: (<InboxIcon fontSize="small" />),
+          //   title: 'Protocol'
+          // },
+          // {
+          //   href: '/admin-dashboard/analytics',
+          //   icon: (<InboxIcon fontSize="small" />),
+          //   title: 'Analytics'
+          // },
+          // {
+          //   href: '/admin-dashboard/approvals',
+          //   icon: (<DraftsIcon fontSize="small" />),
+          //   title: 'Approvals'
+          // },
+          // {
+          //   href: '/admin-dashboard/workflows',
+          //   icon: (<SendIcon fontSize="small" />),
+          //   title: 'Workflows'
+          // },
           {
-            href: '/admin-dashboard/analytics',
-            icon: (<InboxIcon fontSize="small" />),
-            title: 'Analytics'
-          },
-          {
-            href: '/admin-dashboard/approvals',
-            icon: (<DraftsIcon fontSize="small" />),
-            title: 'Approvals'
-          },
-          {
-            href: '/admin-dashboard/workflows',
-            icon: (<SendIcon fontSize="small" />),
-            title: 'Workflows'
-          },
-          {
-            href: '/admin-dashboard/reports',
-            icon: (<StarBorder fontSize="small" />),
-            title: 'Reports'
-          },
-          {
+          //   href: '/admin-dashboard/reports',
+          //   icon: (<StarBorder fontSize="small" />),
+          //   title: 'Reports'
+          // },
+          // {
             href: '/admin-dashboard/departments',
             icon: (<ApartmentIcon fontSize="small" />),
             title: 'Departments'

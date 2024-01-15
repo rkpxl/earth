@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface FormState {
-  answers: Record<string, Record<any, string>>;
+  answers: any;
 }
 
 const initialState: FormState = {
@@ -17,7 +17,7 @@ const formSlice = createSlice({
     },
     updateAnswer: (
       state,
-      action: PayloadAction<{ tabIndex: number; id: string; answer: string }>
+      action: PayloadAction<{ tabIndex: number; id: string; answer: any }>
     ) => {
       const { tabIndex, id, answer } = action.payload;
       state.answers = {

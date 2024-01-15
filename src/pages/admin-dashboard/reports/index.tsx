@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import Review from "../../../Components/Admin Dashboard/Approvals";
+import { useRouter } from 'next/router';
 
-function index() {
+function Index() {
+  const router = useRouter()
+
+  useEffect(() => {
+    router.push("/admin-dashboard/departments")
+  },[])
   return (
     <div><Review /></div>
   )
 }
 
-index.propTypes = {}
+Index.propTypes = {}
 
-export default index
+export default Index

@@ -10,6 +10,8 @@ import Protocol from '../../Scenes/Protocol';
 import FormAttachment from '../../Components/Common/Form/FormAttachments';
 import FormSubmit from '../../Components/Common/Form/FormSubmit';
 import FormPersonnel from '../../Components/Common/Form/FormPersonnel';
+import { useQuery } from '@tanstack/react-query';
+import Loading from '../../Components/Common/Loading';
 
 interface IProps {
   compliance: ICompliance,
@@ -28,12 +30,29 @@ export default function DynamicForm(props : IProps) {
   const { compliance, protocol } = props
   const { id: protocol_id } = router.query as { id: string };
 
+  const { data: protocolData, isLoading, isError } = useQuery({
+    queryKey: [`basicprotocol-${protocol._id}`],
+    queryFn: async () => {
+      try {
+        const protocol : any = await axiosInstance.get(`/protocol/${protocol_id}`);
+        console.log('fetching data', protocol)
+        if(protocol.status < 300) {
+          return protocol.data
+        }
+      } catch (err) {
+        console.error('Error', err)
+      }
+    }
+  })
+
   const [value, setValue] = useState<number>(0);
-  const dispatch : AppDispatch = useDispatch();
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
   
+  if(isLoading) {
+    return (<Loading />)
+  }
 
   return (
     <Layout>
@@ -56,7 +75,7 @@ export default function DynamicForm(props : IProps) {
               compliance={compliance} 
               tabNumber={index+1} 
               step={step}
-              protocol={protocol}
+              protocol={protocolData || protocol}
             />
           </CustomTabPanel>)
       })}

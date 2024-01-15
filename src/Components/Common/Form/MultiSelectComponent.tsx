@@ -11,9 +11,10 @@ const MultiSelectComponent: React.FC<MultiSelectComponentProps> = ({ questionNum
   const { title, handleAnswerChange, handleQuestionSubmit, compliance, answers, question } = useProtocolQuestionContext()
 
   const handleOptionChange = (option: string) => {
-    const updatedOptions = answers[question?._id].includes(option)
-      ? answers[question?._id].filter((selectedOption: string) => selectedOption !== option)
-      : [...answers[question?._id], option];
+    console.log('option', question?._id, option, answers)
+    const updatedOptions = answers?.[question?._id]?.includes(option)
+      ? answers?.[question?._id]?.filter((selectedOption: string) => selectedOption !== option)
+      : [...(answers?.[question?._id] ? answers?.[question?._id] : []), option];
       handleAnswerChange(updatedOptions);
   };
 

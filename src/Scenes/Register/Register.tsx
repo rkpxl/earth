@@ -19,22 +19,24 @@ import {
   TextField,
   Typography
 } from '@mui/material';
-import { departments, accessLevels } from '../../data/fixData'
+import { accessLevels } from '../../data/fixData'
 import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert from '@mui/material/Alert';
+import { IDepartment, RootState } from '../../Utils/types/type';
+import { useDispatch, useSelector } from 'react-redux';
+import axiosInstance from '../../Utils/axiosUtil';
+import { showMessage } from '../../Store/reducers/snackbar';
+
+interface IProps {
+  departments: Array<IDepartment>
+}
 
 
-const Register = () => {
+const Register = ({ departments } : IProps) => {
 
   const [openSuccessBar, setOpenSuccessBar] = React.useState(false);
-
-  const handleSuccessUserRegister = () => {
-    setOpenSuccessBar(true);
-    setTimeout(() => {
-      setOpenSuccessBar(false);
-    }, 2000); // Close the Snackbar after 2 seconds
-  };
+  const dispatch = useDispatch()
 
 
   const formik = useFormik({
@@ -42,8 +44,10 @@ const Register = () => {
       name: '',
       email: '',
       password: '',
-      department: '',
+      department: 1,
+      departmentId: '',
       accessLevel: '',
+      type: '',
       policy: false
     },
     validationSchema: Yup.object({
@@ -61,10 +65,9 @@ const Register = () => {
         .max(255)
         .required('Password is required'),
       department: Yup
-        .string()
-        .max(255)
+        .number()
         .required('Department is required')
-        .oneOf(departments, 'Invalid department selected'),
+        .oneOf(departments.map(({ id , ...rest}) => id), 'Invalid department selected'),
       accessLevel: Yup
         .string()
         .max(255)
@@ -77,28 +80,25 @@ const Register = () => {
           'This field must be checked'
         )
     }),
-    onSubmit: () => {
-      axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/users/register', {
-        name: formik.values.name,
-        email: formik.values.email,
-        type: "user",
-        org: localStorage.getItem('org'),
-        password: formik.values.password,
-        department: formik.values.department,
-        accessLevel: formik.values.accessLevel
-      })
-        .then((response : any) => {
-          // Handle the response
-          // Store the token in local storage or a secure HTTP-only cookie
-          if(response.status < 300) {
-            handleSuccessUserRegister()
-          }
+    onSubmit: async () => {
+      try {
+        console.log('formik.values',formik.values)
+        const response = await axiosInstance.post('/user', {
+          name: formik.values.name,
+          email: formik.values.email,
+          type: formik.values.accessLevel,
+          password: formik.values.password,
+          primaryDepartmentId: formik.values?.department,
+          accessLevel: formik.values.accessLevel,
+          isActive: true,
         })
-        .catch((error) => {
-          // Clear the form values
-          formik.resetForm();
-          console.error(error);
-        });
+        if(response.status < 300) {
+          dispatch(showMessage({message: "User Added Successfully", severity: "success"}))
+        }
+      } catch (err) {
+        dispatch(showMessage({message: "Something went wrong", severity: "error"}))
+        console.error(err)
+      }
     }
   });
 
@@ -177,7 +177,7 @@ const Register = () => {
               <Grid xs={12} md={5.5} sx={{marginTop: '16px', marginBottom: '8px'}}>
                 <FormControl 
                   fullWidth
-                  error={Boolean(formik.touched.department && formik.errors.department)}
+                  error={Boolean(formik.touched.departmentId && formik.errors.departmentId)}
                   >
                   <InputLabel>Select Department</InputLabel>
                   <Select
@@ -186,16 +186,16 @@ const Register = () => {
                     label="Select Department"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={formik.values.department}
+                    value={departments.filter((d : any) => d?.id === formik.values.departmentId)[0]?.name}
                     >
                     {departments.map((option, optionIndex) => (
-                      <MenuItem key={optionIndex} value={option}>
-                            {option}
-                        </MenuItem>
+                      <MenuItem key={option?.id?.toString()} value={option?.id}>
+                        {option.name}
+                      </MenuItem>
                     ))}
                   </Select>
                   <FormHelperText>
-                    {formik.touched.department && formik.errors.department}
+                    {formik.touched.departmentId && formik.errors.departmentId}
                   </FormHelperText>
                 </FormControl>
               </Grid>
@@ -216,8 +216,8 @@ const Register = () => {
                     >
                     {accessLevels.map((option, index: number) => (
                       <MenuItem key={index.toString()} value={option}>
-                            {option}
-                        </MenuItem>
+                        {option}
+                      </MenuItem>
                     ))}
                   </Select>
                   <FormHelperText>

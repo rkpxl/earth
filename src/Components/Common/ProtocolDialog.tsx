@@ -2,12 +2,10 @@ import React from 'react';
 import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, TextareaAutosize, Typography, Button } from '@mui/material';
 import { Formik as Formic, Form, Field, ErrorMessage } from 'formik';
 import PopUp from './Dialog'
-import { departments } from '../../data/fixData';
 import { useRouter } from 'next/router';
 import { useHomeContext } from '../../pages';
 import { ICompliance, IDepartment } from '../../Utils/types/type';
 import axiosInstance from '../../Utils/axiosUtil';
-import { getCookie } from '../../Utils/cookieUtils';
 import { showMessage } from '../../Store/reducers/snackbar';
 import { useDispatch } from 'react-redux';
 
@@ -46,8 +44,8 @@ interface IProps {
 const ProtocolPopUp = (props : IProps) : JSX.Element => {
   const homeContext = useHomeContext()
   const { departments } = homeContext
-  const { complianceType } = props
-  const Router = useRouter()
+  const { complianceType, handleClose } = props
+  const router = useRouter()
   const dispatch = useDispatch()
 
   const validateForm = (values: FormValues) => {
@@ -78,7 +76,8 @@ const ProtocolPopUp = (props : IProps) : JSX.Element => {
       })
       if(response.status < 300) {
         dispatch(showMessage({ message: 'Protocol is drafted', severity: 'success' }));
-        Router.push(`/forms/${response._id}`)
+        handleClose()
+        router.push(`/forms/${response?.data?._id.toString()}`)
       } else {
         dispatch(showMessage({ message: 'Somehitng went wrong, please try again', severity: 'error' }));
       }

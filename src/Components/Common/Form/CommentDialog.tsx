@@ -7,7 +7,6 @@ import {
   Button,
   Grid,
   Typography,
-  IconButton,
   Avatar,
   Paper,
 } from '@mui/material';
@@ -17,18 +16,10 @@ import { useQuery } from '@tanstack/react-query';
 import axiosInstance from '../../../Utils/axiosUtil';
 import { IComment } from '../../../Utils/types/type';
 import Loading from '../Loading';
-import id from 'date-fns/esm/locale/id/index.js';
 import { useDispatch } from 'react-redux';
 import { showMessage } from '../../../Store/reducers/snackbar';
 import { getStandatedDateWithTime } from '../../../Utils/dateTime';
 import { getCookie } from '../../../Utils/cookieUtils';
-
-interface Comment {
-  user: string;
-  time: string;
-  text: string;
-}
-
 interface CommentDialogProps {
   open: boolean;
   onClose: () => void;
@@ -41,8 +32,6 @@ const CommentDialog: React.FC<CommentDialogProps> = ({ open, onClose, question_i
   const dispatch = useDispatch()
   const [newComment, setNewComment] = useState('');
   const [currComments, setCurrComments] = useState<Array<any>>([])
-
-  console.log('complianceId', complianceId)
 
   const handleSendComment = async () => {
     // Handle sending the new comment (you can implement this as needed)

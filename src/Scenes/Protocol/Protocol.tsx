@@ -9,6 +9,7 @@ import Router from 'next/router';
 import { useDispatch } from 'react-redux';
 import { updateAnswer } from '../../Store/reducers/form';
 import Loading from '../../Components/Common/Loading';
+import NoDataFound from '../../Components/Common/NoData';
 
 interface IProps {
   compliance: ICompliance;
@@ -61,6 +62,10 @@ export default function Protocol(props: IProps) {
 
   if(isLoading || answerLoading) {
     return (<Loading />)
+  }
+
+  if(isError || data?.length < 1) {
+    return (<NoDataFound />)
   }
 
 

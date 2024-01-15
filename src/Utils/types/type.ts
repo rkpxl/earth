@@ -17,7 +17,7 @@ export interface APIResponse<T = any> {
 export interface IDepartment {
   _id?: string;
   name?: string;
-  id?: string;
+  id?: number;
   orgId?: string;
   type?: string;
   isActive?: string;

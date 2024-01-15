@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { ICompliance, IProtocol } from '../../../Utils/types/type';
+import { ICompliance, IProtocol, RootState } from '../../../Utils/types/type';
 import SearchPeopleDialog from '../SearchPeopleDialog';
 import { Button, FormControl, Grid, IconButton, InputLabel, MenuItem, Paper, Select, TextField } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axiosInstance from '../../../Utils/axiosUtil';
 import { Console } from 'console';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { showMessage } from '../../../Store/reducers/snackbar';
+import { RefetchQueryFilters, useQueryClient } from '@tanstack/react-query';
+import { updateAnswer } from '../../../Store/reducers/form';
 
 interface IProps {
   compliance: ICompliance;
@@ -31,11 +33,15 @@ const initialState: IApprover = {
 
 export default function FormPersonnel({ compliance, protocol }: IProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const [newApprover, setNewApprover] = useState(initialState);
-  const [approvers, setApprovers] = useState<IApprover[]>(protocol?.approvers as IApprover[] || []);
   const dispatch = useDispatch()
+  const approvers = useSelector((state: RootState) => state?.form?.answers?.['98']?.['approvers'] ??  protocol?.approvers)
 
-  
+  const setApprovers  = (updatedData : any) =>  {
+    dispatch(updateAnswer({ tabIndex: 98, id: 'approvers', answer: updatedData }))
+  }
+
+  console.log('approvers', approvers)
+
   const addPersonBasic = (user: any) => {
     const newPerson: IApprover = {
       user_id: user?._id,
@@ -44,19 +50,18 @@ export default function FormPersonnel({ compliance, protocol }: IProps) {
       access: '',
       isNew: true,
     };
-    setNewApprover(newPerson);
-    setApprovers((prev) => [...prev, newPerson]);
+    setApprovers([...(approvers ? approvers : []), newPerson]);
     setIsOpen((prev) => !prev)
   };
 
   const removeRow = (index: number) => {
-    const result = approvers.filter((_, i) => i !== index)
+    const result = approvers?.filter((_ : any, i : any) => i !== index)
     setApprovers(result);
     updateApprovers(initialState, result, true)
   };
 
   const updateApprover = (index: number, key: string, value: string) => {
-    const result = approvers.map((a, i) => (i === index ? { ...a, [key]: value } : a));
+    const result = approvers?.map((a : any, i : any) => (i === index ? { ...a, [key]: value } : a));
     setApprovers(result);
     const currentIndexResult = result[index];
     updateApprovers(currentIndexResult, result, false)
@@ -79,9 +84,9 @@ export default function FormPersonnel({ compliance, protocol }: IProps) {
             return { ...rest };
           })
         })
-  
         if(result.status < 300) {
           dispatch(showMessage({message: "Updated Successfully", severity: "success"}))
+
         } else {
           dispatch(showMessage({message: "Something went wrong", severity: "error"}))
         }
@@ -94,7 +99,7 @@ export default function FormPersonnel({ compliance, protocol }: IProps) {
 
   return (
     <>
-      {approvers.map((p: IApprover, index: number) => (
+      {approvers?.map((p: IApprover, index: number) => (
         <Paper key={index} elevation={3} style={{ padding: '10px', margin: '10px' }}>
           <Grid container spacing={2}>
             <Grid item xs={12} sm={5}>
@@ -147,7 +152,7 @@ export default function FormPersonnel({ compliance, protocol }: IProps) {
       <Button 
         variant="contained" 
         color="primary" 
-        onClick={() => setIsOpen(true)} sx={{ margin: '8px' }}
+        onClick={() => setIsOpen(true)}
       >
         Add Approver
       </Button>

@@ -85,10 +85,8 @@ const DocumentAttachDialog: React.FC<AddDocumentDialogProps> = ({
   
 
   const handleAdd = async () => {
-    console.log('documentFile',documentFile)
     try {
       const docUri = await uploadDoc(documentFile)
-      console.log('docUri', docUri)
       const doc = await axiosInstance.post('/document', {
         title: title,
         description: description,

@@ -16,9 +16,9 @@ const Loading: React.FC = () => {
         backgroundColor: 'rgba(255, 255, 255, 0.8)',
       }}
     >
-      <Paper elevation={3} sx={{ padding: (theme) => theme.spacing(2) }}>
-        <CircularProgress />
-      </Paper>
+      {/* <Paper elevation={3} sx={{ borderRadius: '100px' }}>
+      </Paper> */}
+      <CircularProgress />
     </Grid>
   );
 };

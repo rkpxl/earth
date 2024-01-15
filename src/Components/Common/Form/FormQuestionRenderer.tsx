@@ -29,7 +29,7 @@ const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, ques
   const answers = useSelector((state: RootState) => state.form.answers[tabId] ?? {});
 
 
-  const handleAnswerChange = (newAnswer: string) => {
+  const handleAnswerChange = (newAnswer: any) => {
     dispatch(updateAnswer({ tabIndex: tabId, id: question?._id, answer: newAnswer }));
   };
 

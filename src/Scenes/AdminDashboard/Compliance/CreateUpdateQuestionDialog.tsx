@@ -110,7 +110,7 @@ const reducer = (state: State, action: Action): State => {
       }
       return { ...state, errors}
     case 'reset':
-      return initialState;
+      return { ...initialState };
     default:
       return state;
   }
@@ -139,6 +139,18 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
     initialState.isActive = data?.isActive || true
     initialState.answerOptions = data?.answerOptions || []
     initialState.isFullWidth = data?.isFullWidth
+  } else {
+    initialState.title = ''
+    initialState.description = ''
+    initialState.questionType = 'text'
+    initialState.priority = 10
+    initialState.valueCount = 0
+    initialState.isActive = true
+    initialState.depId = null
+    initialState.depValue = null
+    initialState.isFullWidth = false
+    initialState.answerOptions = Array(1).fill('')
+    initialState.errors = {}
   }
 
   const priorities: number [] = Array.from({ length: maxPriority }, (_, index) => index + 1);
