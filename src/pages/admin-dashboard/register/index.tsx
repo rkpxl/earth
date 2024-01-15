@@ -2,8 +2,6 @@ import Component from '../../../Scenes/Register/Register'
 import Layout from '../../../Scenes/Home'
 import axiosInstance from '../../../Utils/axiosUtil';
 import { useDispatch } from 'react-redux';
-import { useQuery } from '@tanstack/react-query';
-import { fetchDepartments } from '../../../Store/reducers/department';
 import { AppDispatch, IDepartment } from '../../../Utils/types/type';
 
 interface IProps {

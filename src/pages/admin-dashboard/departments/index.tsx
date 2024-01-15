@@ -2,8 +2,13 @@ import React from 'react'
 import Layout from '../../../Scenes/Home'
 import Departments from "../../../Scenes/AdminDashboard/Departments";
 import axiosInstance from '../../../Utils/axiosUtil';
+import NoDataFound from '../../../Components/Common/NoData';
 
 function index({departments, isAuthenticated } : any) {
+  if(departments.length < 1) {
+    return (<NoDataFound />)
+  }
+
   return (
    <Layout>
       <Departments departments={departments}/>

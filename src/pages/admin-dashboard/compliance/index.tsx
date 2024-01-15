@@ -2,8 +2,15 @@ import React from 'react'
 import Layout from '../../../Scenes/Home'
 import axiosInstance from '../../../Utils/axiosUtil';
 import Compliance from '../../../Scenes/AdminDashboard/Compliance';
+import NoDataFound from '../../../Components/Common/NoData';
+
 
 function index({compliances, isAuthenticated } : any) {
+
+  if(compliances.length < 1) {
+    return (<NoDataFound />)
+  }
+  
   return (
    <Layout>
       <Compliance compliances={compliances}/>
