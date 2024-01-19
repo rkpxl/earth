@@ -20,26 +20,33 @@ import TableCell from '@mui/material/TableCell';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import { getStandatedDateWithTime } from '../../Utils/dateTime';
+import { generateExcel } from '../../Utils/fileGenerator';
+import DownloadIcon from '@mui/icons-material/Download';
+import theme from '../../Theme';
+import Loading from './Loading';
+import NoDataFound from './NoData';
 
 interface EditableTableProps {
-  data: Array<Record<string, any>>;
+  data: Array<any>;
   excludedColumns?: string[];
   title: string,
   handleRowClick?: (...args : any) => void
 }
 
-const EditableTable: React.FC<EditableTableProps> = ({ title, data, handleRowClick, excludedColumns = ['_id', '__v', 'pi_id', 'currentAssignee_id', 'createdBy'] }) => {
+const EditableTable: React.FC<EditableTableProps> = ({ title, data, handleRowClick, excludedColumns = ['_id', '__v', 'pi_id', 'currentAssignee_id', 'createdBy', 'approvers'] }) => {
   const [showColumnsDialog, setShowColumnsDialog] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState(() =>
-    Object.keys(data[0]).reduce((acc : any, key) => {
+    Object.keys(data[0] || {}).reduce((acc : any, key) => {
       acc[key] = !excludedColumns.includes(key);
       return acc;
     }, {})
   );
+
   const [sortConfig, setSortConfig] = useState<{ key: string | null; direction: 'asc' | 'desc' | undefined }>({
     key: null,
     direction: 'asc',
   });
+  const [isLoading, setIsLoading] = useState(false)
 
   const sortedData = [...data].sort((a, b) => {
     if (!sortConfig.key) return 0;
@@ -66,11 +73,19 @@ const EditableTable: React.FC<EditableTableProps> = ({ title, data, handleRowCli
   };
 
   if (!data || data.length === 0) {
-    return <p>No data to display.</p>;
+    return (<NoDataFound />)
+  }
+
+  const handleDownload = () => {
+    generateExcel(sortedData, title, setIsLoading)
   }
 
   const columns = Object.keys(data[0]);
   const visibleColumnsForDialog = columns.filter((column) => !excludedColumns.includes(column));
+
+  if(isLoading) {
+    return (<Loading />)
+  }
 
   return (
     <>
@@ -102,17 +117,41 @@ const EditableTable: React.FC<EditableTableProps> = ({ title, data, handleRowCli
         `}
       </style>
       <div style={{ margin: '16px', padding: '16px' }}>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={10} alignItems="center">
-            <Typography sx={{ color: 'black', fontSize: "28px", fontWeight: '700' }}>{title}</Typography>
+        <Grid container spacing={2} alignItems="center" sx={{pb:1}}>
+          <Grid item xs={12} sm={8}>
+            <Typography variant="h4" sx={{ color: 'black', fontWeight: '700', marginBottom: 2 }}>
+              {title}
+            </Typography>
           </Grid>
-          <Grid item xs={12} sm={2}>
+          <Grid item xs={12} sm={3}>
             <Button
               variant="contained"
               onClick={toggleColumnsDialog}
-              sx={{ mb: 2, borderRadius: '8px', maxHeight: "400px", overflowY: "auto" }}
+              sx={{
+                borderRadius: '8px',
+                backgroundColor: theme.palette.primary.main, // Material-UI Blue
+                color: '#F9FAFC',
+                width: '100%',
+                '&:hover': {
+                  backgroundColor: theme.palette.primary.dark,
+                },
+              }}
             >
               Choose Columns
+            </Button>
+          </Grid>
+          <Grid item xs={12} sm={1}>
+            <Button
+              variant="outlined"
+              onClick={handleDownload}
+              sx={{
+                width: '100%',
+                '&:hover': {
+                  backgroundColor: 'rgba(0, 0, 0, 0.04)', // Change to your desired hover color
+                },
+              }}
+            >
+              <DownloadIcon fontSize="small" />
             </Button>
           </Grid>
         </Grid>
@@ -173,21 +212,25 @@ const EditableTable: React.FC<EditableTableProps> = ({ title, data, handleRowCli
                 <TableRow
                   key={rowIndex}
                   sx={{
-                    backgroundColor: rowIndex % 2 === 0 ? '#ffffff' : '#f4f4f4',
+                    backgroundColor: rowIndex % 2 === 0 ? '#F9FAFC' : '#f4f4f4',
                     cursor: 'pointer',
                   }}
-                  onClick={() => handleRowClick ? handleRowClick(row) : () => {}}
+                  onClick={(e) => handleRowClick ? handleRowClick(e, row) : () => {}}
                 >
-                  {visibleColumnsForDialog.map(
-                    (column, columnIndex) =>
-                      visibleColumns[column] && (
-                        <TableCell key={columnIndex}>
-                          {column === 'createdAt' || column === 'updatedAt'
-                            ? getStandatedDateWithTime(row[column])
-                            : row[column]}
-                        </TableCell>
-                      )
-                  )}
+                  {visibleColumnsForDialog.map((column, columnIndex) => (
+                    visibleColumns[column] && (
+                      <TableCell key={columnIndex}>
+                        {column === 'createdAt' || column === 'updatedAt'
+                          ? getStandatedDateWithTime(row[column])
+                          : column === 'isActive'
+                          ? row[column] ? 'Active' : 'Not Active'
+                          : typeof row[column] === 'object'
+                          ? JSON.stringify(row[column])
+                          : row[column]
+                        }
+                      </TableCell>
+                    )
+                  ))}
                 </TableRow>
               ))}
             </TableBody>

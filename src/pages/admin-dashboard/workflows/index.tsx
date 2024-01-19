@@ -11,7 +11,7 @@ function Index() {
   },[])
   
   return (
-   <Layout><Workflows /></Layout>
+   <><Workflows /></>
   )
 }
 

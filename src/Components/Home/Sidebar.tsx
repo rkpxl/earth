@@ -180,7 +180,7 @@ export const Sidebar = (props : any) => {
           sx: {
             backgroundColor: 'neutral.900',
             color: '#FFFFFF',
-            width: 280
+            width: 250
           }
         }}
         variant="permanent"
@@ -199,7 +199,7 @@ export const Sidebar = (props : any) => {
         sx: {
           backgroundColor: 'neutral.900',
           color: '#FFFFFF',
-          width: 280
+          width: 250
         }
       }}
       sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}

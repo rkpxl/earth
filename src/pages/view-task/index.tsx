@@ -4,9 +4,9 @@ import Component from '../../Scenes/ViewTask/ViewTask'
 
 const Login = () => {
   return (
-    <Layout>
+    <>
       <Component />
-    </Layout>
+    </>
     
   );
 };

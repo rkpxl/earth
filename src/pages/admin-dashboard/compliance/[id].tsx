@@ -17,9 +17,9 @@ const GroupDetail = (props : IProps) => {
   const { id } = router.query;
 
   return (
-    <Layout>
+    <>
       <ManageCompliance id={id} compliance={compliance} />
-    </Layout>
+    </>
   );
 };
 

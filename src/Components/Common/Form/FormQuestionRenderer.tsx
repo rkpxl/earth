@@ -16,26 +16,40 @@ import { useProtocolContext } from '../../../Scenes/Protocol/Protocol';
 interface FormQuestionRendererProps {
   question: any;
   questionNumber: number;
-  tabId: number
+  tabId: number;
+  qIdMap: Record<string, string>
 }
 
 const ProtocolQuestionContext = React.createContext<any>(null);
 
-const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, question }) => {
+const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, question, qIdMap }) => {
   const { questionType, dependent, isFullWidth,  ...rest } = question;
   const { id } = Router.query
   const { compliance, questionNumber  } = useProtocolContext()
   const dispatch = useDispatch()
-  const answers = useSelector((state: RootState) => state.form.answers[tabId] ?? {});
+  const answers = useSelector((state: RootState) => state.form?.tabs?.[tabId]?.questions ?? {});
+
+  
 
 
   const handleAnswerChange = (newAnswer: any) => {
+    console.log('newAnswer', newAnswer)
     dispatch(updateAnswer({ tabIndex: tabId, id: question?._id, answer: newAnswer }));
   };
 
-  if(dependent?.key && dependent?.value) {
-    if(!answers[dependent?.key] || answers[dependent?.key].toLocaleLowerCase() !==  dependent.value.toLocaleLowerCase()) {
+  if (dependent?.key && dependent?.value) {
+    const dependentAnswer = answers[qIdMap[dependent?.key]]?.answer;
+    if (!dependentAnswer) {
       return;
+    }
+    if (Array.isArray(dependentAnswer)) {
+      if (!dependentAnswer.includes(dependent.value)) {
+        return;
+      }
+    } else {
+      if (dependentAnswer.toLowerCase() !== dependent.value.toLowerCase()) {
+        return;
+      }
     }
   }
 
@@ -46,7 +60,7 @@ const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, ques
     
     try {
       const response : any = await axiosInstance.post('/answer', {
-        answer: answers[question?._id] || '',
+        answer: answers[question?._id]?.answer || '',
         question_id: question._id,
         tabId: tabId,
         protocol_id: id,

@@ -1,13 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from 'react';
-import { IAnswer, ICompliance, IProtocol, RootState } from '../../Utils/types/type';
+import { IAnswer, ICompliance, IProtocol, IQuestion, RootState } from '../../Utils/types/type';
 import axiosInstance from '../../Utils/axiosUtil';
-import { Grid, Paper } from '@mui/material';
+import { Grid, Paper, Typography,  List, ListItem, ListItemText, ListItemIcon } from '@mui/material';
 import FormQuestionRenderer from '../../Components/Common/Form/FormQuestionRenderer';
 import { useQuery } from '@tanstack/react-query';
 import Router from 'next/router';
 import { useDispatch } from 'react-redux';
-import { updateAnswer } from '../../Store/reducers/form';
+import { updateAnswer, updateTab } from '../../Store/reducers/form';
 import Loading from '../../Components/Common/Loading';
 import NoDataFound from '../../Components/Common/NoData';
 
@@ -35,16 +35,20 @@ export default function Protocol(props: IProps) {
   let questionNumber = 1;
 
   const { data, isLoading, isError} = useQuery({
-    queryKey: [`compliance-${compliance.id}-${tabNumber}`],
+    queryKey: [`compliance-${compliance.id}`],
     queryFn: async () => {
       try {
-        const response = await axiosInstance.get(`/questions/compliance/${compliance.id}?tabNumber=${tabNumber}`);
+        const response = await axiosInstance.get(`/questions/compliance/${compliance.id}`);
+        response?.data?.map((q : IQuestion) => {
+          dispatch(updateTab({ tabIndex: q?.tabNumber || 0, id: q?._id || '', isRequired: q?.isRequired || false }));
+        })
         return response.data; // Return the data
       } catch (error) {
         throw error; // Rethrow the error to be handled by the query
       }
     }
   })
+
   const { data: answerDtaa, isLoading : answerLoading, } = useQuery({
     queryKey: [`answer-${id}`],
     queryFn: async () => {
@@ -68,18 +72,44 @@ export default function Protocol(props: IProps) {
     return (<NoDataFound />)
   }
 
+  const questions = data.filter((q : IQuestion) => q?.questionType !== 'info')
+  const infos = data.filter((q : IQuestion) => q?.questionType === 'info')
+  const qIdMap : Record<string, string> = data.reduce((acc : any, { id, _id } : any) => {
+    acc[id] = _id;
+    return acc;
+  }, {});
+
+  const tabQuestion = data.filter((q : IQuestion) => q?.tabNumber === tabNumber)
+
 
   return (
     <ProtocolContext.Provider value={{ tabNumber, compliance, step, protocol, questionNumber }}>
         <Grid sx={{p:0}}>
+          {infos?.map((info : any, index : any) => (<>
+            <Typography variant="h6" gutterBottom>
+                {info?.title}
+              </Typography>
+              <Typography color="textSecondary" paragraph sx={{ m: 0, p: 0}}>
+                {info?.description}
+              </Typography>
+              <List sx={{m: 0, p: 0}}>
+                {["testingkdejnc eifbcieub cu", "efibc eicuie bceb uche", "idcn udbc ebcedybxcybxugedxbgvkxwbkxkybwgexvbgwvxv xvw xvw xvw xgw vxgwv xgw xvw vxwebubexuevxkuetcv"].map((point : any, index : any) => (
+                  <ListItem key={index} sx={{ m: 0, pt: 1, pb: 0}}>
+                    <Typography sx={{marginRight: '24px'}}>•</Typography>
+                    <ListItemText primary={point} />
+                  </ListItem>
+                ))}
+              </List>
+          </>))}
           <Paper elevation={3} style={questionContainerStyle}>
             <Grid container spacing={2}>
-              {data?.map((question : any, index : number) => (
+              {tabQuestion?.map((question : any, index : number) => (
                 <FormQuestionRenderer 
                   key={index} 
                   question={question} 
                   questionNumber={questionNumber} 
                   tabId={tabNumber}
+                  qIdMap={qIdMap}
                 />
               ))}
           </Grid>

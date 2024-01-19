@@ -12,7 +12,7 @@ const DoneTasks = () => {
   },[])
 
   return (
-    <Layout><Component /></Layout>
+    <><Component /></>
   );
 };
 

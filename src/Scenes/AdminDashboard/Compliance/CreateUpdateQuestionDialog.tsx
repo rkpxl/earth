@@ -22,6 +22,7 @@ interface State {
   depId?: number | null;
   depValue?: any;
   isFullWidth?: boolean;
+  isRequired: boolean;
   errors: {
     title?: string;
     description?: string;
@@ -75,6 +76,7 @@ const initialState: State = {
   depId: null,
   depValue: null,
   isFullWidth: false,
+  isRequired: false,
   answerOptions: Array(1).fill(''),
   errors: {},
 };
@@ -139,6 +141,7 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
     initialState.isActive = data?.isActive || true
     initialState.answerOptions = data?.answerOptions || []
     initialState.isFullWidth = data?.isFullWidth
+    initialState.isRequired = data?.isRequired || false
   } else {
     initialState.title = ''
     initialState.description = ''
@@ -149,6 +152,7 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
     initialState.depId = null
     initialState.depValue = null
     initialState.isFullWidth = false
+    initialState.isRequired = false
     initialState.answerOptions = Array(1).fill('')
     initialState.errors = {}
   }
@@ -210,9 +214,12 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
           answerOptions: finalStepName,
           isActive: state.isActive,
           isFullWidth: state.isFullWidth,
+          isRequired: state.isRequired,
         }) : await axiosInstance.put(`/questions/${ data?.id}`, {
           title: state.title,
           description: state.description,
+          isFullWidth: state.isFullWidth,
+          isRequired: state.isRequired,
         });
   
         if (response.status < 300) {
@@ -382,6 +389,16 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({ open, data, onClose, onS
             }
             disabled={isUpdate ? isEditing : false}
             label="Fill Width"
+          />
+           <FormControlLabel
+            control={
+              <Switch
+                checked={state.isRequired}
+                onChange={() => handleSwitchChange('isRequired')}
+              />
+            }
+            disabled={isUpdate ? isEditing : false}
+            label="Is Required"
           />
         </Box>
         <FormHelperText sx={{ mb: 2 }} error>{state.errors.general}</FormHelperText>

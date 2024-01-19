@@ -13,6 +13,8 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
 import { AppProps } from 'next/app';
 import { AppCacheProvider } from '@mui/material-nextjs/v14-pagesRouter';
 import '../../styles/globals.css'
+import HomeLayout from '../Scenes/Home/HomeLayout';
+import axiosInstance from '../Utils/axiosUtil';
 
 const queryClient = new QueryClient();
 
@@ -32,7 +34,9 @@ function MyApp(props: AppProps) {
         <CssBaseline />
         <Provider store={Store}>
           <QueryClientProvider client={queryClient}>
-            <Component {...pageProps} />
+            <HomeLayout>
+              <Component {...pageProps} />
+            </HomeLayout>
             <Snackbar />
             <ReactQueryDevtools initialIsOpen={true} />
           </QueryClientProvider>
@@ -40,6 +44,31 @@ function MyApp(props: AppProps) {
       </ThemeProvider>
     </AppCacheProvider>
   );
+}
+
+
+export const getServerSideProps = async function getServerSideProps(context : any) {
+  axiosInstance.context = context
+  try {
+    const response = await axiosInstance.get('/auth/validate-token', context);
+    if(response.status === 200) {
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+    }
+  } catch (err) {
+    console.error("error", err)
+  }
+
+  
+  return {
+    props: {
+      isAuthenticated: false,
+    },
+  };
 }
 
 export default MyApp;

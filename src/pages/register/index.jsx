@@ -4,7 +4,7 @@ import Layout from '../../Scenes/Home'
 
 const Register = () => {
   return (
-    <Layout><Component /></Layout>
+    <><Component /></>
   );
 };
 

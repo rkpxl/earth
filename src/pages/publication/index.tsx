@@ -4,8 +4,8 @@ import NoDataFound from '../../Components/Common/NoData'
 
 export default function index() {
   return (
-    <Layout>
+    <>
       <NoDataFound />
-    </Layout>
+    </>
   )
 }

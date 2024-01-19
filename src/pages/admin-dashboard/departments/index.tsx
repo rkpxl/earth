@@ -10,9 +10,9 @@ function index({departments, isAuthenticated } : any) {
   }
 
   return (
-   <Layout>
+   <>
       <Departments departments={departments}/>
-    </Layout>
+    </>
   )
 }
 

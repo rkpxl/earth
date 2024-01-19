@@ -3,16 +3,26 @@ import Component from '../../Scenes/DoneTasks';
 import axiosInstance from '../../Utils/axiosUtil';
 import { IProtocol } from '../../Utils/types/type';
 import EditableTable from '../../Components/Common/EditableTable';
+import { useRouter } from 'next/router';
 
 interface IProps {
   allProtocols: Array<IProtocol>
 }
 
 const DoneTasks = ({ allProtocols } : IProps) => {
+
+  const router = useRouter()
+
+  const handleRowClick = (e : any, row : IProtocol) => {
+    e.preventDefault()
+    console.log('row', row)
+    router.push(`/forms/${row._id}`)
+  }
+
   return (
-    <Layout>
-      <EditableTable data={allProtocols} title="All Protocols"/>
-    </Layout>
+    <>
+      <EditableTable data={allProtocols} title="All Protocols" handleRowClick={handleRowClick}/>
+    </>
   );
 };
 

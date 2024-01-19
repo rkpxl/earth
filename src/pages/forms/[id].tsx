@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router'
 import React, { useContext, useState } from 'react'
 import axiosInstance from '../../Utils/axiosUtil'
-import { AppDispatch, ICompliance, IProtocol } from '../../Utils/types/type'
+import { AppDispatch, ICompliance, IProtocol, RootState } from '../../Utils/types/type'
 import { Box, Tab, Tabs } from '@mui/material';
 import Layout from '../../Scenes/Home/HomeLayout'
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CustomTabPanel from '../../Components/Common/CustomTabPanel';
 import Protocol from '../../Scenes/Protocol';
 import FormAttachment from '../../Components/Common/Form/FormAttachments';
@@ -29,13 +29,13 @@ export default function DynamicForm(props : IProps) {
   const router = useRouter()
   const { compliance, protocol } = props
   const { id: protocol_id } = router.query as { id: string };
+  const formData = useSelector((state : RootState) => state.form)
 
   const { data: protocolData, isLoading, isError } = useQuery({
     queryKey: [`basicprotocol-${protocol._id}`],
     queryFn: async () => {
       try {
         const protocol : any = await axiosInstance.get(`/protocol/${protocol_id}`);
-        console.log('fetching data', protocol)
         if(protocol.status < 300) {
           return protocol.data
         }
@@ -55,12 +55,12 @@ export default function DynamicForm(props : IProps) {
   }
 
   return (
-    <Layout>
+    <>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Summary" {...a11yProps(0)} />
           {compliance?.tabNames?.sort((a : any, b : any) => parseInt(a.position) - parseInt(b.position)).map((step) => {
-            return (<Tab key={step.position} label={step.name} {...a11yProps(step.position)} />)
+            return (<Tab key={step.position} label={step.name} {...a11yProps(step.position)} style={formData?.tabs[step.position]?.tabInfo?.isError ? { color: 'red' } : { color: '#65748B '}} />)
           })}
           <Tab label="Personnel" {...a11yProps(compliance?.tabNames?.length + 1)} />
           <Tab label="Attachment" {...a11yProps(compliance?.tabNames?.length + 2)} />
@@ -88,7 +88,7 @@ export default function DynamicForm(props : IProps) {
       <CustomTabPanel value={value} index={compliance?.tabNames?.length + 3}>
         <FormSubmit compliance={compliance} protocol={protocol} />
       </CustomTabPanel>
-    </Layout>
+    </>
   )
 }
 

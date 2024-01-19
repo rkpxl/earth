@@ -10,9 +10,9 @@ const Register = () => {
       {token ? (
         <Component />
       ) : (
-        <Layout>
+        <>
           <Component />
-        </Layout>
+        </>
       )}
     </>
   );

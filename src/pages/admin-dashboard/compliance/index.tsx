@@ -12,9 +12,9 @@ function index({compliances, isAuthenticated } : any) {
   }
   
   return (
-   <Layout>
+   <>
       <Compliance compliances={compliances}/>
-    </Layout>
+    </>
   )
 }
 

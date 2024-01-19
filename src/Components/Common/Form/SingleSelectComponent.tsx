@@ -19,7 +19,7 @@ const SingleSelectComponent: React.FC<SingleSelectComponentProps> = ({ questionN
         <FormControl component="fieldset" onBlur={(e) => handleQuestionSubmit(e)}>
           <RadioGroup 
             style={{ display: 'flex', flexDirection: 'row' }}
-            value={answers[question?._id] || ''}
+            value={answers[question?._id]?.answer || ''}
             onChange={(e) => handleAnswerChange(e.target.value)}
           >
             <FormControlLabel value="yes" control={<Radio />} label="Yes" />

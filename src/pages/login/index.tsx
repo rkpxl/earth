@@ -7,9 +7,7 @@ import axiosInstance from '../../Utils/axiosUtil';
 
 const Login = () => {
   return (
-    <Layout>
-      <Component />
-    </Layout>
+    <Component />
   );
 };
 

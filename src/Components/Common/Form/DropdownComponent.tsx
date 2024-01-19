@@ -23,7 +23,7 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({questionNumber} : 
         <FormControl fullWidth variant="outlined"  onBlur={(e) => handleQuestionSubmit(e)}>
           <InputLabel>Select an option</InputLabel>
           <Select
-            value={answers[question?._id]}
+            value={answers[question?._id]?.answer}
             onChange={handleChange}
             label="Select an option"
           >

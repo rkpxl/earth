@@ -1,30 +1,168 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, Dispatch, PayloadAction } from '@reduxjs/toolkit';
+import { boolean } from 'yup';
+
+interface QuestionAnswerPair {
+  answer: any;
+  isError: boolean;
+  questionTitle: string;
+  isRequired: boolean
+}
+
+interface ValidateFormPayload {}
+interface Tab {
+  id?: number;
+  position?: number;
+  title?: string;
+  isError?: boolean;
+}
+
+interface TabState {
+  [id: string]: QuestionAnswerPair;
+}
 
 interface FormState {
-  answers: any;
+  tabs: Record<number, { tabInfo: Tab; questions: TabState }>;
+  isAllRequiredFilled: boolean
 }
 
 const initialState: FormState = {
-  answers: {},
+  tabs: {},
+  isAllRequiredFilled: false,
 };
+
+const validateFormHelper = (state: FormState): boolean => {
+  let isAllSet = true;
+  Object.keys(state.tabs).forEach((tabIndex: any) => {
+    const tab = state.tabs[tabIndex];
+    Object.keys(tab.questions).forEach((questionId) => {
+      const question = tab.questions[questionId];
+      if (question.isRequired && (question.answer === null || question.answer === '')) {
+        isAllSet = false;
+      }
+    });
+  });
+
+  return isAllSet;
+};
+
 
 const formSlice = createSlice({
   name: 'form',
   initialState,
   reducers: {
-    initiatState: () => {
-      return initialState;
+    initState: () => initialState,
+    updateTab: (
+      state,
+      action: PayloadAction<{
+        tabIndex: number;
+        id: string;
+        answer?: any;
+        isError?: boolean;
+        questionTitle?: string;
+        isRequired?: boolean,
+      }>
+    ) => {
+      const { tabIndex, id, answer, isError, questionTitle, isRequired } = action.payload;
+      state.tabs = {
+        ...state.tabs,
+        [tabIndex]: {
+          ...state.tabs[tabIndex],
+          questions: {
+            ...state.tabs[tabIndex]?.questions,
+            [id]: {
+              answer: answer || state.tabs[tabIndex]?.questions?.[id]?.answer || null,
+              isError: isError !== undefined ? isError : state.tabs[tabIndex]?.questions?.[id]?.isError || false,
+              questionTitle: questionTitle || state.tabs[tabIndex]?.questions?.[id]?.questionTitle || '',
+              isRequired: isRequired || state.tabs[tabIndex]?.questions?.[id]?.isRequired || false,
+            },
+          },
+        },
+      };
     },
     updateAnswer: (
       state,
-      action: PayloadAction<{ tabIndex: number; id: string; answer: any }>
+      action: PayloadAction<{
+        tabIndex: number;
+        id: string;
+        answer: any;
+      }>
     ) => {
       const { tabIndex, id, answer } = action.payload;
-      state.answers = {
-        ...state.answers,
+      state.tabs = {
+        ...state.tabs,
         [tabIndex]: {
-          ...state.answers[tabIndex],
-          [id]: answer,
+          ...state.tabs[tabIndex],
+          questions: {
+            ...state.tabs[tabIndex]?.questions,
+            [id]: {
+              ...state.tabs[tabIndex]?.questions?.[id],
+              answer: answer,
+            },
+          },
+        },
+      };
+    },
+    fetchAllQuestionsAndAnswers: (
+      state,
+      action: PayloadAction<{ tabIndex: number; response: any }>
+    ) => {
+      const { tabIndex, response } = action.payload;
+
+      // Assuming response is an array of objects with 'id', 'answer', 'isError', 'questionTitle' properties
+      const newTabState = response.reduce((acc : any, { id, answer, isError, questionTitle } : any) => {
+        acc[id] = { answer, isError, questionTitle };
+        return acc;
+      }, {} as TabState);
+
+      state.tabs = {
+        ...state.tabs,
+        [tabIndex]: {
+          ...state.tabs[tabIndex],
+          questions: newTabState,
+        },
+      };
+    },
+    validateForm: (
+      state,
+    ) => {
+      let isAllset = true;
+      Object.keys(state.tabs).forEach((tabIndex : any) => {
+        const tab = state.tabs[tabIndex];
+        state.tabs[tabIndex].tabInfo =  { isError: false };
+        Object.keys(tab.questions).forEach((questionId) => {
+          const question = tab.questions[questionId];
+          if (question.isRequired && (question.answer === null || question.answer === '')) {
+            state.tabs[tabIndex].tabInfo.isError = true;
+            state.tabs[tabIndex].questions[questionId].isError = true;
+            isAllset = false;
+          } else {
+            state.tabs[tabIndex].questions[questionId].isError = false;
+          }
+        });
+      });
+      state.isAllRequiredFilled = isAllset
+    },
+    addTab: (
+      state,
+      action: PayloadAction<{
+        tabIndex: number;
+        tabInfo: Tab;
+        questions?: QuestionAnswerPair[];
+      }>
+    ) => {
+      const { tabIndex, tabInfo, questions } = action.payload;
+      const tabState = questions
+        ? questions.reduce((acc, { answer, isError, questionTitle, isRequired }, index) => {
+            acc[index] = { answer, isError, questionTitle, isRequired };
+            return acc;
+          }, {} as TabState)
+        : {};
+
+      state.tabs = {
+        ...state.tabs,
+        [tabIndex]: {
+          tabInfo,
+          questions: tabState,
         },
       };
     },
@@ -33,5 +171,5 @@ const formSlice = createSlice({
 
 export default formSlice.reducer;
 
-// Exporting the synchronous actions
-export const { updateAnswer } = formSlice.actions;
+export const { initState, updateTab, fetchAllQuestionsAndAnswers, addTab, updateAnswer, validateForm } = formSlice.actions;
+export { validateFormHelper };

@@ -15,9 +15,9 @@ const GroupDetail = (props : IProps) => {
   const router = useRouter();
 
   return (
-    <Layout>
+    <>
       <ManageGroup group={group}/>
-    </Layout>
+    </>
   );
 };
 

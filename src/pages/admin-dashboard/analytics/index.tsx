@@ -11,7 +11,7 @@ function Index() {
   },[])
 
   return (
-   <Layout><Analytics /></Layout>
+   <><Analytics /></>
   )
 }
 

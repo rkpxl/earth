@@ -98,6 +98,7 @@ export interface IQuestion {
   orgId?: string;
   description?: string;
   isActive?: boolean;
+  isRequired?: boolean;
   type?: string; // You might want to replace this with a more specific type
   createdBy?: string;
   title?: string;
@@ -198,7 +199,21 @@ export interface IDocument {
   markedUpVersion?: string;
 }
 
-export type QuestionType = 'text' | 'dropdown' | 'yesno' | 'bigtext' | 'multiselect' 
+export interface IApproval {
+  _id: string;
+  orgId: number;
+  isActive: boolean;
+  createdBy: string;
+  approver_id: string;
+  protocol_id: IProtocol | string; // Update the type accordingly, as it seems to be a string in your example
+  flow_id: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export type QuestionType = 'text' | 'dropdown' | 'yesno' | 'bigtext' | 'multiselect' | 'info'
 export type SnackbarSeverity = 'success' | 'error' | 'warning'
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

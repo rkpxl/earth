@@ -10,6 +10,6 @@ export default function WorkFlowMoreDetails() {
     router.push("/admin-dashboard/departments")
   },[])
   return (
-    <Layout><Workflows id={router.query.id}/></Layout>
+    <><Workflows id={router.query.id}/></>
   )
 }

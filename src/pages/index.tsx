@@ -6,13 +6,11 @@ import axiosInstance from '../Utils/axiosUtil'
 
 const HomeContext = React.createContext<any>(null);
 
-const Home: NextPage = ({ isAuthenticated, compliances, departments, allProtocols } : any) => {
+const Home: NextPage = ({ isAuthenticated, compliances, departments, allProtocols, allApprovals } : any) => {
   return (
-    <Layout>
-      <HomeContext.Provider value={{ isAuthenticated, compliances, departments, allProtocols }}>
-        <HomePage />
-      </HomeContext.Provider>
-    </Layout>
+    <HomeContext.Provider value={{ isAuthenticated, compliances, departments, allProtocols, allApprovals }}>
+      <HomePage />
+    </HomeContext.Provider>
   )
 }
 
@@ -24,12 +22,14 @@ export const getServerSideProps = async function getServerSideProps(context : an
       const compliances = await axiosInstance.get('/compliance');
       const departments = await axiosInstance.get('/department');
       const allProtocols = await axiosInstance.get('/protocol/get-all');
+      const allApprovals = await axiosInstance.get('/approval/all-active');
       return {
         props: {
           isAuthenticated: true,
           compliances: compliances.data,
           departments: departments.data,
           allProtocols: allProtocols.data,
+          allApprovals: allApprovals.data,
         },
       };
     }

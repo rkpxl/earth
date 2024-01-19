@@ -13,7 +13,7 @@ const Dashboard = () => {
   },[])
   
   return (
-    <Layout><Component /></Layout>
+    <><Component /></>
   );
 };
 

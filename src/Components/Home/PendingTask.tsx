@@ -19,7 +19,7 @@ export const PendingTask = (props : any) => {
               gutterBottom
               variant="overline"
             >
-              Pending Tasks
+              Pending Approvals
             </Typography>
             <Typography
               color="textPrimary"

@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
-import { ICompliance, IProtocol } from '../../../Utils/types/type';
+import React, { useEffect, useState } from 'react'
+import { ICompliance, IProtocol, RootState } from '../../../Utils/types/type';
 import { Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField } from '@mui/material';
 import axiosInstance from '../../../Utils/axiosUtil';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { showMessage } from '../../../Store/reducers/snackbar';
+import { validateForm, validateFormHelper } from '../../../Store/reducers/form';
 
 interface IProps {
   compliance: ICompliance;
@@ -16,22 +17,35 @@ export default function FormSubmit({ compliance, protocol} : IProps) {
 
   const [reviewer, setReviewer] = useState()
   const dispatch = useDispatch()
+  const formRootData = useSelector((state : RootState) => state.form)
+  const [isFormValid, setIsFormValid] = useState(false);
+
   const submitHandle = async () => {
-    try {
-      const response = await axiosInstance.post('/flow', {
-        protocol_id: protocol._id
-      })
-      console.log('response', response)
-      if(response.status < 300) {
-        dispatch(showMessage({message: "Submited", severity: "success"}))
-      } else {
-        dispatch(showMessage({message: "Not Submited", severity: "warning"}))
+    const isAllSet = validateFormHelper(formRootData)
+    dispatch(validateForm())
+    if(isAllSet) {
+      try {
+        const response = await axiosInstance.post('/flow', {
+          protocol_id: protocol._id
+        })
+        if(response.status < 300) {
+          dispatch(showMessage({message: "Submited", severity: "success"}))
+        } else {
+          dispatch(showMessage({message: "Not Submited", severity: "warning"}))
+        }
+      } catch (err) {
+        console.error(err)
+        dispatch(showMessage({message: "Not Submited", severity: "error"}))
       }
-    } catch (err) {
-      console.error(err)
-      dispatch(showMessage({message: "Not Submited", severity: "error"}))
+    } else {
+      dispatch(showMessage({message: "Fill all required answers", severity: "warning", duration: 5000}))
     }
   }
+
+  useEffect(() => {
+    setIsFormValid(formRootData.isAllRequiredFilled);
+  }, [formRootData, dispatch]);
+
   return (
     <Grid container columnSpacing={2} rowSpacing={2} maxWidth="1100px" sx={{ marginBottom: '64px'}}>
         <Grid item xs={12}>

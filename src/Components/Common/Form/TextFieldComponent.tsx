@@ -24,7 +24,9 @@ const TextFieldComponent: React.FC<TextFieldComponentProps> = ({ questionNumber,
           inputProps={{ style: bigBox ? { minHeight: '100px' } : {} }} 
           onChange={(e) => handleAnswerChange(e.target.value)}
           onBlur={handleQuestionSubmit}
-          value={answers[question?._id] || ''}
+          value={answers[question?._id]?.answer || ''}
+          error={answers[question?._id]?.isError}
+          helperText={answers[question?._id]?.isError ? 'This field is required' : ''}
         />
       </Grid>
       <CommentJustification comment={''} justification={''} question_id={question?._id} complianceId={compliance.id} />

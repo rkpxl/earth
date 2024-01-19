@@ -11,9 +11,9 @@ function index({group, isAuthenticated } : any) {
   }
 
   return (
-   <Layout>
+   <>
       <Groups groups={group}/>
-    </Layout>
+    </>
   )
 }
 

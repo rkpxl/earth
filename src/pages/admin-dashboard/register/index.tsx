@@ -12,9 +12,9 @@ const Register = ({ departments } : IProps) => {
   const dispatch : AppDispatch = useDispatch();
 
   return (
-    <Layout>
+    <>
       <Component departments={departments} />
-    </Layout>
+    </>
   );
 };
 
