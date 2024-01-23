@@ -15,6 +15,7 @@ import ShieldIcon from '@mui/icons-material/Shield';
 import GroupIcon from '@mui/icons-material/Group';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import RouteIcon from '@mui/icons-material/Route';
 
 const ItemCount = 4
 
@@ -87,6 +88,11 @@ export const Sidebar = (props : any) => {
             href: '/admin-dashboard/compliance',
             icon: (<ShieldIcon fontSize="small" />),
             title: 'Compliance'
+          },
+          {
+            href: '/admin-dashboard/approval-rule',
+            icon: (<RouteIcon fontSize="small" />),
+            title: 'Approval Rule'
           },
           {
             href: '/admin-dashboard/register',

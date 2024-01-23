@@ -6,6 +6,7 @@ import confirmationReducer from './confirm'
 import complianceReducer from './compliance'
 import formReducer from './form'
 import userReducer from './user'
+import loadingReducer from './loading'
 
 const rootReducer = combineReducers({
   snackbar: snackbarReducer,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   confirmation: confirmationReducer,
   compliance: complianceReducer,
   form: formReducer,
-  user: userReducer
+  user: userReducer,
+  globalLoading: loadingReducer,
 });
 
 export default rootReducer;

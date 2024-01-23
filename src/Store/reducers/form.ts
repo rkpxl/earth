@@ -6,7 +6,7 @@ interface QuestionAnswerPair {
   isError: boolean;
   questionTitle: string;
   isRequired: boolean
-}
+} 
 
 interface ValidateFormPayload {}
 interface Tab {
@@ -79,6 +79,26 @@ const formSlice = createSlice({
         },
       };
     },
+    updateTabInfo: (
+      state,
+      action: PayloadAction<{
+        tabIndex: number;
+        tabTitle: string;
+      }>
+    ) => {
+      const { tabIndex, tabTitle } = action.payload;
+      state.tabs = {
+        ...state?.tabs,
+        [tabIndex]: {
+          questions: state?.tabs[tabIndex]?.questions,
+          tabInfo: {
+            ...state.tabs[tabIndex]?.tabInfo,
+            title: tabTitle,
+            isError: false,
+          }
+        },
+      };
+    },
     updateAnswer: (
       state,
       action: PayloadAction<{
@@ -108,7 +128,6 @@ const formSlice = createSlice({
     ) => {
       const { tabIndex, response } = action.payload;
 
-      // Assuming response is an array of objects with 'id', 'answer', 'isError', 'questionTitle' properties
       const newTabState = response.reduce((acc : any, { id, answer, isError, questionTitle } : any) => {
         acc[id] = { answer, isError, questionTitle };
         return acc;
@@ -171,5 +190,5 @@ const formSlice = createSlice({
 
 export default formSlice.reducer;
 
-export const { initState, updateTab, fetchAllQuestionsAndAnswers, addTab, updateAnswer, validateForm } = formSlice.actions;
+export const { initState, updateTabInfo,  updateTab, fetchAllQuestionsAndAnswers, addTab, updateAnswer, validateForm } = formSlice.actions;
 export { validateFormHelper };

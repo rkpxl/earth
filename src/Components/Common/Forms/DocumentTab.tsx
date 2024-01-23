@@ -79,7 +79,7 @@ const DocumentComponent = (props : DocumentComponentProps) => {
             </Grid>
             <Grid item xs={6} sm={1}>
               <IconButton
-                  color="secondary"
+                  color="primary"
                   onClick={() => handleDeleteDocument(index)}
                   style={{ height: '100%', textAlign: 'center', display: 'flex', alignItems: 'center'  }}
                   disabled={isDisabled}

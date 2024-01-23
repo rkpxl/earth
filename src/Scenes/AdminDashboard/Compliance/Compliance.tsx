@@ -13,6 +13,9 @@ import ConfirmationPopup from '../../../Components/Common/ConfirmationDialog';
 import { showMessage } from '../../../Store/reducers/snackbar';
 import { useRouter } from 'next/router';
 import { fetchCompliances } from '../../../Store/reducers/compliance';
+import { Page } from '../../../Utils/constants';
+import GlobalPagination from '../../../Components/Common/GlobalPagination';
+import NoDataFound from '../../../Components/Common/NoData';
 
 
 export default function Compliance(props: any) {
@@ -21,6 +24,10 @@ export default function Compliance(props: any) {
   const compliances = data || props.compliances || []
   const dispatch : type.AppDispatch = useDispatch();
 	const router = useRouter()
+  const [pageData, setPageData] = useState({
+    currentPage: Page.defaultPage,
+    pageSize: Page.defaultPageSize
+  })
 
   const handleOpenConfirmation = (args: any[]) => {
     dispatch(
@@ -42,7 +49,7 @@ export default function Compliance(props: any) {
       console.error(err)
       dispatch(showMessage({ message: 'Internal server error, contact to admin', severity: 'error' }));
     }
-    dispatch(fetchCompliances())
+    dispatch(fetchCompliances({page: pageData.currentPage, pageSize: pageData.pageSize}))
   }
 
   const handleClickOpen = () => {
@@ -57,6 +64,10 @@ export default function Compliance(props: any) {
     router.push(`/admin-dashboard/compliance/${id}`)
   }
 
+  const onChangeAPICall = (page : number, pageSize: number) => {
+    dispatch(fetchCompliances({page: page, pageSize: pageSize}))
+  }
+
   if(loading) {
     return (
     <>
@@ -65,19 +76,25 @@ export default function Compliance(props: any) {
   }
 
   if(error) {
-    <>
-      Try again
-    </>
+    return (<NoDataFound />)
   }
 
   return (
     <Grid>
       <Header onClickHandle={handleClickOpen} title="Compliance" buttonText="Create New Compliance"/>
       <CreateComplianceDialog open={open} onClose={handleClose}/>
-      {compliances.map((comp : any) => (
+      {compliances?.data?.map((comp : any) => (
       <div key={comp.id}>
         <AdminCard card={comp} onDelete={() => handleOpenConfirmation(comp.id)} onManageClick={() => redirectToGroup(comp.id)}/>
       </div>))}
+      {compliances?.total > 10 ? 
+        <GlobalPagination 
+          totalItems={compliances?.total} 
+          onChange={setPageData}
+          onChangeAPICall={onChangeAPICall}
+          pageData={pageData}
+        />
+        : null}
       <ConfirmationPopup handleConfirm={handleConfirmation} />
     </Grid>
   )

@@ -91,7 +91,7 @@ export default function FormAttachment({ compliance, protocol }: IProps) {
             </Grid>
             <Grid item xs={6} sm={1}>
               <IconButton
-                  color="secondary"
+                  color="primary"
                   onClick={() => handleDeleteDocument(index)}
                   style={{ height: '100%', textAlign: 'center', display: 'flex', alignItems: 'center'  }}
                   disabled={isDisabled}
@@ -104,7 +104,7 @@ export default function FormAttachment({ compliance, protocol }: IProps) {
     <Button variant="contained" color="primary" onClick={handleAddButtonClick} disabled={isDisabled}>
       Add Document
     </Button>
-    <DocumentAttachDialog open={isOpen} onClose={() => setIsOpen((prev) => !prev)} onAddDocument={() => console.log('add')} protocolId={protocol._id} complianceId={compliance.id || 1} />
+    <DocumentAttachDialog open={isOpen} onClose={() => setIsOpen((prev) => !prev)} onAddDocument={() => {}} protocolId={protocol._id} complianceId={compliance.id || 1} />
     </div>
   );
 }

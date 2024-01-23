@@ -14,6 +14,7 @@ import { showMessage } from '../../../Store/reducers/snackbar';
 import { openConfirmation } from '../../../Store/reducers/confirm';
 import { fetchGroups } from '../../../Store/reducers/group';
 import { useRouter } from 'next/router';
+import GlobalPagination from '../../../Components/Common/GlobalPagination';
 
 export default function Group(props: any) {
   const router = useRouter()
@@ -22,6 +23,10 @@ export default function Group(props: any) {
   const { data , loading, error } = useSelector((state: RootState) => state.group);
   const groups = data || props.groups || []
   const dispatch : type.AppDispatch = useDispatch();
+  const [pageData, setPageData] = useState({
+    currentPage: 1,
+    pageSize: 10
+  })
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -47,7 +52,7 @@ export default function Group(props: any) {
       console.error(err)
       dispatch(showMessage({ message: 'Internal server error, contact to admin', severity: 'error' }));
     }
-    dispatch(fetchGroups())
+    dispatch(fetchGroups({page: pageData.currentPage, pageSize: pageData.pageSize}))
   }
 
   const handleOpenConfirmation = (args: any[]) => {
@@ -64,6 +69,10 @@ export default function Group(props: any) {
     } else {
       dispatch(showMessage({message: 'Contact to admin', severity: 'warning', duration: 2000}))
     }
+  }
+
+  const onChangeAPICall = (page : number, pageSize: number) => {
+    dispatch(fetchGroups({page: page, pageSize: pageSize}))
   }
 
   if(loading) {
@@ -84,10 +93,19 @@ export default function Group(props: any) {
     <Grid>
       <Header onClickHandle={handleClickOpen} title="Groups" buttonText="Create New Group"/>
         <PopUp open={open} onClose={handleClose} onSave={handleClose}/>
-        {groups.map((grp : any, index : number) => (
+        {groups?.data?.map((grp : any, index : number) => (
           <div key={index.toString()}>
             <AdminCard card={grp} onDelete={() => handleOpenConfirmation(grp.id)} onManageClick={() => redirectToGroup(grp.id)}/>
           </div>))}
+          {groups?.total > 10 ? 
+            <GlobalPagination 
+              totalItems={groups?.total} 
+              onChange={setPageData}
+              onChangeAPICall={onChangeAPICall}
+              pageData={pageData}
+            />
+          : null}
+          
       <ConfirmationPopup handleConfirm={handleConfirmation} />
     </Grid>
   )

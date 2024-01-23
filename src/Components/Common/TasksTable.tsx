@@ -147,7 +147,7 @@ export const TasksTable = (props : any) => {
         }}
       >
         {allTask.length > 10 ? <Button
-          color="secondary"
+          color="primary"
           endIcon={<ArrowRightIcon fontSize="small" />}
           size="small"
           variant="text"

@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as type from '../../Utils/types/type'
 import axiosInstance from '../../Utils/axiosUtil';
 import { IGroup } from '../../Utils/types/type';
+import { Page } from '../../Utils/constants';
 
 
 
@@ -18,14 +19,27 @@ const initialState: GroupState = {
   error: null,
 };
 
-export const fetchGroups = createAsyncThunk('group/fetchGroups', async () => {
+interface FetchGroupsParams {
+  page: number;
+  pageSize: number;
+}
+
+export const fetchGroups = createAsyncThunk('group/fetchGroups', async (params?: any) => {
   try {
-    const response: type.APIResponse<Array<IGroup>> = await axiosInstance.get('/group');
+    const { page = Page.defaultPage, pageSize = Page.defaultPageSize } = params;
+    const response: type.APIResponse<Array<IGroup>> = await axiosInstance.get('/group', {
+      params: {
+        page: page,
+        pageSize: pageSize,
+      },
+    });
     return response.data;
   } catch (error) {
     throw error || 'Error fetching groups';
   }
 });
+
+
 const groupSlice = createSlice({
   name: 'group',
   initialState,

@@ -1,9 +1,9 @@
 import React from 'react'
 import Head from 'next/head';
 import { Box, Button, Container, Grid } from '@mui/material';
-import DoneTask from '../../Components/Home/DoneTasks';
+import AllProtocols from '../../Components/Home/AllProtocols';
 import Progress from '../../Components/Home/Progress';
-import PendingTask from '../../Components/Home/PendingTask';
+import PendingProtocols from '../../Components/Home/PendingProtocols';
 import { LatestTasks } from '../../Components/Home/LatestTasks'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -22,7 +22,7 @@ interface TaskPageProps {
 
 const Home = () => {
   const homeContext = useHomeContext()
-  const {  isAuthenticated, compliances, allProtocols, allApprovals } = homeContext
+  const { compliances, allProtocols, allApprovals } = homeContext
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [popOpen, setPopOpen] = React.useState(false);
   const [complianceType, setComplianceType] = React.useState<ICompliance>()
@@ -98,7 +98,7 @@ const Home = () => {
             aria-labelledby="demo-positioned-button"
             anchorEl={anchorEl}
             open={open}
-            onClose={handlePopOpen}
+            onClose={handleClose}
             sx={{ mt: 5}}
             anchorOrigin={{
               vertical: 'top',
@@ -109,7 +109,7 @@ const Home = () => {
               horizontal: 'left',
             }}
           >
-            {compliances.map((comp : ICompliance) => (<MenuItem key={comp._id} onClick={() => onComplienceClick(comp)}>{comp.title}</MenuItem>))}
+            {compliances?.data?.map((comp : ICompliance) => (<MenuItem key={comp._id} onClick={() => onComplienceClick(comp)}>{comp.title}</MenuItem>))}
           </Menu>
         </Box>
         <Container maxWidth={false}>
@@ -118,11 +118,10 @@ const Home = () => {
             spacing={2}
           >
             <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <DoneTask donetask={allProtocols?.length}/>
-              {/* <Table data={allProtocols} /> */}
+              <AllProtocols allProtocols={allProtocols?.total}/>
             </Grid>
             <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <PendingTask length={allApprovals.length} task={pendingTask} />
+              <PendingProtocols length={allApprovals.length} task={pendingTask} />
             </Grid>
             <Grid item lg={4} sm={6} xl={3} xs={12}>
               <Progress progress={Math.round(((doneTask.length/((pendingTask.length + doneTask.length) || 1) ) * 100))}/>

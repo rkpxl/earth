@@ -29,7 +29,7 @@ import axiosInstance from '../../Utils/axiosUtil';
 import { showMessage } from '../../Store/reducers/snackbar';
 
 interface IProps {
-  departments: Array<IDepartment>
+  departments: { data : Array<IDepartment>, total?: number}
 }
 
 
@@ -67,7 +67,7 @@ const Register = ({ departments } : IProps) => {
       department: Yup
         .number()
         .required('Department is required')
-        .oneOf(departments.map(({ id , ...rest}) => id), 'Invalid department selected'),
+        .oneOf(departments?.data?.map(({ id , ...rest}) => id), 'Invalid department selected'),
       accessLevel: Yup
         .string()
         .max(255)
@@ -82,7 +82,6 @@ const Register = ({ departments } : IProps) => {
     }),
     onSubmit: async () => {
       try {
-        console.log('formik.values',formik.values)
         const response = await axiosInstance.post('/user', {
           name: formik.values.name,
           email: formik.values.email,
@@ -186,9 +185,9 @@ const Register = ({ departments } : IProps) => {
                     label="Select Department"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={departments.filter((d : any) => d?.id === formik.values.departmentId)[0]?.name}
+                    value={departments?.data?.filter((d : any) => d?.id === formik.values.departmentId)[0]?.name}
                     >
-                    {departments.map((option, optionIndex) => (
+                    {departments?.data?.map((option, optionIndex) => (
                       <MenuItem key={option?.id?.toString()} value={option?.id}>
                         {option.name}
                       </MenuItem>

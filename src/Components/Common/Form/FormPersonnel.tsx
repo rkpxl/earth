@@ -34,13 +34,12 @@ const initialState: IApprover = {
 export default function FormPersonnel({ compliance, protocol }: IProps) {
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const dispatch = useDispatch()
-  const approvers = useSelector((state: RootState) => state?.form?.answers?.['98']?.['approvers'] ??  protocol?.approvers)
+  const approvers = useSelector((state: RootState) => state?.form?.tabs['98']?.questions['approvers']?.answer ??  protocol?.approvers)
 
   const setApprovers  = (updatedData : any) =>  {
     dispatch(updateAnswer({ tabIndex: 98, id: 'approvers', answer: updatedData }))
   }
 
-  console.log('approvers', approvers)
 
   const addPersonBasic = (user: any) => {
     const newPerson: IApprover = {

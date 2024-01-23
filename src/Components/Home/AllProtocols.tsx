@@ -4,8 +4,8 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import NextLink from 'next/link';
 import { DoneTaskIcon } from '../../icons/doneTask'
 
-const DoneTask = (props : any) => {
-  const { donetask } = props
+const AllProtocols = (props : any) => {
+  const { allProtocols } = props
   return (
   <Card
     sx={{ height: '100%' }}
@@ -29,7 +29,7 @@ const DoneTask = (props : any) => {
             color="textPrimary"
             variant="h4"
           >
-            {donetask}
+            {allProtocols}
           </Typography>
         </Grid>
         <Grid item>
@@ -66,10 +66,10 @@ const DoneTask = (props : any) => {
       >
         <NextLink
           style={{width: '100%'}}
-          href="/done-tasks"
+          href="/all-protocols"
         >
           <Button
-            color="secondary"
+            color="primary"
             endIcon={<ArrowRightIcon fontSize="small" />}
             size="small"
             variant="text"
@@ -82,4 +82,4 @@ const DoneTask = (props : any) => {
     </CardContent>
   </Card>
 )};
-export default DoneTask;
+export default AllProtocols;

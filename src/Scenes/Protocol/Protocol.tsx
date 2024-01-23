@@ -7,7 +7,7 @@ import FormQuestionRenderer from '../../Components/Common/Form/FormQuestionRende
 import { useQuery } from '@tanstack/react-query';
 import Router from 'next/router';
 import { useDispatch } from 'react-redux';
-import { updateAnswer, updateTab } from '../../Store/reducers/form';
+import { updateAnswer, updateTab, updateTabInfo } from '../../Store/reducers/form';
 import Loading from '../../Components/Common/Loading';
 import NoDataFound from '../../Components/Common/NoData';
 
@@ -34,13 +34,18 @@ export default function Protocol(props: IProps) {
   const dispatch = useDispatch()
   let questionNumber = 1;
 
+  // dispatch()
+
   const { data, isLoading, isError} = useQuery({
     queryKey: [`compliance-${compliance.id}`],
     queryFn: async () => {
       try {
         const response = await axiosInstance.get(`/questions/compliance/${compliance.id}`);
-        response?.data?.map((q : IQuestion) => {
-          dispatch(updateTab({ tabIndex: q?.tabNumber || 0, id: q?._id || '', isRequired: q?.isRequired || false }));
+        compliance.tabNames.map(async (t) => {
+          await dispatch(updateTabInfo({ tabIndex: t.position , tabTitle: t?.name }))
+        })
+        response?.data?.map(async (q : IQuestion) => {
+          await dispatch(updateTab({ tabIndex: q?.tabNumber || 0, id: q?._id || '', isRequired: q?.isRequired || false, questionTitle: q?.title }));
         })
         return response.data; // Return the data
       } catch (error) {
@@ -54,8 +59,8 @@ export default function Protocol(props: IProps) {
     queryFn: async () => {
       try {
         const answers = await axiosInstance.get(`/answer/${id}`);
-        answers?.data?.map((answer : IAnswer) => {
-          dispatch(updateAnswer({ tabIndex: answer.tabId, id: answer.question_id, answer: answer.answer }));
+        answers?.data?.map(async (answer : IAnswer) => {
+          await dispatch(updateAnswer({ tabIndex: answer.tabId, id: answer.question_id, answer: answer.answer }));
         })
         return answers.data
       } catch (error) {
@@ -93,7 +98,7 @@ export default function Protocol(props: IProps) {
                 {info?.description}
               </Typography>
               <List sx={{m: 0, p: 0}}>
-                {["testingkdejnc eifbcieub cu", "efibc eicuie bceb uche", "idcn udbc ebcedybxcybxugedxbgvkxwbkxkybwgexvbgwvxv xvw xvw xvw xgw vxgwv xgw xvw vxwebubexuevxkuetcv"].map((point : any, index : any) => (
+                {info?.answerOptions?.map((point : any, index : any) => (
                   <ListItem key={index} sx={{ m: 0, pt: 1, pb: 0}}>
                     <Typography sx={{marginRight: '24px'}}>•</Typography>
                     <ListItemText primary={point} />

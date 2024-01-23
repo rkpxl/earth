@@ -4,11 +4,16 @@ import * as type from '../../Utils/types/type'
 import { AnyARecord } from 'dns';
 import axiosInstance from '../../Utils/axiosUtil';
 import { IDepartment } from '../../Utils/types/type';
+import { Page } from '../../Utils/constants';
 
 
+interface IData {
+  data: IDepartment[],
+  total: number
+}
 
 interface DepartmentState {
-  data: IDepartment[] | undefined;
+  data: IData | undefined;
   loading: boolean;
   error: string | null;
 }
@@ -19,9 +24,20 @@ const initialState: DepartmentState = {
   error: null,
 };
 
-export const fetchDepartments = createAsyncThunk('department/fetchDepartments', async () => {
+interface FetchDepartmentsParams {
+  page: number;
+  pageSize: number;
+}
+
+export const fetchDepartments = createAsyncThunk('department/fetchDepartments', async (params?: any) => {
   try {
-    const response: type.APIResponse<Array<IDepartment>> = await axiosInstance.get('/department');
+    const { page = Page.defaultPage, pageSize = Page.defaultPageSize } = params;
+    const response: type.APIResponse<IData> = await axiosInstance.get('/department', {
+      params: {
+        page: page,
+        pageSize: pageSize,
+      },
+    });
     return response.data;
   } catch (error) {
     throw error || 'Error fetching departments';

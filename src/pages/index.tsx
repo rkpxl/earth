@@ -34,7 +34,7 @@ export const getServerSideProps = async function getServerSideProps(context : an
       };
     }
   } catch (err) {
-    console.error("error", err)
+    console.error("home server error")
   }
 
   return {

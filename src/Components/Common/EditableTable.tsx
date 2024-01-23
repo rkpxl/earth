@@ -25,15 +25,22 @@ import DownloadIcon from '@mui/icons-material/Download';
 import theme from '../../Theme';
 import Loading from './Loading';
 import NoDataFound from './NoData';
+import GlobalPagination from './GlobalPagination';
 
 interface EditableTableProps {
-  data: Array<any>;
+  data: { data: Array<any>, total?: number};
+  pageData?: {
+    currentPage: number,
+    pageSize: number
+  };
+  setPageData?: Function;
   excludedColumns?: string[];
   title: string,
   handleRowClick?: (...args : any) => void
 }
 
-const EditableTable: React.FC<EditableTableProps> = ({ title, data, handleRowClick, excludedColumns = ['_id', '__v', 'pi_id', 'currentAssignee_id', 'createdBy', 'approvers'] }) => {
+const EditableTable: React.FC<EditableTableProps> = ({ title, data : tableData, pageData, setPageData, handleRowClick, excludedColumns = ['_id', '__v', 'pi_id', 'currentAssignee_id', 'createdBy', 'approvers'] }) => {
+  const { data, total } = tableData
   const [showColumnsDialog, setShowColumnsDialog] = useState(false);
   const [visibleColumns, setVisibleColumns] = useState(() =>
     Object.keys(data[0] || {}).reduce((acc : any, key) => {
@@ -236,6 +243,14 @@ const EditableTable: React.FC<EditableTableProps> = ({ title, data, handleRowCli
             </TableBody>
           </Table>
         </TableContainer>
+        {((total && setPageData && pageData) && total > 10) ? 
+          <GlobalPagination 
+            totalItems={total} 
+            onChange={setPageData}
+            // onChangeAPICall={onChangeAPICall}
+            pageData={pageData}
+          />
+        : null}
       </div>
     </>
   );

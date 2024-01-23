@@ -15,6 +15,7 @@ import { AppCacheProvider } from '@mui/material-nextjs/v14-pagesRouter';
 import '../../styles/globals.css'
 import HomeLayout from '../Scenes/Home/HomeLayout';
 import axiosInstance from '../Utils/axiosUtil';
+import GlobalLoading from '../Components/Common/GlobalLoading';
 
 const queryClient = new QueryClient();
 
@@ -38,6 +39,7 @@ function MyApp(props: AppProps) {
               <Component {...pageProps} />
             </HomeLayout>
             <Snackbar />
+            <GlobalLoading />
             <ReactQueryDevtools initialIsOpen={true} />
           </QueryClientProvider>
         </Provider>

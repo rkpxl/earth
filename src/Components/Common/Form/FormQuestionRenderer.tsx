@@ -33,7 +33,6 @@ const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, ques
 
 
   const handleAnswerChange = (newAnswer: any) => {
-    console.log('newAnswer', newAnswer)
     dispatch(updateAnswer({ tabIndex: tabId, id: question?._id, answer: newAnswer }));
   };
 
@@ -72,7 +71,6 @@ const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, ques
         dispatch(showMessage({message: 'Youe Answer Not Saved', severity: 'warning', duration: 600}))
       }
     } catch (err) {
-      console.log('Error', err)
       dispatch(showMessage({message: 'Youe Answer Not Saved, Please try after some time', severity: 'error', duration: 2000}))
     }
   }

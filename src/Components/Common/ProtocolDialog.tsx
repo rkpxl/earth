@@ -106,7 +106,7 @@ const ProtocolPopUp = (props : IProps) : JSX.Element => {
                 <FormControl fullWidth>
                   <InputLabel>Department</InputLabel>
                   <Select {...field} label="Department">
-                    {departments.map((dep : IDepartment, index : number) => (
+                    {departments?.data?.map((dep : IDepartment, index : number) => (
                       <MenuItem value={dep.name} key={index.toString()}>{dep.name}</MenuItem>
                     ))}
                   </Select>

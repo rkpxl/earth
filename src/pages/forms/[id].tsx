@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router'
-import React, { useContext, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axiosInstance from '../../Utils/axiosUtil'
 import { AppDispatch, ICompliance, IProtocol, RootState } from '../../Utils/types/type'
-import { Box, Tab, Tabs } from '@mui/material';
+import { Box, Menu, MenuItem, Tab, Tabs } from '@mui/material';
 import Layout from '../../Scenes/Home/HomeLayout'
 import { useDispatch, useSelector } from 'react-redux';
 import CustomTabPanel from '../../Components/Common/CustomTabPanel';
@@ -12,6 +12,11 @@ import FormSubmit from '../../Components/Common/Form/FormSubmit';
 import FormPersonnel from '../../Components/Common/Form/FormPersonnel';
 import { useQuery } from '@tanstack/react-query';
 import Loading from '../../Components/Common/Loading';
+import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import { generatePDF } from '../../Utils/fileGenerator';
+import { toggleLoading } from '../../Store/reducers/loading';
+import { updateTab, updateTabInfo } from '../../Store/reducers/form';
 
 interface IProps {
   compliance: ICompliance,
@@ -30,22 +35,45 @@ export default function DynamicForm(props : IProps) {
   const { compliance, protocol } = props
   const { id: protocol_id } = router.query as { id: string };
   const formData = useSelector((state : RootState) => state.form)
+  const [value, setValue] = useState<number>(0);
+  const [tabValue, setTabValue] = useState<number>(0);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const dispatch : AppDispatch = useDispatch()
 
   const { data: protocolData, isLoading, isError } = useQuery({
     queryKey: [`basicprotocol-${protocol._id}`],
     queryFn: async () => {
       try {
         const protocol : any = await axiosInstance.get(`/protocol/${protocol_id}`);
-        if(protocol.status < 300) {
+        if(protocol.status < 300) { 
           return protocol.data
         }
       } catch (err) {
         console.error('Error', err)
       }
     }
-  })
+  });
 
-  const [value, setValue] = useState<number>(0);
+
+  const handleTabChange = (event: React.SyntheticEvent, newValue: number) => {
+    setTabValue(newValue);
+  };
+
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleDownloadOption = async () => {
+    dispatch(toggleLoading())
+    await generatePDF(formData, protocolData)
+    dispatch(toggleLoading())
+    handleMenuClose();
+  };
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
   };
@@ -56,7 +84,27 @@ export default function DynamicForm(props : IProps) {
 
   return (
     <>
-      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+      <Box sx={{ display: 'flex', alignItems: 'center', borderBottom: 1, borderColor: 'divider' }}>
+        <IconButton
+          onClick={handleMenuOpen}
+          size="large"
+          color="inherit"
+          aria-controls="download-menu"
+          aria-haspopup="true"
+          edge="end"
+        >
+          <MoreVertIcon fontSize='small'/>
+        </IconButton>
+
+        <Menu
+          id="download-menu"
+          anchorEl={anchorEl}
+          open={Boolean(anchorEl)}
+          onClose={handleMenuClose}
+        >
+          <MenuItem onClick={handleDownloadOption}>Download PDF</MenuItem>
+          {/* Add more download options as needed */}
+        </Menu>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
           <Tab label="Summary" {...a11yProps(0)} />
           {compliance?.tabNames?.sort((a : any, b : any) => parseInt(a.position) - parseInt(b.position)).map((step) => {

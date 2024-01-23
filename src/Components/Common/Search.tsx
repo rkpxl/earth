@@ -6,10 +6,11 @@ import { debounce } from '../../Utils/util';
 
 
 interface IProps {
-  setText: Function
+  setText: Function,
+  onClickHandle?: Function
 }
 
-const SearchPage: React.FC<IProps> = ( { setText } ) => {
+const SearchPage: React.FC<IProps> = ( { setText, onClickHandle } ) => {
   const textDebouce = debounce((value: string) => {
     setText(value);
   }, 500)
@@ -17,6 +18,12 @@ const SearchPage: React.FC<IProps> = ( { setText } ) => {
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     textDebouce(e.target.value)
   };
+
+  const handleClickChange = () => {
+    if(onClickHandle) {
+      onClickHandle()
+    }
+  }
 
 
   return (
@@ -40,6 +47,8 @@ const SearchPage: React.FC<IProps> = ( { setText } ) => {
           placeholder="Search..."
           inputProps={{ 'aria-label': 'search' }}
           onChange={handleChange}
+          onClick={handleClickChange}
+          onBlur={handleClickChange}
         />
       </Paper>
     </Grid>
