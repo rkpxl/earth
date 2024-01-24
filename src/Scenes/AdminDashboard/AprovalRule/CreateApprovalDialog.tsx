@@ -6,7 +6,6 @@ import { Grid } from '@mui/material';
 import { useDispatch } from 'react-redux';
 import axiosInstance from '../../../Utils/axiosUtil';
 import { showMessage } from '../../../Store/reducers/snackbar';
-import { fetchGroups } from '../../../Store/reducers/group';
 import * as type from '../../../Utils/types/type';
 import { RefetchQueryFilters, useQueryClient } from '@tanstack/react-query';
 

@@ -52,7 +52,7 @@ export default function Group(props: any) {
       console.error(err)
       dispatch(showMessage({ message: 'Internal server error, contact to admin', severity: 'error' }));
     }
-    dispatch(fetchGroups({page: pageData.currentPage, pageSize: pageData.pageSize}))
+    dispatch(fetchGroups())
   }
 
   const handleOpenConfirmation = (args: any[]) => {
@@ -71,9 +71,9 @@ export default function Group(props: any) {
     }
   }
 
-  const onChangeAPICall = (page : number, pageSize: number) => {
-    dispatch(fetchGroups({page: page, pageSize: pageSize}))
-  }
+  // const onChangeAPICall = (page : number, pageSize: number) => {
+  //   dispatch(fetchGroups({page: page, pageSize: pageSize}))
+  // }
 
   if(loading) {
     return (
@@ -93,19 +93,18 @@ export default function Group(props: any) {
     <Grid>
       <Header onClickHandle={handleClickOpen} title="Groups" buttonText="Create New Group"/>
         <PopUp open={open} onClose={handleClose} onSave={handleClose}/>
-        {groups?.data?.map((grp : any, index : number) => (
+        {groups?.map((grp : any, index : number) => (
           <div key={index.toString()}>
             <AdminCard card={grp} onDelete={() => handleOpenConfirmation(grp.id)} onManageClick={() => redirectToGroup(grp.id)}/>
           </div>))}
-          {groups?.total > 10 ? 
+          {/* {groups?.total > 10 ? 
             <GlobalPagination 
               totalItems={groups?.total} 
               onChange={setPageData}
               onChangeAPICall={onChangeAPICall}
               pageData={pageData}
             />
-          : null}
-          
+          : null} */}
       <ConfirmationPopup handleConfirm={handleConfirmation} />
     </Grid>
   )

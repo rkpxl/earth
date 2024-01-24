@@ -19,14 +19,14 @@ const initialState: ComplianceState = {
   error: null,
 };
 
-export const fetchCompliances = createAsyncThunk('compliance/fetchCompliances', async (params?: any) => {
-  const { page = Page.defaultPage, pageSize = Page.defaultPageSize } = params;
+export const fetchCompliances = createAsyncThunk('compliance/fetchCompliances', async () => {
+  // const { page = Page.defaultPage, pageSize = Page.defaultPageSize } = params;
   try {
     const response: type.APIResponse<Array<ICompliance>> = await axiosInstance.get('/compliance', {
-      params: {
-        page: page,
-        pageSize: pageSize,
-      },
+      // params: {
+      //   page: page,
+      //   pageSize: pageSize,
+      // },
     });
     return response.data;
   } catch (error) {

@@ -20,6 +20,7 @@ import { useDispatch } from 'react-redux';
 import { showMessage } from '../../../Store/reducers/snackbar';
 import { getStandatedDateWithTime } from '../../../Utils/dateTime';
 import { getCookie } from '../../../Utils/cookieUtils';
+import theme from '../../../Theme';
 interface CommentDialogProps {
   open: boolean;
   onClose: () => void;
@@ -84,7 +85,9 @@ const CommentDialog: React.FC<CommentDialogProps> = ({ open, onClose, question_i
   }
 
   return (
-    <Dialog open={open} onClose={onClose} fullWidth>
+    <Dialog open={open} onClose={onClose} fullWidth PaperProps={{ style: { 
+      backgroundColor: theme.palette.background.default,
+    }}}>
       <DialogTitle>Previous Comments</DialogTitle>
       <DialogContent sx={{ p: 2 }}>
         <Grid container>

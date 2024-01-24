@@ -3,6 +3,7 @@ import type { NextPage } from 'next'
 import Layout from '../Scenes/Home/HomeLayout'
 import HomePage from '../Scenes/Home/Home'
 import axiosInstance from '../Utils/axiosUtil'
+import { Page } from '../Utils/constants'
 
 const HomeContext = React.createContext<any>(null);
 
@@ -34,7 +35,7 @@ export const getServerSideProps = async function getServerSideProps(context : an
       };
     }
   } catch (err) {
-    console.error("home server error")
+    console.error("home server error", err)
   }
 
   return {

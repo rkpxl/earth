@@ -13,6 +13,7 @@ import ManageComplianceStep from './ManageComplianceStep';
 interface IProps {
   compliance: type.ICompliance,
   id: string | string[] | undefined,
+  approvalRule: any
 }
 
 function a11yProps(index: number) {
@@ -23,7 +24,7 @@ function a11yProps(index: number) {
 }
 
 export default function ManageCompliance(props: IProps) {
-  const { compliance, id } = props
+  const { compliance, id, approvalRule } = props
 
   const router = useRouter()
   const [value, setValue] = useState<number>(0);
@@ -57,7 +58,7 @@ export default function ManageCompliance(props: IProps) {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0} sx={{p: 0}}>
-        <UpdateCompliance compliance={compliance}/>
+        <UpdateCompliance compliance={compliance} approvalRule={approvalRule}/>
       </CustomTabPanel>
       {compliance?.tabNames?.sort((a : any, b : any) => parseInt(a.position) - parseInt(b.position)).map((step, index) => {
         return (

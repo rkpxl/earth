@@ -109,7 +109,7 @@ const Home = () => {
               horizontal: 'left',
             }}
           >
-            {compliances?.data?.map((comp : ICompliance) => (<MenuItem key={comp._id} onClick={() => onComplienceClick(comp)}>{comp.title}</MenuItem>))}
+            {compliances?.map((comp : ICompliance) => (<MenuItem key={comp._id} onClick={() => onComplienceClick(comp)}>{comp.title}</MenuItem>))}
           </Menu>
         </Box>
         <Container maxWidth={false}>
@@ -121,7 +121,7 @@ const Home = () => {
               <AllProtocols allProtocols={allProtocols?.total}/>
             </Grid>
             <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <PendingProtocols length={allApprovals.length} task={pendingTask} />
+              <PendingProtocols length={allApprovals?.total} task={pendingTask} />
             </Grid>
             <Grid item lg={4} sm={6} xl={3} xs={12}>
               <Progress progress={Math.round(((doneTask.length/((pendingTask.length + doneTask.length) || 1) ) * 100))}/>

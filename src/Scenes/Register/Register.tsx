@@ -13,23 +13,20 @@ import {
   FormHelperText,
   Grid,
   InputLabel,
-  Link,
   MenuItem,
   Select,
   TextField,
   Typography
 } from '@mui/material';
 import { accessLevels } from '../../data/fixData'
-import axios from 'axios';
 import Snackbar from '@mui/material/Snackbar';
-import MuiAlert from '@mui/material/Alert';
-import { IDepartment, RootState } from '../../Utils/types/type';
-import { useDispatch, useSelector } from 'react-redux';
+import { IDepartment } from '../../Utils/types/type';
+import { useDispatch } from 'react-redux';
 import axiosInstance from '../../Utils/axiosUtil';
 import { showMessage } from '../../Store/reducers/snackbar';
 
 interface IProps {
-  departments: { data : Array<IDepartment>, total?: number}
+  departments: Array<IDepartment>
 }
 
 
@@ -67,7 +64,7 @@ const Register = ({ departments } : IProps) => {
       department: Yup
         .number()
         .required('Department is required')
-        .oneOf(departments?.data?.map(({ id , ...rest}) => id), 'Invalid department selected'),
+        .oneOf(departments?.map(({ id , ...rest}) => id), 'Invalid department selected'),
       accessLevel: Yup
         .string()
         .max(255)
@@ -185,9 +182,9 @@ const Register = ({ departments } : IProps) => {
                     label="Select Department"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={departments?.data?.filter((d : any) => d?.id === formik.values.departmentId)[0]?.name}
+                    value={departments?.filter((d : any) => d?.id === formik.values.departmentId)[0]?.name}
                     >
-                    {departments?.data?.map((option, optionIndex) => (
+                    {departments?.map((option, optionIndex) => (
                       <MenuItem key={option?.id?.toString()} value={option?.id}>
                         {option.name}
                       </MenuItem>

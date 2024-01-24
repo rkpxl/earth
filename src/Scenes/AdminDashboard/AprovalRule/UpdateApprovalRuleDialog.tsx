@@ -19,7 +19,9 @@ import {
   Typography,
   List,
   ListItem,
-  ListItemText
+  ListItemText,
+  Select,
+  MenuItem
 } from '@mui/material';
 import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
 import theme from '../../../Theme';
@@ -31,6 +33,7 @@ import { fetchGroups } from '../../../Store/reducers/group';
 import axiosInstance from '../../../Utils/axiosUtil';
 import { showMessage } from '../../../Store/reducers/snackbar';
 import { RefetchQueryFilters, useQueryClient } from '@tanstack/react-query';
+import { Page, onCancel } from '../../../Utils/constants';
 
 
 const DragHandle = styled('div')({
@@ -133,6 +136,18 @@ const YourComponent: React.FC<YourComponentProps> = ({ open, onClose, apiRespons
     });
   };
 
+  const handleSelectChange = (index: number, propertyName: string, value: string) => {
+    setUpdatedRules((prevRules) => {
+      const newRules = [...prevRules];
+      newRules[index] = {
+        ...newRules[index],
+        [propertyName]: value,
+      };
+      return newRules;
+    });
+  };
+  
+
   const handleAddRule = (group : IGroup) => {
     const newRule = {
       groupName: group?.name,
@@ -171,7 +186,7 @@ const YourComponent: React.FC<YourComponentProps> = ({ open, onClose, apiRespons
       }
       queryClient.refetchQueries(['get-approval-rules'] as RefetchQueryFilters);
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
     onClose();
   };
@@ -180,7 +195,7 @@ const YourComponent: React.FC<YourComponentProps> = ({ open, onClose, apiRespons
     setShowSearch((prev) => !prev)
   }
 
-  const finalSearchResult = (groups.data || []).filter((g : IGroup) => g?.name?.includes(groupSearchText))
+  const finalSearchResult = (groups?.data || []).filter((g : IGroup) => g?.name?.includes(groupSearchText))
 
   return (
     <Dialog 
@@ -257,6 +272,7 @@ const YourComponent: React.FC<YourComponentProps> = ({ open, onClose, apiRespons
                 <TableCell>Admin</TableCell>
                 <TableCell>Board</TableCell>
                 <TableCell>Auto Assign</TableCell>
+                <TableCell>Retuen On Cancel</TableCell>
                 <TableCell>Actions</TableCell>
                 <TableCell></TableCell>
               </TableRow>
@@ -299,7 +315,19 @@ const YourComponent: React.FC<YourComponentProps> = ({ open, onClose, apiRespons
                       onChange={() => handleSwitchChange(index, 'isAutoAssign')}
                     />
                   </TableCell>
-                  
+                  <TableCell>
+                    <Select
+                      sx={{ height: "38px", width: "100px" }}
+                      value={rule.onCancel}
+                      onChange={(e) => handleSelectChange(index, 'onCancel', e.target.value)}
+                    >
+                      {Object.entries(onCancel).map(([key, value] : any) => (
+                        <MenuItem key={key} value={key}>
+                          {value}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </TableCell>
                   <TableCell>
                     <DragHandle
                       draggable

@@ -1,6 +1,9 @@
 import * as XLSX from 'xlsx';
 import jsPDF from 'jspdf';
 
+const supportedLanguages = [
+  { languageCode: 'hi', fontPath: '/static/fonts/hindi.ttf' },
+];
 
 export const generateExcel = (data: any[], sheetName: string, handleLoading?: Function): void => {
 
@@ -20,7 +23,6 @@ export const generateExcel = (data: any[], sheetName: string, handleLoading?: Fu
   link?.setAttribute('download', sheetName+time);
   document?.body?.appendChild(link);
 
-  // Trigger a click on the link to start the download
   if(handleLoading) {
     handleLoading(false)
   }
@@ -29,7 +31,6 @@ export const generateExcel = (data: any[], sheetName: string, handleLoading?: Fu
   URL?.revokeObjectURL(blobUrl);
 };
 
-// Helper function to convert binary string to array buffer
 const s2ab = (s: string): ArrayBuffer => {
   const buf = new ArrayBuffer(s?.length);
   const view = new Uint8Array(buf);
@@ -39,6 +40,21 @@ const s2ab = (s: string): ArrayBuffer => {
   return buf;
 };
 
+function detectLanguage(answer: any): string | null {
+  let text = answer
+  if(Array.isArray(answer)) {
+    text = answer[0] || 'en'
+  }
+  const hindiRegex = /[^\u0000-\u007F]/;
+  const germanRegex = /[\u00C0-\u00FF]/;
+
+  if (hindiRegex.test(text)) return 'hi';
+  if (germanRegex.test(text)) return 'de';
+
+  return 'en';
+}
+
+
 export const generatePDF = async (formState: any, info: any): Promise<void> => {
   try {
     if (!formState) {
@@ -47,12 +63,14 @@ export const generatePDF = async (formState: any, info: any): Promise<void> => {
 
     const pdf = new jsPDF();
 
-    // Style settings
+    for (const language of supportedLanguages) {
+      pdf.addFont(language.fontPath, language.languageCode, 'normal');
+    }
+
     const titleSize = 18;
     const subtitleSize = 14;
     const questionSize = 12;
 
-    // Add title and description to the first page
     pdf.setFontSize(titleSize);
     pdf.setFont('bold');
     pdf.text("Title: " + info?.title || '', 20, 20);
@@ -62,7 +80,6 @@ export const generatePDF = async (formState: any, info: any): Promise<void> => {
     pdf.text("Description: " + info?.description || '', 20, 30);
     pdf.text("Pi Name: " + info?.piName || '', 20, 40);
 
-    // Add tabs and descriptions to the second page
     pdf.addPage();
     pdf.setFontSize(titleSize);
     pdf.setFont('bold');
@@ -79,12 +96,11 @@ export const generatePDF = async (formState: any, info: any): Promise<void> => {
       yOffset += 20;
     });
 
-    // Add questions and answers to the appropriate pages
-    let currentPage = 2; // Start on the second page
+    let currentPage = 2;
     Object.keys(formState?.tabs)?.forEach((tabIndex) => {
       const tab = formState.tabs[tabIndex];
 
-      pdf.setPage(currentPage); // Switch to the current page
+      pdf.setPage(currentPage);
 
       pdf.text(`Tab ${tabIndex}: ${tab?.tabInfo?.title || ''}`, 20, yOffset);
       yOffset += 10;
@@ -93,33 +109,37 @@ export const generatePDF = async (formState: any, info: any): Promise<void> => {
         Object.keys(tab?.questions)?.forEach((questionId) => {
           const question = tab?.questions?.[questionId];
 
-          pdf.setFontSize(questionSize);
-          pdf.setFont('bold');
-          pdf.text(`Question: ${question?.questionTitle || ''}`, 30, yOffset);
+          const detectedLanguageCode = detectLanguage(question.questionTitle);
+          const font = supportedLanguages.find((language) => language.languageCode === detectedLanguageCode)?.languageCode || 'times';
+          pdf.setFont(font);
 
-          pdf.setFontSize(questionSize);
-          pdf.setFont('times', 'normal');
-          pdf.text(`Answer: ${question?.answer || ''}`, 30, yOffset + 10);
-          yOffset += 20;
-
-          // Check if we need to create a new page for the next question
-          const remainingHeight = pdf.internal.pageSize.getHeight() - yOffset - 20;
-          if (remainingHeight < questionSize + 10) {
-            currentPage++;
-            pdf.addPage();
-            yOffset = 30;
+          if(question?.questionTitle) {
+            pdf.text(`Question: ${question?.questionTitle || ''}`, 30, yOffset);
+  
+            const detectedLanguageCodeabswer = detectLanguage(question.answer);
+            const fontanswer = supportedLanguages.find((language) => language.languageCode === detectedLanguageCodeabswer)?.languageCode || 'times';
+            pdf.setFont(fontanswer);
+  
+            pdf.setFontSize(questionSize);
+            pdf.setFont('times', 'normal');
+            pdf.text(`Answer: ${question?.answer || ''}`, 30, yOffset + 10);
+            yOffset += 20;
+  
+            const remainingHeight = pdf.internal.pageSize.getHeight() - yOffset - 20;
+            if (remainingHeight < questionSize + 10) {
+              currentPage++;
+              pdf.addPage();
+              yOffset = 30;
+            }
           }
+
         });
       }
-
-      currentPage++; // Move to the next page for the next tab
+      currentPage++;
     });
-
-    // Save the PDF
     pdf.save('form.pdf');
   } catch (error) {
     console.error('Error generating PDF:', error);
-    // Handle the error appropriately, e.g., reject the promise or notify the user
-    throw error; // Re-throw to signal error to the caller
+    throw error;
   }
 };

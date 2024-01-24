@@ -247,7 +247,6 @@ const EditableTable: React.FC<EditableTableProps> = ({ title, data : tableData, 
           <GlobalPagination 
             totalItems={total} 
             onChange={setPageData}
-            // onChangeAPICall={onChangeAPICall}
             pageData={pageData}
           />
         : null}

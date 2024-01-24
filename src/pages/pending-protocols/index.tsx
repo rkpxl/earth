@@ -6,10 +6,10 @@ import { useRouter } from 'next/router';
 import EditableTable from '../../Components/Common/EditableTable';
 
 interface IProps {
-  allApprovals :IApproval[];
+  allApprovals : { data: IApproval[], total: number};
 }
 
-const PendingTasks = ({ allApprovals = []} : IProps) => {
+const PendingTasks = ({ allApprovals } : IProps) => {
 
   const router = useRouter()
 
@@ -18,11 +18,9 @@ const PendingTasks = ({ allApprovals = []} : IProps) => {
     router.push(`/forms/${row._id}`)
   }
 
-  const allApprovalsProtocol = allApprovals?.map((a) => a?.protocol_id)
-
 
   return (
-    <EditableTable data={allApprovalsProtocol || []} title="Approval Approvals" handleRowClick={handleRowClick}/>
+    <EditableTable data={allApprovals} title="Approval Approvals" handleRowClick={handleRowClick}/>
   );
 };
 

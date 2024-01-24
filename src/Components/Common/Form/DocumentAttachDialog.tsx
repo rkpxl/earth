@@ -85,6 +85,10 @@ const DocumentAttachDialog: React.FC<AddDocumentDialogProps> = ({
   
 
   const handleAdd = async () => {
+    if(!documentFile) {
+      dispatch(showMessage({message: "Please attach file"}))
+      return;
+    }
     try {
       const docUri = await uploadDoc(documentFile)
       const doc = await axiosInstance.post('/document', {
@@ -102,6 +106,9 @@ const DocumentAttachDialog: React.FC<AddDocumentDialogProps> = ({
       console.error(err)
       dispatch(showMessage({message: 'Document Not Added', severity: "error"})) 
     }
+    onClose()
+    setDocumentFile(null)
+    setVersionFile(null)
   }
   const handleFileInputChange = (event: any, isVersion: boolean) => {
     const file = event.target.files[0];

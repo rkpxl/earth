@@ -20,10 +20,10 @@ export default function Department(props: any) {
   const { data , loading, error } = useSelector((state: type.RootState) => state.department);
   const departments = data || props.departments || []
   const dispatch : type.AppDispatch = useDispatch();
-  const [pageData, setPageData] = useState({
-    currentPage: 1,
-    pageSize: 10
-  })
+  // const [pageData, setPageData] = useState({
+  //   currentPage: 1,
+  //   pageSize: 10
+  // })
 
   const handleOpenConfirmation = (args: any[]) => {
     dispatch(
@@ -45,12 +45,12 @@ export default function Department(props: any) {
       console.error(err)
       dispatch(showMessage({ message: 'Internal server error, contact to admin', severity: 'error' }));
     }
-    dispatch(fetchDepartments({page: pageData.currentPage, pageSize: pageData.pageSize}))
+    dispatch(fetchDepartments())
   }
 
-  const onChangeAPICall = (page : number, pageSize: number) => {
-    dispatch(fetchDepartments({page: page, pageSize: pageSize}))
-  }
+  // const onChangeAPICall = (page : number, pageSize: number) => {
+  //   dispatch(fetchDepartments())
+  // }
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -77,18 +77,18 @@ export default function Department(props: any) {
     <Grid>
       <Header onClickHandle={handleClickOpen} title="Department" buttonText="Create New Departments"/>
       <PopUp open={open} onClose={handleClose} onSave={handleClose}/>
-      {departments?.data?.map((dep : any, index : number) => (
+      {departments?.map((dep : any, index : number) => (
       <div key={dep.id}>
         <AdminCard card={dep} onDelete={() => handleOpenConfirmation(dep.id)}/>
       </div>))}
-      {departments?.total > 10 ? 
+      {/* {departments?.total > 10 ? 
         <GlobalPagination 
         totalItems={departments?.total} 
         onChange={setPageData}
         onChangeAPICall={onChangeAPICall}
         pageData={pageData}
       />
-      : null}
+      : null} */}
       <ConfirmationPopup handleConfirm={handleConfirmation} />
     </Grid>
   )

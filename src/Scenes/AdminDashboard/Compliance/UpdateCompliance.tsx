@@ -1,6 +1,6 @@
 import React, { useEffect, useReducer, useState } from 'react'
 import { AppDispatch, ICompliance } from '../../../Utils/types/type'
-import { Button, Card, CardContent, FormControlLabel, Grid, Switch, TextField, Typography } from '@mui/material';
+import { Button, Card, CardContent, FormControlLabel, Grid, MenuItem, Select, Switch, TextField, Typography } from '@mui/material';
 import { showMessage } from '../../../Store/reducers/snackbar';
 import { fetchCompliances } from '../../../Store/reducers/compliance';
 import axiosInstance from '../../../Utils/axiosUtil';
@@ -9,9 +9,12 @@ import { useRouter } from 'next/router';
 import { isObject } from 'formik';
 import ConfirmationPopup from '../../../Components/Common/ConfirmationDialog';
 import { openConfirmation } from '../../../Store/reducers/confirm';
+import { Page } from '../../../Utils/constants';
+import { stat } from 'fs';
 
 interface IProps {
   compliance: ICompliance
+  approvalRule: any,
 }
 
 interface State {
@@ -84,7 +87,7 @@ const reducer = (state: State, action: Action): State => {
 };
 
 export default function UpdateCompliance(props: IProps) {
-  const { compliance } = props
+  const { compliance, approvalRule } = props
   const router = useRouter()
   const { id } = router.query
   const [state, dispatch] = useReducer(reducer, initialState);
@@ -189,7 +192,9 @@ export default function UpdateCompliance(props: IProps) {
       );
     }
   };
+
   
+  const approvalRuleName = approvalRule?.filter((ap : any) => ap.id == parseInt(state.approvalRulesId))[0]?.id || ''
   return (
     <Grid sx={{ overflowY: 'auto' }}>
       <ConfirmationPopup handleConfirm={handleSave} />
@@ -271,15 +276,18 @@ export default function UpdateCompliance(props: IProps) {
             label="Is External Submission"
             disabled={!isEditing}
           />
-          <TextField
-            label="Approval Rules ID"
-            fullWidth
-            margin="normal"
-            value={state.approvalRulesId}
-            onChange={(e) => handleTextChange('approvalRulesId', e.target.value)}
+          <Select
+            sx={{ width: "100%" }}
+            value={approvalRuleName}
             disabled={!isEditing}
-          />
-
+            onChange={(e) => handleTextChange('approvalRulesId', e.target.value)}
+          >
+            {approvalRule?.map((rule : any) => (
+              <MenuItem key={rule._is} value={rule.id}>
+                {rule?.title}
+              </MenuItem>
+            ))}
+          </Select>
           {isEditing ? (
             <Button variant="contained" color="primary" onClick={handleOpenConfirmation} sx={{marginTop: 2}}>
               Update

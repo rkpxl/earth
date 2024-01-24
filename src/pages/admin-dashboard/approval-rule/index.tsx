@@ -1,12 +1,28 @@
 import React, { useContext } from 'react'
 import ApprovalRule from "../../../Scenes/AdminDashboard/AprovalRule";
 import axiosInstance from '../../../Utils/axiosUtil';
+import { useQuery } from '@tanstack/react-query';
 
 const ApprovalRulesContext = React.createContext<any>(null);
 
 function Index({ approvalsRules } : any) {
+
+  const { data } = useQuery({
+    queryKey: ['get-approval-rules'],
+    queryFn: async () => {
+      try {
+        const approvalRule = await axiosInstance.get('/approval-rules');
+        return approvalRule.data;
+      } catch (err) {
+        console.error(err)
+      }
+    }
+  })
+
+  const finalRules = data || approvalsRules
+
   return (
-   <ApprovalRulesContext.Provider value={{ approvalsRules }}>
+   <ApprovalRulesContext.Provider value={{ approvalsRules: finalRules }}>
     <ApprovalRule />
    </ApprovalRulesContext.Provider>
   )

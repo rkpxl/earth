@@ -58,6 +58,7 @@ export interface IMember {
 }
 
 export interface ICompliance {
+  complianceType: any;
   _id?: string;
   id?: number;
   orgId?: string;

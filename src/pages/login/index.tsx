@@ -24,7 +24,7 @@ export const getServerSideProps = async function getServerSideProps(context : an
       };
     }
   } catch (err) {
-    console.error("login server error")
+    console.error("login server error", err)
   }
 
   

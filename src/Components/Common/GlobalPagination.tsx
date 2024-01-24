@@ -38,7 +38,9 @@ const GlobalPagination: React.FC<GlobalPaginationProps> = ({
     const newPage = Math.floor((pageData.currentPage - 1) * pageData.pageSize / newRowsPerPage) + 1;
     
     if (onChange) {
-      onChange((prev: any) => ({ ...prev, pageSize: newRowsPerPage, currentPage: newPage }));
+      onChange((prev: any) => {
+        return { ...prev, pageSize: newRowsPerPage, currentPage: newPage }
+      });
       onChangeAPICall && onChangeAPICall(newPage, newRowsPerPage);
     }
   };

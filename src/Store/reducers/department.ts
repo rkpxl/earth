@@ -13,15 +13,19 @@ interface IData {
 }
 
 interface DepartmentState {
-  data: IData | undefined;
+  data: IDepartment[] | undefined;
   loading: boolean;
   error: string | null;
+  page: number,
+  pageSize: number,
 }
   
 const initialState: DepartmentState = {
   data: undefined,
   loading: false,
   error: null,
+  page: Page.defaultPage,
+  pageSize: Page.defaultPageSize
 };
 
 interface FetchDepartmentsParams {
@@ -29,15 +33,9 @@ interface FetchDepartmentsParams {
   pageSize: number;
 }
 
-export const fetchDepartments = createAsyncThunk('department/fetchDepartments', async (params?: any) => {
+export const fetchDepartments = createAsyncThunk('department/fetchDepartments', async () => {
   try {
-    const { page = Page.defaultPage, pageSize = Page.defaultPageSize } = params;
-    const response: type.APIResponse<IData> = await axiosInstance.get('/department', {
-      params: {
-        page: page,
-        pageSize: pageSize,
-      },
-    });
+    const response: type.APIResponse<IDepartment[]> = await axiosInstance.get('/department');
     return response.data;
   } catch (error) {
     throw error || 'Error fetching departments';

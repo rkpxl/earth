@@ -20,10 +20,9 @@ const AllProtocols = ({ allProtocols } : IProps) => {
   })
 
   const { data } = useQuery({
-    queryKey: [`all-protocols-${pageData.currentPage}`],
+    queryKey: ['all-protocols', pageData.currentPage, pageData.pageSize],
     queryFn: async () => {
       try {
-        console.log('in react query', pageData)
         const allProtocols = await axiosInstance.get('/protocol/get-all', {
           params: {
             page: pageData.currentPage,
@@ -56,7 +55,6 @@ const AllProtocols = ({ allProtocols } : IProps) => {
 export const getServerSideProps = async function getServerSideProps(context : any) {
   axiosInstance.context = context
   try {
-    console.log('inside server')
     const response = await axiosInstance.get('/auth/validate-token', context);
     if(response.status === 200) {
       const allProtocols = await axiosInstance.get('/protocol/get-all');

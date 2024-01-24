@@ -65,6 +65,8 @@ const ProtocolPopUp = (props : IProps) : JSX.Element => {
     return errors;
   };
 
+  console.group('complianceType', complianceType)
+
   const handleSubmit = async (values: FormValues, { setSubmitting }: any) => {
     // Handle form submission logic here
     if(complianceType?.id) {
@@ -72,7 +74,8 @@ const ProtocolPopUp = (props : IProps) : JSX.Element => {
         title: values.title,
         description: values.description,
         department: values.department,
-        complianceId: complianceType.id
+        complianceId: complianceType.id,
+        ruleId: complianceType?.approvalRulesId
       })
       if(response.status < 300) {
         dispatch(showMessage({ message: 'Protocol is drafted', severity: 'success' }));

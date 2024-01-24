@@ -23,7 +23,7 @@ interface IProps {
 
 
 export default function ManageComplianceMember(props: IProps) {
-  const { id, title, position, tabNumber } = props
+  const { id, title, tabNumber } = props
   const [data, setData] = useState<Array<IQuestion>|null>(null)
   const [loading, setLoading] = useState<boolean>(false)
   const [open, setOpen] = useState<IQuestion|null|boolean>();
