@@ -32,9 +32,9 @@ const initialState: FormState = {
 
 const validateFormHelper = (state: FormState): boolean => {
   let isAllSet = true;
-  Object.keys(state.tabs).forEach((tabIndex: any) => {
+  Object.keys(state?.tabs)?.forEach((tabIndex: any) => {
     const tab = state.tabs[tabIndex];
-    Object.keys(tab.questions).forEach((questionId) => {
+    Object.keys(tab?.questions)?.forEach((questionId) => {
       const question = tab.questions[questionId];
       if (question.isRequired && (question.answer === null || question.answer === '')) {
         isAllSet = false;
@@ -145,10 +145,10 @@ const formSlice = createSlice({
       state,
     ) => {
       let isAllset = true;
-      Object.keys(state.tabs).forEach((tabIndex : any) => {
+      Object.keys(state?.tabs)?.forEach((tabIndex : any) => {
         const tab = state.tabs[tabIndex];
         state.tabs[tabIndex].tabInfo =  { isError: false };
-        Object.keys(tab.questions).forEach((questionId) => {
+        Object.keys(tab?.questions)?.forEach((questionId) => {
           const question = tab.questions[questionId];
           if (question.isRequired && (question.answer === null || question.answer === '')) {
             state.tabs[tabIndex].tabInfo.isError = true;
