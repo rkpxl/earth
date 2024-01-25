@@ -65,8 +65,6 @@ const ProtocolPopUp = (props : IProps) : JSX.Element => {
     return errors;
   };
 
-  console.group('complianceType', complianceType)
-
   const handleSubmit = async (values: FormValues, { setSubmitting }: any) => {
     // Handle form submission logic here
     if(complianceType?.id) {

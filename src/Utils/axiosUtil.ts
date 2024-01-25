@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from 'axios';
+import { getCookie } from './cookieUtils';
 
 interface AxiosWithCustomProps extends AxiosInstance {
   interceptors: any;
@@ -15,15 +16,34 @@ const axiosInstance : AxiosWithCustomProps = axios.create({
 axiosInstance.context = null;
 
 axiosInstance.interceptors.request.use((config: any) => {
-  if (typeof localStorage === 'undefined' && config.headers) {
-    const cookie = axiosInstance.context?.req?.headers?.cookie;
-    config.headers.Cookie = cookie || '';
-  } else {
-    const cookie = document.cookie;
-    config.headers.Cookie = cookie || '';
+  try {
+    if (typeof localStorage === 'undefined' && config.headers) {
+      const cookie = axiosInstance.context?.req?.headers?.cookie;
+      config.headers.Cookie = cookie || '';
+    } else {
+      const authToken = getCookie('authToken')
+      if (authToken) {
+        config.headers.Authorization = `Bearer ${authToken}`;
+      }
+    }
+    return config;
+  } catch (err) {
+    console.error(err)
   }
-  return config;
-  return config;
+});
+
+axios.interceptors.response.use((response) => {
+
+  console.log(" --- response ---- ", response)
+  if(response.status === 401) {
+       alert("You are not authorized");
+  }
+  return response;
+}, (error) => {
+  if (error.response && error.response.data) {
+      return Promise.reject(error.response.data);
+  }
+  return Promise.reject(error.message);
 });
 
 export default axiosInstance;
