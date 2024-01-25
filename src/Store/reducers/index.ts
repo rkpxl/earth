@@ -1,5 +1,5 @@
-import { combineReducers } from '@reduxjs/toolkit';
-import snackbarReducer from './snackbar';
+import { combineReducers } from '@reduxjs/toolkit'
+import snackbarReducer from './snackbar'
 import departmentReducer from './department'
 import groupReducer from './group'
 import confirmationReducer from './confirm'
@@ -17,6 +17,6 @@ const rootReducer = combineReducers({
   form: formReducer,
   user: userReducer,
   globalLoading: loadingReducer,
-});
+})
 
-export default rootReducer;
+export default rootReducer

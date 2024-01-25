@@ -1,3 +1,1 @@
-export const closeSnackBar = () => {
-    
-}
+export const closeSnackBar = () => {}

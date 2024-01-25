@@ -1,30 +1,19 @@
-import { Avatar, Box, Card, CardContent, Grid, Typography, Button, Divider } from '@mui/material';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import PeopleIcon from '@mui/icons-material/PeopleOutlined';
-import NextLink from 'next/link';
+import { Avatar, Box, Card, CardContent, Grid, Typography, Button, Divider } from '@mui/material'
+import ArrowRightIcon from '@mui/icons-material/ArrowRight'
+import PeopleIcon from '@mui/icons-material/PeopleOutlined'
+import NextLink from 'next/link'
 
-export const PendingProtocols = (props : any) => {
-  const { length, task } = props;
-  return(
+export const PendingProtocols = (props: any) => {
+  const { length, task } = props
+  return (
     <Card {...props} sx={{ height: '100%' }}>
       <CardContent>
-        <Grid
-          container
-          spacing={3}
-          sx={{ justifyContent: 'space-between' }}
-        >
+        <Grid container spacing={3} sx={{ justifyContent: 'space-between' }}>
           <Grid item>
-            <Typography
-              color="textSecondary"
-              gutterBottom
-              variant="overline"
-            >
+            <Typography color="textSecondary" gutterBottom variant="overline">
               Pending Approvals
             </Typography>
-            <Typography
-              color="textPrimary"
-              variant="h4"
-            >
+            <Typography color="textPrimary" variant="h4">
               {length}
             </Typography>
           </Grid>
@@ -33,7 +22,7 @@ export const PendingProtocols = (props : any) => {
               sx={{
                 background: 'transparent',
                 height: 68,
-                width: 68
+                width: 68,
               }}
             >
               <img
@@ -48,11 +37,11 @@ export const PendingProtocols = (props : any) => {
           </Grid>
         </Grid>
         <Divider
-            sx={{
-              borderColor: 'textSecondary',
-              py: 1,
-            }}
-          />
+          sx={{
+            borderColor: 'textSecondary',
+            py: 1,
+          }}
+        />
         <Box
           sx={{
             display: 'flex',
@@ -60,16 +49,13 @@ export const PendingProtocols = (props : any) => {
             justifyContent: 'flex-start',
           }}
         >
-          <NextLink
-            style={{width: '100%'}}
-            href="/pending-protocols"
-          >
+          <NextLink style={{ width: '100%' }} href="/pending-protocols">
             <Button
               color="primary"
               endIcon={<ArrowRightIcon fontSize="small" />}
               size="small"
               variant="text"
-              sx={{mt: 1}}
+              sx={{ mt: 1 }}
             >
               View all
             </Button>
@@ -77,6 +63,7 @@ export const PendingProtocols = (props : any) => {
         </Box>
       </CardContent>
     </Card>
-)};
+  )
+}
 
-export default PendingProtocols;
+export default PendingProtocols

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   Button,
   Dialog,
@@ -9,89 +9,98 @@ import {
   Grid,
   IconButton,
   Typography,
-} from '@mui/material';
-import Table from '@mui/material/Table';
-import TableBody from '@mui/material/TableBody';
-import TableContainer from '@mui/material/TableContainer';
-import TableSortLabel from '@mui/material/TableSortLabel';
-import TableHead from '@mui/material/TableHead';
-import TableRow from '@mui/material/TableRow';
-import TableCell from '@mui/material/TableCell';
-import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
-import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
-import { getStandatedDateWithTime } from '../../Utils/dateTime';
-import { generateExcel } from '../../Utils/fileGenerator';
-import DownloadIcon from '@mui/icons-material/Download';
-import theme from '../../Theme';
-import Loading from './Loading';
-import NoDataFound from './NoData';
-import GlobalPagination from './GlobalPagination';
+} from '@mui/material'
+import Table from '@mui/material/Table'
+import TableBody from '@mui/material/TableBody'
+import TableContainer from '@mui/material/TableContainer'
+import TableHead from '@mui/material/TableHead'
+import TableRow from '@mui/material/TableRow'
+import TableCell from '@mui/material/TableCell'
+import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
+import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
+import { getStandatedDateWithTime } from '../../Utils/dateTime'
+import { generateExcel } from '../../Utils/fileGenerator'
+import DownloadIcon from '@mui/icons-material/Download'
+import theme from '../../Theme'
+import Loading from './Loading'
+import NoDataFound from './NoData'
+import GlobalPagination from './GlobalPagination'
 
 interface EditableTableProps {
-  data: { data: Array<any>, total?: number};
+  data: { data: Array<any>; total?: number }
   pageData?: {
-    currentPage: number,
+    currentPage: number
     pageSize: number
-  };
-  setPageData?: Function;
-  excludedColumns?: string[];
-  title: string,
-  handleRowClick?: (...args : any) => void
+  }
+  setPageData?: Function
+  excludedColumns?: string[]
+  title: string
+  handleRowClick?: (...args: any) => void
 }
 
-const EditableTable: React.FC<EditableTableProps> = ({ title, data : tableData, pageData, setPageData, handleRowClick, excludedColumns = ['_id', '__v', 'pi_id', 'currentAssignee_id', 'createdBy', 'approvers'] }) => {
+const EditableTable: React.FC<EditableTableProps> = ({
+  title,
+  data: tableData,
+  pageData,
+  setPageData,
+  handleRowClick,
+  excludedColumns = ['_id', '__v', 'pi_id', 'currentAssignee_id', 'createdBy', 'approvers'],
+}) => {
   const { data, total } = tableData
-  const [showColumnsDialog, setShowColumnsDialog] = useState(false);
+  const [showColumnsDialog, setShowColumnsDialog] = useState(false)
   const [visibleColumns, setVisibleColumns] = useState(() =>
-    Object.keys(data[0] || {}).reduce((acc : any, key) => {
-      acc[key] = !excludedColumns.includes(key);
-      return acc;
-    }, {})
-  );
+    Object.keys(data[0] || {}).reduce((acc: any, key) => {
+      acc[key] = !excludedColumns.includes(key)
+      return acc
+    }, {}),
+  )
 
-  const [sortConfig, setSortConfig] = useState<{ key: string | null; direction: 'asc' | 'desc' | undefined }>({
+  const [sortConfig, setSortConfig] = useState<{
+    key: string | null
+    direction: 'asc' | 'desc' | undefined
+  }>({
     key: null,
     direction: 'asc',
-  });
+  })
   const [isLoading, setIsLoading] = useState(false)
 
   const sortedData = [...data].sort((a, b) => {
-    if (!sortConfig.key) return 0;
-    const order = sortConfig.direction === 'asc' ? 1 : -1;
-    return a[sortConfig.key] > b[sortConfig.key] ? order : -order;
-  });
+    if (!sortConfig.key) return 0
+    const order = sortConfig.direction === 'asc' ? 1 : -1
+    return a[sortConfig.key] > b[sortConfig.key] ? order : -order
+  })
 
   const toggleColumnsDialog = () => {
-    setShowColumnsDialog(!showColumnsDialog);
-  };
+    setShowColumnsDialog(!showColumnsDialog)
+  }
 
   const handleColumnToggle = (column: string) => {
-    setVisibleColumns((prevVisibleColumns : any) => ({
+    setVisibleColumns((prevVisibleColumns: any) => ({
       ...prevVisibleColumns,
       [column]: !prevVisibleColumns[column],
-    }));
-  };
+    }))
+  }
 
   const handleSort = (column: string) => {
     setSortConfig((prevSortConfig) => ({
       key: column,
       direction: prevSortConfig.direction === 'asc' ? 'desc' : 'asc',
-    }));
-  };
+    }))
+  }
 
   if (!data || data.length === 0) {
-    return (<NoDataFound />)
+    return <NoDataFound />
   }
 
   const handleDownload = () => {
     generateExcel(sortedData, title, setIsLoading)
   }
 
-  const columns = Object.keys(data[0]);
-  const visibleColumnsForDialog = columns.filter((column) => !excludedColumns.includes(column));
+  const columns = Object.keys(data[0])
+  const visibleColumnsForDialog = columns.filter((column) => !excludedColumns.includes(column))
 
-  if(isLoading) {
-    return (<Loading />)
+  if (isLoading) {
+    return <Loading />
   }
 
   return (
@@ -124,7 +133,7 @@ const EditableTable: React.FC<EditableTableProps> = ({ title, data : tableData, 
         `}
       </style>
       <div style={{ margin: '16px', padding: '16px' }}>
-        <Grid container spacing={2} alignItems="center" sx={{pb:1}}>
+        <Grid container spacing={2} alignItems="center" sx={{ pb: 1 }}>
           <Grid item xs={12} sm={8}>
             <Typography variant="h4" sx={{ color: 'black', fontWeight: '700', marginBottom: 2 }}>
               {title}
@@ -162,7 +171,7 @@ const EditableTable: React.FC<EditableTableProps> = ({ title, data : tableData, 
             </Button>
           </Grid>
         </Grid>
-        <Dialog open={showColumnsDialog} onClose={toggleColumnsDialog} sx={{minWidth: "250px"}}>
+        <Dialog open={showColumnsDialog} onClose={toggleColumnsDialog} sx={{ minWidth: '250px' }}>
           <DialogTitle>Choose Columns</DialogTitle>
           <DialogContent>
             {visibleColumnsForDialog.map((column) => (
@@ -186,32 +195,32 @@ const EditableTable: React.FC<EditableTableProps> = ({ title, data : tableData, 
             <TableHead>
               <TableRow>
                 {visibleColumnsForDialog.map((column, index) =>
-                visibleColumns[column] ? (
-                  <TableCell key={index}>
-                    <div
-                      style={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        cursor: 'pointer',
-                        width: '120px',
-                        fontWeight: '720'
-                      }}
-                      onClick={() => handleSort(column)}
-                    >
-                      <span>{column}</span>
-                      {sortConfig.key === column && (
-                        <IconButton size="small">
-                          {sortConfig.direction === 'asc' ? (
-                            <ArrowUpwardIcon sx={{ width: '16px', height: '16px'}}/>
-                          ) : (
-                            <ArrowDownwardIcon sx={{ width: '16px', height: '16px'}} />
-                          )}
-                        </IconButton>
-                      )}
-                    </div>
-                  </TableCell>
-                ) : null
-              )}
+                  visibleColumns[column] ? (
+                    <TableCell key={index}>
+                      <div
+                        style={{
+                          display: 'flex',
+                          alignItems: 'center',
+                          cursor: 'pointer',
+                          width: '120px',
+                          fontWeight: '720',
+                        }}
+                        onClick={() => handleSort(column)}
+                      >
+                        <span>{column}</span>
+                        {sortConfig.key === column && (
+                          <IconButton size="small">
+                            {sortConfig.direction === 'asc' ? (
+                              <ArrowUpwardIcon sx={{ width: '16px', height: '16px' }} />
+                            ) : (
+                              <ArrowDownwardIcon sx={{ width: '16px', height: '16px' }} />
+                            )}
+                          </IconButton>
+                        )}
+                      </div>
+                    </TableCell>
+                  ) : null,
+                )}
               </TableRow>
             </TableHead>
             <TableBody>
@@ -222,37 +231,35 @@ const EditableTable: React.FC<EditableTableProps> = ({ title, data : tableData, 
                     backgroundColor: rowIndex % 2 === 0 ? '#F9FAFC' : '#f4f4f4',
                     cursor: 'pointer',
                   }}
-                  onClick={(e) => handleRowClick ? handleRowClick(e, row) : () => {}}
+                  onClick={(e) => (handleRowClick ? handleRowClick(e, row) : () => {})}
                 >
-                  {visibleColumnsForDialog.map((column, columnIndex) => (
-                    visibleColumns[column] && (
-                      <TableCell key={columnIndex}>
-                        {column === 'createdAt' || column === 'updatedAt'
-                          ? getStandatedDateWithTime(row[column])
-                          : column === 'isActive'
-                          ? row[column] ? 'Active' : 'Not Active'
-                          : typeof row[column] === 'object'
-                          ? JSON.stringify(row[column])
-                          : row[column]
-                        }
-                      </TableCell>
-                    )
-                  ))}
+                  {visibleColumnsForDialog.map(
+                    (column, columnIndex) =>
+                      visibleColumns[column] && (
+                        <TableCell key={columnIndex}>
+                          {column === 'createdAt' || column === 'updatedAt'
+                            ? getStandatedDateWithTime(row[column])
+                            : column === 'isActive'
+                              ? row[column]
+                                ? 'Active'
+                                : 'Not Active'
+                              : typeof row[column] === 'object'
+                                ? JSON.stringify(row[column])
+                                : row[column]}
+                        </TableCell>
+                      ),
+                  )}
                 </TableRow>
               ))}
             </TableBody>
           </Table>
         </TableContainer>
-        {((total && setPageData && pageData) && total > 10) ? 
-          <GlobalPagination 
-            totalItems={total} 
-            onChange={setPageData}
-            pageData={pageData}
-          />
-        : null}
+        {total && setPageData && pageData && total > 10 ? (
+          <GlobalPagination totalItems={total} onChange={setPageData} pageData={pageData} />
+        ) : null}
       </div>
     </>
-  );
-};
+  )
+}
 
-export default EditableTable;
+export default EditableTable

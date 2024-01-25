@@ -1,85 +1,69 @@
-import { Avatar, Box, Button, Card, CardContent, Grid, Typography, Divider } from '@mui/material';
-import MoneyIcon from '@mui/icons-material/Money';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import NextLink from 'next/link';
+import { Avatar, Box, Button, Card, CardContent, Grid, Typography, Divider } from '@mui/material'
+import MoneyIcon from '@mui/icons-material/Money'
+import ArrowRightIcon from '@mui/icons-material/ArrowRight'
+import NextLink from 'next/link'
 import { DoneTaskIcon } from '../../icons/doneTask'
 
-const AllProtocols = (props : any) => {
+const AllProtocols = (props: any) => {
   const { allProtocols } = props
   return (
-  <Card
-    sx={{ height: '100%' }}
-    {...props}
-  >
-    <CardContent>
-      <Grid
-        container
-        spacing={3}
-        sx={{ justifyContent: 'space-between' }}
-      >
-        <Grid item>
-          <Typography
-            color="textSecondary"
-            gutterBottom
-            variant="overline"
-          >
-            ALL Protocols
-          </Typography>
-          <Typography
-            color="textPrimary"
-            variant="h4"
-          >
-            {allProtocols}
-          </Typography>
-        </Grid>
-        <Grid item>
-          <Box
-            sx={{
-              background: 'transparent',
-              height: 68,
-              width: 68
-            }}
-          >
-             <img
-              alt="Approved tasks"
-              src="/static/images/tick.svg"
-              style={{
-                display: 'inline-block',
-                maxWidth: '100%',
+    <Card sx={{ height: '100%' }} {...props}>
+      <CardContent>
+        <Grid container spacing={3} sx={{ justifyContent: 'space-between' }}>
+          <Grid item>
+            <Typography color="textSecondary" gutterBottom variant="overline">
+              ALL Protocols
+            </Typography>
+            <Typography color="textPrimary" variant="h4">
+              {allProtocols}
+            </Typography>
+          </Grid>
+          <Grid item>
+            <Box
+              sx={{
+                background: 'transparent',
+                height: 68,
+                width: 68,
               }}
-            />
-          </Box>
+            >
+              <img
+                alt="Approved tasks"
+                src="/static/images/tick.svg"
+                style={{
+                  display: 'inline-block',
+                  maxWidth: '100%',
+                }}
+              />
+            </Box>
+          </Grid>
         </Grid>
-      </Grid>
-      <Divider
+        <Divider
           sx={{
             borderColor: 'textSecondary',
             py: 1,
           }}
         />
-      <Box
-        sx={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'flex-start',
-        }}
-      >
-        <NextLink
-          style={{width: '100%'}}
-          href="/all-protocols"
+        <Box
+          sx={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'flex-start',
+          }}
         >
-          <Button
-            color="primary"
-            endIcon={<ArrowRightIcon fontSize="small" />}
-            size="small"
-            variant="text"
-            sx={{mt: 1}}
-          >
-            View all
-          </Button>
-        </NextLink>
-      </Box>
-    </CardContent>
-  </Card>
-)};
-export default AllProtocols;
+          <NextLink style={{ width: '100%' }} href="/all-protocols">
+            <Button
+              color="primary"
+              endIcon={<ArrowRightIcon fontSize="small" />}
+              size="small"
+              variant="text"
+              sx={{ mt: 1 }}
+            >
+              View all
+            </Button>
+          </NextLink>
+        </Box>
+      </CardContent>
+    </Card>
+  )
+}
+export default AllProtocols

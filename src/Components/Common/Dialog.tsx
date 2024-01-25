@@ -1,15 +1,12 @@
-import * as React from 'react';
-import Button from '@mui/material/Button';
-import { styled } from '@mui/material/styles';
-import Dialog from '@mui/material/Dialog';
-import DialogTitle from '@mui/material/DialogTitle';
-import DialogContent from '@mui/material/DialogContent';
-import DialogActions from '@mui/material/DialogActions';
-import IconButton from '@mui/material/IconButton';
-import CloseIcon from '@mui/icons-material/Close';
-
-
-
+import * as React from 'react'
+import Button from '@mui/material/Button'
+import { styled } from '@mui/material/styles'
+import Dialog from '@mui/material/Dialog'
+import DialogTitle from '@mui/material/DialogTitle'
+import DialogContent from '@mui/material/DialogContent'
+import DialogActions from '@mui/material/DialogActions'
+import IconButton from '@mui/material/IconButton'
+import CloseIcon from '@mui/icons-material/Close'
 
 const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogContent-root': {
@@ -18,16 +15,16 @@ const BootstrapDialog = styled(Dialog)(({ theme }) => ({
   '& .MuiDialogActions-root': {
     padding: theme.spacing(1),
   },
-}));
+}))
 
 export interface DialogTitleProps {
-  id: string;
-  children?: React.ReactNode;
-  onClose: () => void;
+  id: string
+  children?: React.ReactNode
+  onClose: () => void
 }
 
 function BootstrapDialogTitle(props: DialogTitleProps) {
-  const { children, onClose, ...other } = props;
+  const { children, onClose, ...other } = props
 
   return (
     <DialogTitle sx={{ m: 0, p: 2 }} {...other}>
@@ -47,11 +44,11 @@ function BootstrapDialogTitle(props: DialogTitleProps) {
         </IconButton>
       ) : null}
     </DialogTitle>
-  );
+  )
 }
 
-export default function CustomizedDialogs(props : any) {
-  const {handleClose, popOpen, title, handleSubmit, children} = props
+export default function CustomizedDialogs(props: any) {
+  const { handleClose, popOpen, title, handleSubmit, children } = props
 
   return (
     <div>
@@ -63,10 +60,8 @@ export default function CustomizedDialogs(props : any) {
         <BootstrapDialogTitle id="customized-dialog-title" onClose={handleClose}>
           {title || 'Title'}
         </BootstrapDialogTitle>
-        
-        <DialogContent dividers>
-          {children}
-        </DialogContent>
+
+        <DialogContent dividers>{children}</DialogContent>
         {/* <DialogActions>
           <Button autoFocus onClick={handleSubmit}>
             Proceed
@@ -74,5 +69,5 @@ export default function CustomizedDialogs(props : any) {
         </DialogActions> */}
       </BootstrapDialog>
     </div>
-  );
+  )
 }

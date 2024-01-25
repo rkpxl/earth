@@ -1,8 +1,8 @@
 import React from 'react'
-import Head from 'next/head';
-import NextLink from 'next/link';
-import { useFormik } from 'formik';
-import * as Yup from 'yup';
+import Head from 'next/head'
+import NextLink from 'next/link'
+import { useFormik } from 'formik'
+import * as Yup from 'yup'
 import {
   Alert,
   Box,
@@ -16,25 +16,22 @@ import {
   MenuItem,
   Select,
   TextField,
-  Typography
-} from '@mui/material';
+  Typography,
+} from '@mui/material'
 import { accessLevels } from '../../data/fixData'
-import Snackbar from '@mui/material/Snackbar';
-import { IDepartment } from '../../Utils/types/type';
-import { useDispatch } from 'react-redux';
-import axiosInstance from '../../Utils/axiosUtil';
-import { showMessage } from '../../Store/reducers/snackbar';
+import Snackbar from '@mui/material/Snackbar'
+import { IDepartment } from '../../Utils/types/type'
+import { useDispatch } from 'react-redux'
+import axiosInstance from '../../Utils/axiosUtil'
+import { showMessage } from '../../Store/reducers/snackbar'
 
 interface IProps {
   departments: Array<IDepartment>
 }
 
-
-const Register = ({ departments } : IProps) => {
-
-  const [openSuccessBar, setOpenSuccessBar] = React.useState(false);
+const Register = ({ departments }: IProps) => {
+  const [openSuccessBar, setOpenSuccessBar] = React.useState(false)
   const dispatch = useDispatch()
-
 
   const formik = useFormik({
     initialValues: {
@@ -45,37 +42,23 @@ const Register = ({ departments } : IProps) => {
       departmentId: '',
       accessLevel: '',
       type: '',
-      policy: false
+      policy: false,
     },
     validationSchema: Yup.object({
-      email: Yup
-        .string()
-        .email('Must be a valid email')
-        .max(255)
-        .required('Email is required'),
-      name: Yup
-        .string()
-        .max(255)
-        .required('Name is required'),
-      password: Yup
-        .string()
-        .max(255)
-        .required('Password is required'),
-      department: Yup
-        .number()
+      email: Yup.string().email('Must be a valid email').max(255).required('Email is required'),
+      name: Yup.string().max(255).required('Name is required'),
+      password: Yup.string().max(255).required('Password is required'),
+      department: Yup.number()
         .required('Department is required')
-        .oneOf(departments?.map(({ id , ...rest}) => id), 'Invalid department selected'),
-      accessLevel: Yup
-        .string()
+        .oneOf(
+          departments?.map(({ id, ...rest }) => id),
+          'Invalid department selected',
+        ),
+      accessLevel: Yup.string()
         .max(255)
         .required('Access Level is required')
         .oneOf(accessLevels, 'Invalid access level selected'),
-      policy: Yup
-        .boolean()
-        .oneOf(
-          [true],
-          'This field must be checked'
-        )
+      policy: Yup.boolean().oneOf([true], 'This field must be checked'),
     }),
     onSubmit: async () => {
       try {
@@ -88,22 +71,20 @@ const Register = ({ departments } : IProps) => {
           accessLevel: formik.values.accessLevel,
           isActive: true,
         })
-        if(response.status < 300) {
-          dispatch(showMessage({message: "User Added Successfully", severity: "success"}))
+        if (response.status < 300) {
+          dispatch(showMessage({ message: 'User Added Successfully', severity: 'success' }))
         }
       } catch (err) {
-        dispatch(showMessage({message: "Something went wrong", severity: "error"}))
+        dispatch(showMessage({ message: 'Something went wrong', severity: 'error' }))
         console.error(err)
       }
-    }
-  });
+    },
+  })
 
   return (
     <>
       <Head>
-        <title>
-          Knowledge Link
-        </title>
+        <title>Knowledge Link</title>
       </Head>
       <Box
         component="main"
@@ -111,23 +92,16 @@ const Register = ({ departments } : IProps) => {
           alignItems: 'center',
           display: 'flex',
           flexGrow: 1,
-          minHeight: '100%'
+          minHeight: '100%',
         }}
       >
         <Container maxWidth="sm">
           <form onSubmit={formik.handleSubmit}>
             <Box sx={{ my: 3 }}>
-              <Typography
-                color="textPrimary"
-                variant="h4"
-              >
+              <Typography color="textPrimary" variant="h4">
                 Create a new user
               </Typography>
-              <Typography
-                color="textSecondary"
-                gutterBottom
-                variant="body2"
-              >
+              <Typography color="textSecondary" gutterBottom variant="body2">
                 Use your email to create a new user
               </Typography>
             </Box>
@@ -170,11 +144,11 @@ const Register = ({ departments } : IProps) => {
               variant="outlined"
             />
             <Grid container justifyContent="space-between">
-              <Grid xs={12} md={5.5} sx={{marginTop: '16px', marginBottom: '8px'}}>
-                <FormControl 
+              <Grid xs={12} md={5.5} sx={{ marginTop: '16px', marginBottom: '8px' }}>
+                <FormControl
                   fullWidth
                   error={Boolean(formik.touched.departmentId && formik.errors.departmentId)}
-                  >
+                >
                   <InputLabel>Select Department</InputLabel>
                   <Select
                     id="department"
@@ -182,8 +156,10 @@ const Register = ({ departments } : IProps) => {
                     label="Select Department"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
-                    value={departments?.filter((d : any) => d?.id === formik.values.departmentId)[0]?.name}
-                    >
+                    value={
+                      departments?.filter((d: any) => d?.id === formik.values.departmentId)[0]?.name
+                    }
+                  >
                     {departments?.map((option, optionIndex) => (
                       <MenuItem key={option?.id?.toString()} value={option?.id}>
                         {option.name}
@@ -195,21 +171,21 @@ const Register = ({ departments } : IProps) => {
                   </FormHelperText>
                 </FormControl>
               </Grid>
-              <Grid xs={12} md={5.5} sx={{marginTop: '16px', marginBottom: '8px'}}>
+              <Grid xs={12} md={5.5} sx={{ marginTop: '16px', marginBottom: '8px' }}>
                 <FormControl
                   fullWidth
                   error={Boolean(formik.touched.accessLevel && formik.errors.accessLevel)}
-                  >
+                >
                   <InputLabel id="accessLevelLabel">Select Access Level</InputLabel>
                   <Select
-                    labelId='accessLevelLabel'
+                    labelId="accessLevelLabel"
                     id="accessLevel"
                     label="Select Access Level"
                     name="accessLevel"
                     onChange={formik.handleChange}
                     onBlur={formik.handleBlur}
                     value={formik.values.accessLevel}
-                    >
+                  >
                     {accessLevels.map((option, index: number) => (
                       <MenuItem key={index.toString()} value={option}>
                         {option}
@@ -226,7 +202,7 @@ const Register = ({ departments } : IProps) => {
               sx={{
                 alignItems: 'center',
                 display: 'flex',
-                ml: -1
+                ml: -1,
               }}
             >
               <Checkbox
@@ -234,24 +210,15 @@ const Register = ({ departments } : IProps) => {
                 name="policy"
                 onChange={formik.handleChange}
               />
-              <Typography
-                color="textSecondary"
-                variant="body2"
-              >
-                I have read the
-                {' '}
-                <NextLink
-                  href="#"
-                  passHref
-                >
+              <Typography color="textSecondary" variant="body2">
+                I have read the{' '}
+                <NextLink href="#" passHref>
                   Terms and Conditions
                 </NextLink>
               </Typography>
             </Box>
             {Boolean(formik.touched.policy && formik.errors.policy) && (
-              <FormHelperText error>
-                {formik.errors.policy}
-              </FormHelperText>
+              <FormHelperText error>{formik.errors.policy}</FormHelperText>
             )}
             <Box sx={{ py: 2 }}>
               <Button
@@ -269,14 +236,17 @@ const Register = ({ departments } : IProps) => {
         </Container>
       </Box>
 
-
-      <Snackbar open={openSuccessBar} autoHideDuration={2000} onClose={() => setOpenSuccessBar(false)}>
+      <Snackbar
+        open={openSuccessBar}
+        autoHideDuration={2000}
+        onClose={() => setOpenSuccessBar(false)}
+      >
         <Alert onClose={() => setOpenSuccessBar(false)} severity="success">
           User created successfully
         </Alert>
       </Snackbar>
     </>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register

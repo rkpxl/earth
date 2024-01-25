@@ -1,5 +1,5 @@
-import React from 'react';
-import { CircularProgress, Grid, Paper } from '@mui/material';
+import React from 'react'
+import { CircularProgress, Grid, Paper } from '@mui/material'
 
 const Loading: React.FC = () => {
   return (
@@ -20,7 +20,7 @@ const Loading: React.FC = () => {
       </Paper> */}
       <CircularProgress />
     </Grid>
-  );
-};
+  )
+}
 
-export default Loading;
+export default Loading

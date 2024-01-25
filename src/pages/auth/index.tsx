@@ -1,15 +1,13 @@
-// pages/auth/index.tsx
-
-import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const IndexPage = () => {
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
-    router.push('/auth/password-update');
-  }, []); 
-  return null;
-};
+    router.push('/auth/password-update')
+  }, [])
+  return null
+}
 
-export default IndexPage;
+export default IndexPage

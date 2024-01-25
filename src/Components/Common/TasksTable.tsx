@@ -1,5 +1,5 @@
-import { format } from 'date-fns';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import { format } from 'date-fns'
+import PerfectScrollbar from 'react-perfect-scrollbar'
 import {
   Box,
   Button,
@@ -11,53 +11,43 @@ import {
   TableHead,
   TableRow,
   TableSortLabel,
-  Tooltip
-} from '@mui/material';
-import ArrowRightIcon from '@mui/icons-material/ArrowRight';
-import { SeverityPill } from '../Common/SeverityPills';
-import React from 'react';
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import { closestIndexTo } from 'date-fns/esm';
+  Tooltip,
+} from '@mui/material'
+import ArrowRightIcon from '@mui/icons-material/ArrowRight'
+import { SeverityPill } from '../Common/SeverityPills'
+import React from 'react'
+import axios from 'axios'
+import { useRouter } from 'next/router'
+import { closestIndexTo } from 'date-fns/esm'
 
 const tableHeader = [
-    {
-        headerTitle: 'Protocol Id',
-        isSortable: false,
-    },
-    {
-        headerTitle: 'Creator',
-        isSortable: false,
-    },
-    {
-        headerTitle: 'Date',
-        isSortable: true,
-    },
-    {
-        headerTitle: 'Status',
-        isSortable: false,
-    },
+  {
+    headerTitle: 'Protocol Id',
+    isSortable: false,
+  },
+  {
+    headerTitle: 'Creator',
+    isSortable: false,
+  },
+  {
+    headerTitle: 'Date',
+    isSortable: true,
+  },
+  {
+    headerTitle: 'Status',
+    isSortable: false,
+  },
 ]
 
-const tableHeaderColumn = (title : String, index : number) : JSX.Element => {
-  return (
-    <TableCell key={index.toString()}>
-      {title}
-    </TableCell>
-  )
+const tableHeaderColumn = (title: String, index: number): JSX.Element => {
+  return <TableCell key={index.toString()}>{title}</TableCell>
 }
 
-const sortableTableHeader = (title : String, index : number) : JSX.Element => {
+const sortableTableHeader = (title: String, index: number): JSX.Element => {
   return (
     <TableCell sortDirection="desc" key={index.toString()}>
-      <Tooltip
-        enterDelay={300}
-        title="Sort"
-      >
-        <TableSortLabel
-          active
-          direction="desc"
-        >
+      <Tooltip enterDelay={300} title="Sort">
+        <TableSortLabel active direction="desc">
           {title}
         </TableSortLabel>
       </Tooltip>
@@ -65,37 +55,43 @@ const sortableTableHeader = (title : String, index : number) : JSX.Element => {
   )
 }
 
-const tableHeaderRow = () : JSX.Element => {
+const tableHeaderRow = (): JSX.Element => {
   return (
     <TableHead>
       <TableRow>
-        {tableHeader.map((header : any, index : number) => {
-          return header?.isSortable ? sortableTableHeader(header?.headerTitle, index ) : tableHeaderColumn(header?.headerTitle, index)
+        {tableHeader.map((header: any, index: number) => {
+          return header?.isSortable
+            ? sortableTableHeader(header?.headerTitle, index)
+            : tableHeaderColumn(header?.headerTitle, index)
         })}
       </TableRow>
     </TableHead>
   )
 }
 
-export const TasksTable = (props : any) => {
-
+export const TasksTable = (props: any) => {
   const router = useRouter()
-  const { title, type }  = props
+  const { title, type } = props
   const [allTask, setAllTask] = React.useState([])
 
   React.useEffect(() => {
-    if(props.type === "pending") {
-      axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/to/${localStorage.getItem('_id')}`).then((response) => {
-        setAllTask(response.data || [])
-      }).catch((e) => console.error(e))
+    if (props.type === 'pending') {
+      axios
+        .get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/to/${localStorage.getItem('_id')}`)
+        .then((response) => {
+          setAllTask(response.data || [])
+        })
+        .catch((e) => console.error(e))
     } else {
-      axios.get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/by/${localStorage.getItem('_id')}`).then((response) => {
-        setAllTask(response.data || [])
-      }).catch((e) => console.error(e))
+      axios
+        .get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/by/${localStorage.getItem('_id')}`)
+        .then((response) => {
+          setAllTask(response.data || [])
+        })
+        .catch((e) => console.error(e))
     }
   }, [])
 
-  
   return (
     <Card {...props}>
       <CardHeader title={title} />
@@ -104,8 +100,8 @@ export const TasksTable = (props : any) => {
           <Table key="table">
             {tableHeaderRow()}
             <TableBody>
-              {allTask.map(((e : any, index : number) => {
-              const protocol = JSON.parse(e.rawJson)
+              {allTask.map((e: any, index: number) => {
+                const protocol = JSON.parse(e.rawJson)
                 return (
                   <TableRow
                     hover
@@ -114,27 +110,26 @@ export const TasksTable = (props : any) => {
                       router.push(`/view-task?id=${e._id}`)
                     }}
                   >
+                    <TableCell>{e._id.slice(-6).toString().toUpperCase()}</TableCell>
+                    <TableCell>{protocol?.creator}</TableCell>
                     <TableCell>
-                      {e._id.slice(-6).toString().toUpperCase()}
-                    </TableCell>
-                    <TableCell>
-                      {protocol?.creator}
-                    </TableCell>
-                    <TableCell>
-                    {protocol?.date ? format(protocol?.date, 'dd/MM/yyyy') : ''}
+                      {protocol?.date ? format(protocol?.date, 'dd/MM/yyyy') : ''}
                     </TableCell>
                     <TableCell>
                       <SeverityPill
-                        color={(e.status === 'APPROVED' && 'success')
-                        || (e.status === 'REJECTED' && 'error')
-                        || (e.status === 'PENDING' && 'warning') || 'warning'}
+                        color={
+                          (e.status === 'APPROVED' && 'success') ||
+                          (e.status === 'REJECTED' && 'error') ||
+                          (e.status === 'PENDING' && 'warning') ||
+                          'warning'
+                        }
                       >
                         {e.status}
                       </SeverityPill>
                     </TableCell>
                   </TableRow>
-                )}
-              ))}
+                )
+              })}
             </TableBody>
           </Table>
         </Box>
@@ -143,20 +138,22 @@ export const TasksTable = (props : any) => {
         sx={{
           display: 'flex',
           justifyContent: 'flex-end',
-          p: 2
+          p: 2,
         }}
       >
-        {allTask.length > 10 ? <Button
-          color="primary"
-          endIcon={<ArrowRightIcon fontSize="small" />}
-          size="small"
-          variant="text"
-        >
-          View all
-        </Button> : null}
+        {allTask.length > 10 ? (
+          <Button
+            color="primary"
+            endIcon={<ArrowRightIcon fontSize="small" />}
+            size="small"
+            variant="text"
+          >
+            View all
+          </Button>
+        ) : null}
       </Box>
     </Card>
-  );
+  )
 }
 
-export default TasksTable;
+export default TasksTable

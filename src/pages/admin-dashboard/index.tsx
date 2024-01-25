@@ -1,20 +1,19 @@
-import Layout from '../../Scenes/Home'
-import Component from '../../Scenes/AdminDashboard';
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
-
+import Component from '../../Scenes/AdminDashboard'
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const DoneTasks = () => {
   const router = useRouter()
 
   useEffect(() => {
-    router.push("/admin-dashboard/departments")
-  },[])
+    router.push('/admin-dashboard/departments')
+  }, [])
 
   return (
-    <><Component /></>
-  );
-};
+    <>
+      <Component />
+    </>
+  )
+}
 
-
-export default DoneTasks;
+export default DoneTasks

@@ -1,10 +1,9 @@
-import Component from '../../../Scenes/Settings';
-import Layout from '../../../Scenes/Home';
-import { useRouter } from 'next/router';
+import Component from '../../../Scenes/Settings'
+import { useRouter } from 'next/router'
 
 const Register = () => {
-  const router = useRouter();
-  const { token } = router.query;
+  const router = useRouter()
+  const { token } = router.query
   return (
     <>
       {token ? (
@@ -15,7 +14,7 @@ const Register = () => {
         </>
       )}
     </>
-  );
-};
+  )
+}
 
-export default Register;
+export default Register

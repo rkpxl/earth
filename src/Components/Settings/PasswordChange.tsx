@@ -1,101 +1,120 @@
-import { useEffect, useState } from 'react';
-import { Alert, Box, Button, Card, CardContent, CardHeader, Divider, Snackbar, TextField } from '@mui/material';
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import { parseJwt } from '../../Utils/signin';
-import axiosInstance from '../../Utils/axiosUtil';
-import { showMessage } from '../../Store/reducers/snackbar';
-import { useDispatch } from 'react-redux';
+import { useEffect, useState } from 'react'
+import {
+  Alert,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  CardHeader,
+  Divider,
+  Snackbar,
+  TextField,
+} from '@mui/material'
+import axios from 'axios'
+import { useRouter } from 'next/router'
+import { parseJwt } from '../../Utils/signin'
+import axiosInstance from '../../Utils/axiosUtil'
+import { showMessage } from '../../Store/reducers/snackbar'
+import { useDispatch } from 'react-redux'
 
-const PasswordChange = (props : any) => {
+const PasswordChange = (props: any) => {
   const [values, setValues] = useState({
     password: '',
     confirm: '',
     previous: '',
-  });
+  })
 
-  const [openIncorrectInput, setOpenIncorrectInput] = useState(false);
-  const [openSuccessBar, setOpenSuccessBar] = useState(false);
-  const [errorMessage, setErrorMessage] = useState(`Both input isn't equal`);
+  const [openIncorrectInput, setOpenIncorrectInput] = useState(false)
+  const [openSuccessBar, setOpenSuccessBar] = useState(false)
+  const [errorMessage, setErrorMessage] = useState(`Both input isn't equal`)
   const [token, setToken] = useState<any>(null)
-  const router = useRouter();
+  const router = useRouter()
   const dispatch = useDispatch()
 
   const handleIncorrectInput = () => {
-    setOpenIncorrectInput(true);
+    setOpenIncorrectInput(true)
     setTimeout(() => {
-      setOpenIncorrectInput(false);
-    }, 5000); // Close the Snackbar after 2 seconds
-  };
+      setOpenIncorrectInput(false)
+    }, 5000) // Close the Snackbar after 2 seconds
+  }
 
   const handleSuccess = () => {
-    setOpenSuccessBar(true);
+    setOpenSuccessBar(true)
     setTimeout(() => {
-      setOpenSuccessBar(false);
-    }, 5000); // Close the Snackbar after 2 seconds
-  };
+      setOpenSuccessBar(false)
+    }, 5000) // Close the Snackbar after 2 seconds
+  }
 
-
-  const handleChange = (event : any) => {
+  const handleChange = (event: any) => {
     setValues({
       ...values,
-      [event.target.name]: event.target.value
-    });
-  };
+      [event.target.name]: event.target.value,
+    })
+  }
 
   useEffect(() => {
-    const { token } = router.query;
-    if(token) {
-      axios.get(process.env.NEXT_PUBLIC_HOST_URL+"/auth/validate-token", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        }
-      }).then((response) => {})
-      .catch((err) => {
-        setErrorMessage('Please generate url again, your session is expired')
-        handleIncorrectInput()
-        console.error(err)
-      })
+    const { token } = router.query
+    if (token) {
+      axios
+        .get(process.env.NEXT_PUBLIC_HOST_URL + '/auth/validate-token', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        })
+        .then((response) => {})
+        .catch((err) => {
+          setErrorMessage('Please generate url again, your session is expired')
+          handleIncorrectInput()
+          console.error(err)
+        })
       setToken(token)
     }
   }, [router.query])
 
   const handleUpdate = async () => {
-    if(values.password !== values.confirm) {
+    if (values.password !== values.confirm) {
       handleIncorrectInput()
     } else {
-      if(token) {
-        const user : any = parseJwt(token)
+      if (token) {
+        const user: any = parseJwt(token)
         try {
-          const response = await axiosInstance.put('/user/update-reset-password',{
-            email: user.email,
-            password: values.password,
-          }, {
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }})
-  
-          if(response.status < 300) {
-            dispatch(showMessage({message: "Updated Successfully", severity: "success"}));
+          const response = await axiosInstance.put(
+            '/user/update-reset-password',
+            {
+              email: user.email,
+              password: values.password,
+            },
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          )
+
+          if (response.status < 300) {
+            dispatch(showMessage({ message: 'Updated Successfully', severity: 'success' }))
             router.push('/')
-          } 
+          }
         } catch (err) {
           console.error(err)
         }
       } else {
-        axios.put(process.env.NEXT_PUBLIC_HOST_URL + '/users/updatePassword', {
-          email: localStorage.getItem('email'),
-          password: values.password,
-          previousPassword: values.previous,
-        }).then((response) => {
-          if(response.status < 300) {
-            handleSuccess()
-          }
-        }).catch((e) => {
-          console.error(e)
-          setErrorMessage(e.response.data.message)
-          handleIncorrectInput()
-        })
+        axios
+          .put(process.env.NEXT_PUBLIC_HOST_URL + '/users/updatePassword', {
+            email: localStorage.getItem('email'),
+            password: values.password,
+            previousPassword: values.previous,
+          })
+          .then((response) => {
+            if (response.status < 300) {
+              handleSuccess()
+            }
+          })
+          .catch((e) => {
+            console.error(e)
+            setErrorMessage(e.response.data.message)
+            handleIncorrectInput()
+          })
       }
     }
   }
@@ -104,22 +123,21 @@ const PasswordChange = (props : any) => {
     <>
       <form {...props}>
         <Card>
-          <CardHeader
-            subheader={token ? "Reset Password" : "Update password"}
-            title="Password"
-          />
+          <CardHeader subheader={token ? 'Reset Password' : 'Update password'} title="Password" />
           <Divider />
           <CardContent>
-            { !token ? <TextField
-              fullWidth
-              label="Previous Password"
-              margin="normal"
-              name="previous"
-              onChange={handleChange}
-              type="password"
-              value={values.previous}
-              variant="outlined"
-            /> : null }
+            {!token ? (
+              <TextField
+                fullWidth
+                label="Previous Password"
+                margin="normal"
+                name="previous"
+                onChange={handleChange}
+                type="password"
+                value={values.previous}
+                variant="outlined"
+              />
+            ) : null}
             <TextField
               fullWidth
               label="Password"
@@ -146,32 +164,35 @@ const PasswordChange = (props : any) => {
             sx={{
               display: 'flex',
               justifyContent: 'flex-end',
-              p: 2
+              p: 2,
             }}
           >
-            <Button
-              color="primary"
-              variant="contained"
-              onClick={handleUpdate}
-            >
+            <Button color="primary" variant="contained" onClick={handleUpdate}>
               Update
             </Button>
           </Box>
         </Card>
       </form>
-      <Snackbar open={openIncorrectInput} autoHideDuration={5000} onClose={() => setOpenIncorrectInput(false)}>
+      <Snackbar
+        open={openIncorrectInput}
+        autoHideDuration={5000}
+        onClose={() => setOpenIncorrectInput(false)}
+      >
         <Alert onClose={() => setOpenIncorrectInput(false)} severity="error">
           {errorMessage}
         </Alert>
       </Snackbar>
-      <Snackbar open={openSuccessBar} autoHideDuration={5000} onClose={() => setOpenSuccessBar(false)}>
+      <Snackbar
+        open={openSuccessBar}
+        autoHideDuration={5000}
+        onClose={() => setOpenSuccessBar(false)}
+      >
         <Alert onClose={() => setOpenSuccessBar(false)} severity="success">
           Woww!!, your password is updated
         </Alert>
       </Snackbar>
     </>
-  );
-};
+  )
+}
 
-
-export default PasswordChange;
+export default PasswordChange

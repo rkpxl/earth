@@ -1,88 +1,87 @@
 // reducers/snackbar.ts
-import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 import * as type from '../../Utils/types/type'
-import { AnyARecord } from 'dns';
-import axiosInstance from '../../Utils/axiosUtil';
-import { IDepartment } from '../../Utils/types/type';
-import { Page } from '../../Utils/constants';
-
+import { AnyARecord } from 'dns'
+import axiosInstance from '../../Utils/axiosUtil'
+import { IDepartment } from '../../Utils/types/type'
+import { Page } from '../../Utils/constants'
 
 interface IData {
-  data: IDepartment[],
+  data: IDepartment[]
   total: number
 }
 
 interface DepartmentState {
-  data: IDepartment[] | undefined;
-  loading: boolean;
-  error: string | null;
-  page: number,
-  pageSize: number,
+  data: IDepartment[] | undefined
+  loading: boolean
+  error: string | null
+  page: number
+  pageSize: number
 }
-  
+
 const initialState: DepartmentState = {
   data: undefined,
   loading: false,
   error: null,
   page: Page.defaultPage,
-  pageSize: Page.defaultPageSize
-};
+  pageSize: Page.defaultPageSize,
+}
 
 interface FetchDepartmentsParams {
-  page: number;
-  pageSize: number;
+  page: number
+  pageSize: number
 }
 
 export const fetchDepartments = createAsyncThunk('department/fetchDepartments', async () => {
   try {
-    const response: type.APIResponse<IDepartment[]> = await axiosInstance.get('/department');
-    return response.data;
+    const response: type.APIResponse<IDepartment[]> = await axiosInstance.get('/department')
+    return response.data
   } catch (error) {
-    throw error || 'Error fetching departments';
+    throw error || 'Error fetching departments'
   }
-});
+})
 
 const departmentSlice = createSlice({
   name: 'department',
   initialState,
   reducers: {
     clearDepartments: (state) => {
-      state.data = undefined;
-      state.loading = false;
-      state.error = null;
+      state.data = undefined
+      state.loading = false
+      state.error = null
     },
 
     // Action to set loading state
     setLoading: (state, action: PayloadAction<boolean>) => {
-      state.loading = action.payload;
+      state.loading = action.payload
     },
 
     // Action to set error state
     setError: (state, action: PayloadAction<string | null>) => {
-      state.error = action.payload;
+      state.error = action.payload
     },
   },
   extraReducers: (builder) => {
     // Handling the pending, fulfilled, and rejected states of fetchDepartments
     builder.addCase(fetchDepartments.pending, (state) => {
-      state.loading = true;
-      state.error = null;
-    });
+      state.loading = true
+      state.error = null
+    })
 
     builder.addCase(fetchDepartments.fulfilled, (state, action) => {
-      state.loading = false;
-      state.error = null;
-      state.data = action.payload;
-    });
+      state.loading = false
+      state.error = null
+      state.data = action.payload
+    })
 
     builder.addCase(fetchDepartments.rejected, (state, action) => {
-      state.loading = false;
-      state.error = 'Error fetching departments';
-    });
+      state.loading = false
+      state.error = 'Error fetching departments'
+    })
   },
-});
+})
 
-export default departmentSlice.reducer;
+export default departmentSlice.reducer
 
 // Exporting the synchronous actions
-export const { clearDepartments, setLoading, setError } = departmentSlice.actions;
+export const { clearDepartments, setLoading, setError } = departmentSlice.actions

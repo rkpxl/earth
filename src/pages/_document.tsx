@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Html, Head, Main, NextScript, DocumentProps } from 'next/document';
-import { DocumentHeadTags, documentGetInitialProps } from '@mui/material-nextjs/v14-pagesRouter';
-import theme, { roboto } from '../Theme/index';
+import * as React from 'react'
+import { Html, Head, Main, NextScript, DocumentProps } from 'next/document'
+import { DocumentHeadTags, documentGetInitialProps } from '@mui/material-nextjs/v14-pagesRouter'
+import theme, { roboto } from '../Theme/index'
 
 export default function MyDocument(props: DocumentProps) {
   return (
@@ -17,7 +17,7 @@ export default function MyDocument(props: DocumentProps) {
         <NextScript />
       </body>
     </Html>
-  );
+  )
 }
 
-MyDocument.getInitialProps = documentGetInitialProps;
+MyDocument.getInitialProps = documentGetInitialProps

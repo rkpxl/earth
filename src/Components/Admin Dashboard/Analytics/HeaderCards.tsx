@@ -1,20 +1,19 @@
-import React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import { Doughnut } from 'react-chartjs-2';
-import 'chart.js/auto';
-
+import React from 'react'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
+import Grid from '@mui/material/Grid'
+import { Doughnut } from 'react-chartjs-2'
+import 'chart.js/auto'
 
 const Dashboard = () => {
   const cardStyle = {
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     marginBottom: '16px',
     padding: '16px',
-    height: "100%",
-    width: "100%",
-  };
+    height: '100%',
+    width: '100%',
+  }
 
   // Sample data for the pie chart
   const chartData = {
@@ -26,7 +25,7 @@ const Dashboard = () => {
         hoverBackgroundColor: ['#36A2EB', '#FF6384'],
       },
     ],
-  };
+  }
 
   return (
     <Grid container spacing={2} mt={3} pl={3} pr={3}>
@@ -47,12 +46,12 @@ const Dashboard = () => {
       {/* Second Card: Chart */}
       <Grid item xs={12} md={4}>
         <Card style={cardStyle}>
-          <CardContent sx={{display: "flex", justifyContent: "space-between"}}>
+          <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
             <Typography variant="h6" gutterBottom>
               Workflows Chart
             </Typography>
-            <div style={{width: '200px', height: '200px'}}>
-              <Doughnut data={chartData} width="200px" height="200px"/>
+            <div style={{ width: '200px', height: '200px' }}>
+              <Doughnut data={chartData} width="200px" height="200px" />
             </div>
           </CardContent>
         </Card>
@@ -72,7 +71,7 @@ const Dashboard = () => {
         </Card>
       </Grid>
     </Grid>
-  );
-};
+  )
+}
 
-export default Dashboard;
+export default Dashboard

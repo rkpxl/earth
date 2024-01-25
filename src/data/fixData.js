@@ -1,6 +1,1 @@
-export const accessLevels = [
-    "SuperAdmin",
-    "Admin",
-    "Professor",
-    "student"
-]
+export const accessLevels = ['SuperAdmin', 'Admin', 'Professor', 'student']

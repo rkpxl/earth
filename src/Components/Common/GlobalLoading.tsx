@@ -1,13 +1,12 @@
-import React from 'react';
-import { CircularProgress, Grid, Paper } from '@mui/material';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../Utils/types/type';
+import React from 'react'
+import { CircularProgress, Grid, Paper } from '@mui/material'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../Utils/types/type'
 
 const GlobalLoading: React.FC = () => {
+  const loading = useSelector((state: RootState) => state.globalLoading)
 
-  const loading = useSelector((state : RootState) => state.globalLoading)
-
-  if(loading?.isLoading) {
+  if (loading?.isLoading) {
     return (
       <Grid
         sx={{
@@ -24,10 +23,10 @@ const GlobalLoading: React.FC = () => {
       >
         <CircularProgress />
       </Grid>
-    );
+    )
   }
 
-  return (<></>)
-};
+  return <></>
+}
 
-export default GlobalLoading;
+export default GlobalLoading

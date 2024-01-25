@@ -1,9 +1,9 @@
-import React from 'react';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import Typography from '@mui/material/Typography';
-import Grid from '@mui/material/Grid';
-import { Line } from 'react-chartjs-2';
+import React from 'react'
+import Card from '@mui/material/Card'
+import CardContent from '@mui/material/CardContent'
+import Typography from '@mui/material/Typography'
+import Grid from '@mui/material/Grid'
+import { Line } from 'react-chartjs-2'
 
 const LineChartCard = () => {
   // ... (Existing code)
@@ -11,10 +11,9 @@ const LineChartCard = () => {
     boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
     marginBottom: '16px',
     padding: '16px',
-    height: "100%",
-    width: "100%"
-  };
-
+    height: '100%',
+    width: '100%',
+  }
 
   // Sample data for the Line chart
   const lineChartData = {
@@ -36,7 +35,7 @@ const LineChartCard = () => {
         data: [3, 8, 10, 6, 15, 10, 18],
       },
     ],
-  };
+  }
 
   return (
     <Grid container spacing={2} mt={3} pl={3} pr={3}>
@@ -54,7 +53,7 @@ const LineChartCard = () => {
         </Card>
       </Grid>
     </Grid>
-  );
-};
+  )
+}
 
-export default LineChartCard;
+export default LineChartCard

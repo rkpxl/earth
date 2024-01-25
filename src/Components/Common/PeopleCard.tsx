@@ -1,5 +1,5 @@
 // components/PeopleCard.tsx
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   Card,
   CardContent,
@@ -12,29 +12,35 @@ import {
   FormControl,
   InputLabel,
   Checkbox,
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
+} from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import RemoveIcon from '@mui/icons-material/Remove'
 
 interface PeopleCardProps {
-  name: string;
-  id: string;
-  avatarUrl?: string;
-  selectToggle: () => void;
-  showSelect: boolean;
+  name: string
+  id: string
+  avatarUrl?: string
+  selectToggle: () => void
+  showSelect: boolean
 }
 
-const PeopleCard: React.FC<PeopleCardProps> = ({ name, id, avatarUrl,selectToggle, showSelect }) => {
-  const [selectedOption, setSelectedOption] = useState('default');
-  const [isChecked, setIsChecked] = useState(false);
+const PeopleCard: React.FC<PeopleCardProps> = ({
+  name,
+  id,
+  avatarUrl,
+  selectToggle,
+  showSelect,
+}) => {
+  const [selectedOption, setSelectedOption] = useState('default')
+  const [isChecked, setIsChecked] = useState(false)
 
   const handleSelectChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setSelectedOption(event.target.value as string);
-  };
+    setSelectedOption(event.target.value as string)
+  }
 
   const handleCheckboxChange = () => {
-    setIsChecked(!isChecked);
-  };
+    setIsChecked(!isChecked)
+  }
 
   return (
     <Card sx={{ borderRadius: 8, padding: 2, display: 'flex', alignItems: 'center' }}>
@@ -75,7 +81,7 @@ const PeopleCard: React.FC<PeopleCardProps> = ({ name, id, avatarUrl,selectToggl
         )}
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default PeopleCard;
+export default PeopleCard

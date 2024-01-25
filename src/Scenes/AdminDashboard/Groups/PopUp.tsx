@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import { Dialog, DialogContent, DialogTitle } from '@mui/material';
-import { Grid } from '@mui/material';
-import { useDispatch } from 'react-redux';
-import axiosInstance from '../../../Utils/axiosUtil';
-import { showMessage } from '../../../Store/reducers/snackbar';
-import { fetchGroups } from '../../../Store/reducers/group';
-import * as type from '../../../Utils/types/type';
-import { Page } from '../../../Utils/constants';
+import React, { useState } from 'react'
+import Button from '@mui/material/Button'
+import TextField from '@mui/material/TextField'
+import { Dialog, DialogContent, DialogTitle } from '@mui/material'
+import { Grid } from '@mui/material'
+import { useDispatch } from 'react-redux'
+import axiosInstance from '../../../Utils/axiosUtil'
+import { showMessage } from '../../../Store/reducers/snackbar'
+import { fetchGroups } from '../../../Store/reducers/group'
+import * as type from '../../../Utils/types/type'
+import { Page } from '../../../Utils/constants'
 
-const Popup = ({ open, onClose, onSave } : any) => {
-  const [name, setName] = useState('');
-  const [primaryEmail, setPrimaryEmail] = useState('');
-  const [nameError, setNameError] = useState('');
+const Popup = ({ open, onClose, onSave }: any) => {
+  const [name, setName] = useState('')
+  const [primaryEmail, setPrimaryEmail] = useState('')
+  const [nameError, setNameError] = useState('')
   const dispatch: type.AppDispatch = useDispatch()
 
   const popUpClose = () => {
@@ -23,31 +23,35 @@ const Popup = ({ open, onClose, onSave } : any) => {
 
   const onSubmit = async () => {
     if (name.trim() === '') {
-      setNameError('Name is required');
-      return;
+      setNameError('Name is required')
+      return
     }
     try {
-      const response = await axiosInstance.post("/group", {
+      const response = await axiosInstance.post('/group', {
         name,
-        primaryEmail
+        primaryEmail,
       })
-      if(response.status <= 201) {
-        dispatch(showMessage({ message: 'Group is added', severity: 'success' }));
+      if (response.status <= 201) {
+        dispatch(showMessage({ message: 'Group is added', severity: 'success' }))
       } else {
-        dispatch(showMessage({ message: 'Somehitng went wrong, please try again', severity: 'error' }));
+        dispatch(
+          showMessage({ message: 'Somehitng went wrong, please try again', severity: 'error' }),
+        )
       }
     } catch (err) {
       console.error(err)
-      dispatch(showMessage({ message: 'Internal server error, contact to admin', severity: 'error' }));
+      dispatch(
+        showMessage({ message: 'Internal server error, contact to admin', severity: 'error' }),
+      )
     }
     dispatch(fetchGroups())
     popUpClose()
   }
 
   return (
-    <Dialog open={open} onClose={onClose} >
-      <DialogContent sx={{ padding: 2 }} >
-        <DialogTitle sx={{padding: "0px"}}>New Group Details</DialogTitle>
+    <Dialog open={open} onClose={onClose}>
+      <DialogContent sx={{ padding: 2 }}>
+        <DialogTitle sx={{ padding: '0px' }}>New Group Details</DialogTitle>
         <TextField
           label="Enter Name"
           variant="outlined"
@@ -58,9 +62,9 @@ const Popup = ({ open, onClose, onSave } : any) => {
           onChange={(e) => setName(e.target.value)}
           error={Boolean(nameError)}
           helperText={nameError}
-          sx={{ minWidth: "450px" }}
+          sx={{ minWidth: '450px' }}
         />
-         <TextField
+        <TextField
           label="Primary Email"
           variant="outlined"
           fullWidth
@@ -68,11 +72,11 @@ const Popup = ({ open, onClose, onSave } : any) => {
           margin="normal"
           value={primaryEmail}
           onChange={(e) => setPrimaryEmail(e.target.value)}
-          sx={{ minWidth: "450px" }}
+          sx={{ minWidth: '450px' }}
         />
 
         {/* Buttons */}
-        <Grid sx={{ display: "flex", justifyContent: "flex-end", alignItems: "flex-end" }}>
+        <Grid sx={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'flex-end' }}>
           <Button type="submit" onClick={onSubmit} color="primary" sx={{ marginTop: 1 }}>
             Add
           </Button>
@@ -82,7 +86,7 @@ const Popup = ({ open, onClose, onSave } : any) => {
         </Grid>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
-export default Popup;
+export default Popup

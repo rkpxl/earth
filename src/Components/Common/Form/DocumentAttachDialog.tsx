@@ -1,24 +1,24 @@
-import React, { useRef, useState } from 'react';
-import { Button, Dialog, DialogContent, DialogTitle, Grid, TextField } from '@mui/material';
-import axiosInstance from '../../../Utils/axiosUtil';
-import { useDispatch } from 'react-redux';
-import { showMessage } from '../../../Store/reducers/snackbar';
-import { RefetchQueryFilters, useQueryClient } from '@tanstack/react-query';
+import React, { useRef, useState } from 'react'
+import { Button, Dialog, DialogContent, DialogTitle, Grid, TextField } from '@mui/material'
+import axiosInstance from '../../../Utils/axiosUtil'
+import { useDispatch } from 'react-redux'
+import { showMessage } from '../../../Store/reducers/snackbar'
+import { RefetchQueryFilters, useQueryClient } from '@tanstack/react-query'
 
 interface AddDocumentDialogProps {
-  open: boolean;
-  onClose: () => void;
-  onAddDocument: (data: DocumentData) => void;
-  protocolId: string,
-  complianceId: number,
+  open: boolean
+  onClose: () => void
+  onAddDocument: (data: DocumentData) => void
+  protocolId: string
+  complianceId: number
 }
 
 interface DocumentData {
-  documentFile: File | null;
-  versionFile: File | null;
-  title: string;
-  description: string;
-  protocolId: string,
+  documentFile: File | null
+  versionFile: File | null
+  title: string
+  description: string
+  protocolId: string
 }
 
 const DocumentAttachDialog: React.FC<AddDocumentDialogProps> = ({
@@ -28,14 +28,14 @@ const DocumentAttachDialog: React.FC<AddDocumentDialogProps> = ({
   protocolId,
   complianceId,
 }) => {
-  const [documentFile, setDocumentFile] = useState<any | null>(null);
-  const [versionFile, setVersionFile] = useState<any | null>(null);
-  const [title, setTitle] = useState<string>('');
-  const [description, setDescription] = useState<string>('');
-  const documentInputRef = useRef<HTMLInputElement>(null);
-  const versionInputRef = useRef<HTMLInputElement>(null);
+  const [documentFile, setDocumentFile] = useState<any | null>(null)
+  const [versionFile, setVersionFile] = useState<any | null>(null)
+  const [title, setTitle] = useState<string>('')
+  const [description, setDescription] = useState<string>('')
+  const documentInputRef = useRef<HTMLInputElement>(null)
+  const versionInputRef = useRef<HTMLInputElement>(null)
   const dispatch = useDispatch()
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   const handleAddDocument = () => {
     // Add your logic to handle the document addition
@@ -45,49 +45,48 @@ const DocumentAttachDialog: React.FC<AddDocumentDialogProps> = ({
       versionFile,
       title,
       description,
-      protocolId: ''
-    });
+      protocolId: '',
+    })
 
     // Close the dialog after adding the document
-    onClose();
-  };
+    onClose()
+  }
 
   const handleDocumentButtonClick = () => {
-    documentInputRef.current?.click();
-  };
+    documentInputRef.current?.click()
+  }
 
   const handleVersionButtonClick = () => {
-    versionInputRef.current?.click();
-  };
+    versionInputRef.current?.click()
+  }
 
   const uploadDoc = async (doc: any) => {
     if (!(doc.file instanceof Blob)) {
-      console.error(`Invalid file format for document ${doc.name}.`);
-      return null; // Return null or handle the error appropriately.
+      console.error(`Invalid file format for document ${doc.name}.`)
+      return null // Return null or handle the error appropriately.
     }
-  
-    const formData = new FormData();
-    formData.append('file', doc.file, doc.name);
-  
+
+    const formData = new FormData()
+    formData.append('file', doc.file, doc.name)
+
     try {
-      const response = await axiosInstance.post("/document/upload", formData, {
+      const response = await axiosInstance.post('/document/upload', formData, {
         headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      });
-  
-      return response.data;
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+
+      return response.data
     } catch (error) {
-      console.error(`Error uploading document ${doc.name}:`, error);
-      throw error; // Rethrow the error to handle it outside the function if needed.
+      console.error(`Error uploading document ${doc.name}:`, error)
+      throw error // Rethrow the error to handle it outside the function if needed.
     }
-  };
-  
+  }
 
   const handleAdd = async () => {
-    if(!documentFile) {
-      dispatch(showMessage({message: "Please attach file"}))
-      return;
+    if (!documentFile) {
+      dispatch(showMessage({ message: 'Please attach file' }))
+      return
     }
     try {
       const docUri = await uploadDoc(documentFile)
@@ -95,31 +94,31 @@ const DocumentAttachDialog: React.FC<AddDocumentDialogProps> = ({
         title: title,
         description: description,
         docLink: docUri,
-        protocol_id:protocolId,
+        protocol_id: protocolId,
         complianceId: complianceId,
       })
-      if(doc.status < 300) {
-        dispatch(showMessage({message: 'Document Added', severity: "success"}))
-        queryClient.refetchQueries([`compliance-document-${protocolId}`] as RefetchQueryFilters);
+      if (doc.status < 300) {
+        dispatch(showMessage({ message: 'Document Added', severity: 'success' }))
+        queryClient.refetchQueries([`compliance-document-${protocolId}`] as RefetchQueryFilters)
       }
     } catch (err) {
       console.error(err)
-      dispatch(showMessage({message: 'Document Not Added', severity: "error"})) 
+      dispatch(showMessage({ message: 'Document Not Added', severity: 'error' }))
     }
     onClose()
     setDocumentFile(null)
     setVersionFile(null)
   }
   const handleFileInputChange = (event: any, isVersion: boolean) => {
-    const file = event.target.files[0];
+    const file = event.target.files[0]
     if (file) {
-      if(isVersion) {
-        setVersionFile({name: file.name, file: file, uri: ''});
+      if (isVersion) {
+        setVersionFile({ name: file.name, file: file, uri: '' })
       } else {
-        setDocumentFile({name: file.name, file: file, uri: ''});
+        setDocumentFile({ name: file.name, file: file, uri: '' })
       }
     }
-  };
+  }
 
   return (
     <Dialog open={open} onClose={onClose} fullWidth maxWidth="sm">
@@ -167,14 +166,16 @@ const DocumentAttachDialog: React.FC<AddDocumentDialogProps> = ({
           rows={3}
           margin="normal"
           value={description}
-          onChange={(e: { target: { value: React.SetStateAction<string>; }; }) => setDescription(e.target.value)}
+          onChange={(e: { target: { value: React.SetStateAction<string> } }) =>
+            setDescription(e.target.value)
+          }
         />
         <Button variant="contained" color="primary" onClick={handleAdd}>
           Add Document
         </Button>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
-export default DocumentAttachDialog;
+export default DocumentAttachDialog

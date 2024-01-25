@@ -1,24 +1,27 @@
-import React from 'react';
-import { TextField, Button, Grid, MenuItem, FormControl, InputLabel, Select } from '@mui/material';
+import React from 'react'
+import { TextField, Button, Grid, MenuItem, FormControl, InputLabel, Select } from '@mui/material'
 
 interface FiltersComponentProps {
-  handleApplyFilter: Function;
-  filters: any,
+  handleApplyFilter: Function
+  filters: any
   setFilters: Function
 }
 
 interface Filters {
-  startDate: string;
-  endDate: string;
-  searchPerson: string;
-  status: string;
+  startDate: string
+  endDate: string
+  searchPerson: string
+  status: string
 }
 
-const FiltersComponent: React.FC<FiltersComponentProps> = ({ filters, setFilters, handleApplyFilter }) => {
-  
+const FiltersComponent: React.FC<FiltersComponentProps> = ({
+  filters,
+  setFilters,
+  handleApplyFilter,
+}) => {
   const handleFilterChange = (field: keyof Filters, value: string) => {
-    setFilters((prevFilters: any) => ({ ...prevFilters, [field]: value }));
-  };
+    setFilters((prevFilters: any) => ({ ...prevFilters, [field]: value }))
+  }
 
   return (
     <Grid container spacing={2} alignItems="center">
@@ -75,7 +78,7 @@ const FiltersComponent: React.FC<FiltersComponentProps> = ({ filters, setFilters
         </Button>
       </Grid>
     </Grid>
-  );
-};
+  )
+}
 
-export default FiltersComponent;
+export default FiltersComponent

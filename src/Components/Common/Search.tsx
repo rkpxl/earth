@@ -1,30 +1,28 @@
-import React, { ChangeEvent } from 'react';
-import { Grid, InputBase, IconButton, Paper, styled } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
-import id from 'date-fns/esm/locale/id/index.js';
-import { debounce } from '../../Utils/util';
-
+import React, { ChangeEvent } from 'react'
+import { Grid, InputBase, IconButton, Paper, styled } from '@mui/material'
+import SearchIcon from '@mui/icons-material/Search'
+import id from 'date-fns/esm/locale/id/index.js'
+import { debounce } from '../../Utils/util'
 
 interface IProps {
-  setText: Function,
+  setText: Function
   onClickHandle?: Function
 }
 
-const SearchPage: React.FC<IProps> = ( { setText, onClickHandle } ) => {
+const SearchPage: React.FC<IProps> = ({ setText, onClickHandle }) => {
   const textDebouce = debounce((value: string) => {
-    setText(value);
+    setText(value)
   }, 500)
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     textDebouce(e.target.value)
-  };
+  }
 
   const handleClickChange = () => {
-    if(onClickHandle) {
+    if (onClickHandle) {
       onClickHandle()
     }
   }
-
 
   return (
     <Grid container>
@@ -52,7 +50,7 @@ const SearchPage: React.FC<IProps> = ( { setText, onClickHandle } ) => {
         />
       </Paper>
     </Grid>
-  );
-};
+  )
+}
 
-export default SearchPage;
+export default SearchPage

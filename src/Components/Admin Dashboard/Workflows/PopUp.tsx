@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogTitle, TextField, MenuItem, Button } from '@mui/material';
+import React, { useState } from 'react'
+import { Dialog, DialogContent, DialogTitle, TextField, MenuItem, Button } from '@mui/material'
 
-const Popup = ({ open, onClose, onSave } : any) => {
+const Popup = ({ open, onClose, onSave }: any) => {
   return (
     <Dialog open={open} onClose={onClose}>
       <DialogTitle>Edit Details</DialogTitle>
@@ -35,7 +35,7 @@ const Popup = ({ open, onClose, onSave } : any) => {
         </Button>
       </DialogContent>
     </Dialog>
-  );
-};
+  )
+}
 
-export default Popup;
+export default Popup

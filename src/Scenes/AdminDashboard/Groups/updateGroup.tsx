@@ -1,33 +1,33 @@
-import React, { useState } from 'react';
-import { TextField, Button, Grid, Paper, Typography } from '@mui/material';
-import axiosInstance from '../../../Utils/axiosUtil';
-import { IGroup } from '../../../Utils/types/type';
-import { showMessage } from '../../../Store/reducers/snackbar';
-import { useDispatch } from 'react-redux';
+import React, { useState } from 'react'
+import { TextField, Button, Grid, Paper, Typography } from '@mui/material'
+import axiosInstance from '../../../Utils/axiosUtil'
+import { IGroup } from '../../../Utils/types/type'
+import { showMessage } from '../../../Store/reducers/snackbar'
+import { useDispatch } from 'react-redux'
 
 const EditableGroup = ({ group }: any) => {
   const dispatch = useDispatch()
-  const [name, setName] = useState(group.name);
-  const [email, setEmail] = useState(group.primaryEmail);
-  const [isEditing, setIsEditing] = useState(false);
+  const [name, setName] = useState(group.name)
+  const [email, setEmail] = useState(group.primaryEmail)
+  const [isEditing, setIsEditing] = useState(false)
 
   const handleEdit = () => {
-    setIsEditing(true);
-  };
+    setIsEditing(true)
+  }
 
   const handleSave = async () => {
     try {
-        const response = await axiosInstance.put(`/group/${group.id}`, { name, primaryEmail: email });
-        if(response.status < 300) {
-          dispatch(showMessage({ message: "Group info saved", severity: 'success'}))
-        } 
-    } catch(err) {
-        console.error(err)
-        dispatch(showMessage({ message: "Group info not updated, try again", severity: 'error'}))
+      const response = await axiosInstance.put(`/group/${group.id}`, { name, primaryEmail: email })
+      if (response.status < 300) {
+        dispatch(showMessage({ message: 'Group info saved', severity: 'success' }))
+      }
+    } catch (err) {
+      console.error(err)
+      dispatch(showMessage({ message: 'Group info not updated, try again', severity: 'error' }))
     }
 
-    setIsEditing(false);
-  };
+    setIsEditing(false)
+  }
 
   return (
     <Grid container justifyContent="center" alignItems="center" style={{ minHeight: '50vh' }}>
@@ -67,7 +67,12 @@ const EditableGroup = ({ group }: any) => {
               ) : (
                 <>
                   <Grid item>
-                    <Button variant="contained" color="primary" onClick={handleSave} disabled={!(group.name !== name || group.primaryEmail !== email)}>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSave}
+                      disabled={!(group.name !== name || group.primaryEmail !== email)}
+                    >
                       Save
                     </Button>
                   </Grid>
@@ -78,7 +83,7 @@ const EditableGroup = ({ group }: any) => {
         </Paper>
       </Grid>
     </Grid>
-  );
-};
+  )
+}
 
-export default EditableGroup;
+export default EditableGroup

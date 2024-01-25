@@ -1,7 +1,7 @@
-import React from 'react';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
-import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied';
+import React from 'react'
+import Typography from '@mui/material/Typography'
+import Box from '@mui/material/Box'
+import SentimentVeryDissatisfiedIcon from '@mui/icons-material/SentimentVeryDissatisfied'
 
 const NoDataFound = () => {
   return (
@@ -20,7 +20,7 @@ const NoDataFound = () => {
         Sorry, but there is no data available.
       </Typography>
     </Box>
-  );
-};
+  )
+}
 
-export default NoDataFound;
+export default NoDataFound

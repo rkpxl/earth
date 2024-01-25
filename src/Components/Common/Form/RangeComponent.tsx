@@ -1,19 +1,20 @@
-import React from 'react';
-import { Grid, Slider, TextField } from '@mui/material';
-import CommentJustification from './CommentJustification';
-import { useProtocolQuestionContext } from './FormQuestionRenderer';
+import React from 'react'
+import { Grid, Slider, TextField } from '@mui/material'
+import CommentJustification from './CommentJustification'
+import { useProtocolQuestionContext } from './FormQuestionRenderer'
 
 interface RangeComponentProps {
-  questionNumber?: number;
+  questionNumber?: number
 }
 
 const RangeComponent: React.FC<RangeComponentProps> = ({ questionNumber }) => {
-  const [value, setValue] = React.useState<number>(5);
-  const { title, handleAnswerChange, handleQuestionSubmit, compliance, answers, question } = useProtocolQuestionContext()
+  const [value, setValue] = React.useState<number>(5)
+  const { title, handleAnswerChange, handleQuestionSubmit, compliance, answers, question } =
+    useProtocolQuestionContext()
 
   const handleChange = (event: Event, newValue: number | number[]) => {
-    setValue(newValue as number);
-  };
+    setValue(newValue as number)
+  }
 
   return (
     <Grid container spacing={1}>
@@ -31,7 +32,7 @@ const RangeComponent: React.FC<RangeComponentProps> = ({ questionNumber }) => {
       </Grid>
       <CommentJustification comment={''} justification={''} question_id={''} complianceId={1} />
     </Grid>
-  );
-};
+  )
+}
 
-export default RangeComponent;
+export default RangeComponent

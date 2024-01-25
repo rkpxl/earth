@@ -1,14 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import Filters from './Filters';
-import DataTable from './Table';
-import { Grid } from '@mui/material';
-import axios from 'axios';
+import React, { useEffect, useState } from 'react'
+import Filters from './Filters'
+import DataTable from './Table'
+import { Grid } from '@mui/material'
+import axios from 'axios'
 
 interface Filters {
-  startDate: string;
-  endDate: string;
-  searchPerson: string;
-  status: string;
+  startDate: string
+  endDate: string
+  searchPerson: string
+  status: string
 }
 
 const AdminDashboard = (): JSX.Element => {
@@ -17,13 +17,13 @@ const AdminDashboard = (): JSX.Element => {
     endDate: '',
     searchPerson: '',
     status: '',
-  });
-  const [tasks, setAllTask] = useState([]);
+  })
+  const [tasks, setAllTask] = useState([])
 
   const fetchData = () => {
     const filteredFilters = Object.fromEntries(
-      Object.entries(filters).filter(([key, value]) => value !== '')
-    );
+      Object.entries(filters).filter(([key, value]) => value !== ''),
+    )
 
     axios
       .get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/filter`, {
@@ -34,20 +34,20 @@ const AdminDashboard = (): JSX.Element => {
         },
       })
       .then((response) => {
-        setAllTask(response.data || []);
+        setAllTask(response.data || [])
       })
       .catch((error) => {
-        console.error(error);
-      });
-  };
+        console.error(error)
+      })
+  }
 
   const handleApplyFilter = () => {
-    fetchData();
-  };
+    fetchData()
+  }
 
   useEffect(() => {
-    fetchData();
-  }, []); 
+    fetchData()
+  }, [])
 
   return (
     <Grid p={3}>
@@ -56,7 +56,7 @@ const AdminDashboard = (): JSX.Element => {
         <DataTable data={tasks} />
       </Grid>
     </Grid>
-  );
-};
+  )
+}
 
-export default AdminDashboard;
+export default AdminDashboard

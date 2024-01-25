@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from 'react'
 import {
   Dialog,
   DialogTitle,
@@ -21,20 +21,19 @@ import {
   ListItem,
   ListItemText,
   Select,
-  MenuItem
-} from '@mui/material';
-import DragIndicatorIcon from '@mui/icons-material/DragIndicator';
-import theme from '../../../Theme';
-import Search from '../../../Components/Common/Search';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { useDispatch, useSelector } from 'react-redux';
-import { AppDispatch, IGroup, RootState } from '../../../Utils/types/type';
-import { fetchGroups } from '../../../Store/reducers/group';
-import axiosInstance from '../../../Utils/axiosUtil';
-import { showMessage } from '../../../Store/reducers/snackbar';
-import { RefetchQueryFilters, useQueryClient } from '@tanstack/react-query';
-import { Page, onCancel } from '../../../Utils/constants';
-
+  MenuItem,
+} from '@mui/material'
+import DragIndicatorIcon from '@mui/icons-material/DragIndicator'
+import theme from '../../../Theme'
+import Search from '../../../Components/Common/Search'
+import DeleteIcon from '@mui/icons-material/Delete'
+import { useDispatch, useSelector } from 'react-redux'
+import { AppDispatch, IGroup, RootState } from '../../../Utils/types/type'
+import { fetchGroups } from '../../../Store/reducers/group'
+import axiosInstance from '../../../Utils/axiosUtil'
+import { showMessage } from '../../../Store/reducers/snackbar'
+import { RefetchQueryFilters, useQueryClient } from '@tanstack/react-query'
+import { Page, onCancel } from '../../../Utils/constants'
 
 const DragHandle = styled('div')({
   cursor: 'move',
@@ -45,7 +44,7 @@ const DragHandle = styled('div')({
   '&:hover': {
     backgroundColor: '#f0f0f0',
   },
-});
+})
 
 const StyledTableRow = styled(TableRow)({
   '&:nth-of-type(odd)': {
@@ -54,101 +53,98 @@ const StyledTableRow = styled(TableRow)({
   '&:hover': {
     backgroundColor: '#f0f0f0 !important',
   },
-});
+})
 
 interface Rule {
-  group_id: string;
-  groupName: string;
-  step: number;
-  isOptional: boolean;
-  isAdmin: boolean;
-  isBoard: boolean;
-  isAutoAssign: boolean;
+  group_id: string
+  groupName: string
+  step: number
+  isOptional: boolean
+  isAdmin: boolean
+  isBoard: boolean
+  isAutoAssign: boolean
 }
 
 interface ApiResponse {
-  _id: string;
-  name: string;
-  description: string;
-  rules: Rule[];
-  isAdmin: boolean;
-  isBoard: boolean;
-  isAutoAssign: boolean;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  _id: string
+  name: string
+  description: string
+  rules: Rule[]
+  isAdmin: boolean
+  isBoard: boolean
+  isAutoAssign: boolean
+  isActive: boolean
+  createdAt: string
+  updatedAt: string
+  __v: number
 }
 
 interface YourComponentProps {
-  open: boolean;
-  onClose: () => void;
-  apiResponse: any;
+  open: boolean
+  onClose: () => void
+  apiResponse: any
 }
 
 const YourComponent: React.FC<YourComponentProps> = ({ open, onClose, apiResponse }) => {
-  const [updatedRules, setUpdatedRules] = useState<any[]>(apiResponse.rules);
-  const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
-  const [groupSearchText, setGroupSearchText] = useState<string>('');
-  const [showSearch, setShowSearch] = useState<boolean>();
-  const dispatch : AppDispatch = useDispatch()
+  const [updatedRules, setUpdatedRules] = useState<any[]>(apiResponse.rules)
+  const [draggedIndex, setDraggedIndex] = useState<number | null>(null)
+  const [groupSearchText, setGroupSearchText] = useState<string>('')
+  const [showSearch, setShowSearch] = useState<boolean>()
+  const dispatch: AppDispatch = useDispatch()
   const groups = useSelector((state: RootState) => state.group)
-  const queryClient = useQueryClient();
+  const queryClient = useQueryClient()
 
   !groups?.data && dispatch(fetchGroups())
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-    e.dataTransfer.setData('text/plain', index.toString());
-    setDraggedIndex(index);
-  };
+    e.dataTransfer.setData('text/plain', index.toString())
+    setDraggedIndex(index)
+  }
 
   const handleDrop = (e: React.DragEvent<HTMLDivElement>, toIndex: number) => {
-    e.preventDefault();
-    const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10);
-    const draggedRule = updatedRules[fromIndex];
-    const updatedRulesCopy = [...updatedRules];
-    updatedRulesCopy.splice(fromIndex, 1);
-    updatedRulesCopy.splice(toIndex, 0, draggedRule);
-    setUpdatedRules(
-      updatedRulesCopy.map((rule, index) => ({ ...rule, step: index + 1 }))
-    );
-    setDraggedIndex(null);
-  };
+    e.preventDefault()
+    const fromIndex = parseInt(e.dataTransfer.getData('text/plain'), 10)
+    const draggedRule = updatedRules[fromIndex]
+    const updatedRulesCopy = [...updatedRules]
+    updatedRulesCopy.splice(fromIndex, 1)
+    updatedRulesCopy.splice(toIndex, 0, draggedRule)
+    setUpdatedRules(updatedRulesCopy.map((rule, index) => ({ ...rule, step: index + 1 })))
+    setDraggedIndex(null)
+  }
 
   const handleDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-    e.preventDefault();
+    e.preventDefault()
     if (draggedIndex !== null && draggedIndex !== index) {
-      const rect = e.currentTarget.getBoundingClientRect();
-      const offsetY = e.clientY - rect.top;
-      const newIndex = offsetY > rect.height / 2 ? index + 1 : index;
-      setDraggedIndex(newIndex);
+      const rect = e.currentTarget.getBoundingClientRect()
+      const offsetY = e.clientY - rect.top
+      const newIndex = offsetY > rect.height / 2 ? index + 1 : index
+      setDraggedIndex(newIndex)
     }
-  };
+  }
 
   const handleSwitchChange = (index: number, propertyName: string) => {
     setUpdatedRules((prevRules) => {
-      const newRules = [...prevRules];
+      const newRules = [...prevRules]
       newRules[index] = {
         ...newRules[index],
         [propertyName]: !newRules[index][propertyName],
-      };
-      return newRules;
-    });
-  };
+      }
+      return newRules
+    })
+  }
 
   const handleSelectChange = (index: number, propertyName: string, value: string) => {
     setUpdatedRules((prevRules) => {
-      const newRules = [...prevRules];
+      const newRules = [...prevRules]
       newRules[index] = {
         ...newRules[index],
         [propertyName]: value,
-      };
-      return newRules;
-    });
-  };
-  
+      }
+      return newRules
+    })
+  }
 
-  const handleAddRule = (group : IGroup) => {
+  const handleAddRule = (group: IGroup) => {
     const newRule = {
       groupName: group?.name,
       group_id: group?._id,
@@ -156,75 +152,81 @@ const YourComponent: React.FC<YourComponentProps> = ({ open, onClose, apiRespons
       isBoard: false,
       isAdmin: false,
       isAutoAssign: true,
-      step: updatedRules.length + 1
+      step: updatedRules.length + 1,
     }
     setUpdatedRules((prev) => [...prev, newRule])
   }
 
   const handleRemoveRow = (index: number) => {
     setUpdatedRules((prevRules) => {
-      const newRules = [...prevRules];
-      newRules.splice(index, 1);
+      const newRules = [...prevRules]
+      newRules.splice(index, 1)
       const updatedRules = newRules.map((rule, i) => ({
         ...rule,
         step: i + 1,
-      }));
-  
-      return updatedRules;
-    });
-  };
+      }))
+
+      return updatedRules
+    })
+  }
 
   const handleUpdate = async () => {
     try {
       const response = await axiosInstance.put(`/approval-rules/${apiResponse?._id}`, {
-        rules: updatedRules
+        rules: updatedRules,
       })
-      if(response.status <= 201) {
-        dispatch(showMessage({ message: 'Approval Rule is added', severity: 'success' }));
+      if (response.status <= 201) {
+        dispatch(showMessage({ message: 'Approval Rule is added', severity: 'success' }))
       } else {
-        dispatch(showMessage({ message: 'Somehitng went wrong, please try again', severity: 'error' }));
+        dispatch(
+          showMessage({ message: 'Somehitng went wrong, please try again', severity: 'error' }),
+        )
       }
-      queryClient.refetchQueries(['get-approval-rules'] as RefetchQueryFilters);
+      queryClient.refetchQueries(['get-approval-rules'] as RefetchQueryFilters)
     } catch (err) {
       console.error(err)
     }
-    onClose();
-  };
+    onClose()
+  }
 
   const handleShowSearch = () => {
     setShowSearch((prev) => !prev)
   }
 
-  const finalSearchResult = (groups?.data || []).filter((g : IGroup) => g?.name?.includes(groupSearchText))
+  const finalSearchResult = (groups?.data || []).filter((g: IGroup) =>
+    g?.name?.includes(groupSearchText),
+  )
 
   return (
-    <Dialog 
-      open={open} 
-      onClose={onClose} 
-      fullWidth 
-      maxWidth="md" 
+    <Dialog
+      open={open}
+      onClose={onClose}
+      fullWidth
+      maxWidth="md"
       sx={{
         maxHeight: '650px',
-        height: "auto",
-      }} 
-      PaperProps={{ style: { 
-        backgroundColor: theme.palette.background.default,
-        padding: '6px',
-        top: '50%',
-        transform: 'translateY(-50%)',
-      }}}
+        height: 'auto',
+      }}
+      PaperProps={{
+        style: {
+          backgroundColor: theme.palette.background.default,
+          padding: '6px',
+          top: '50%',
+          transform: 'translateY(-50%)',
+        },
+      }}
     >
       <DialogTitle>Manage Approval Rule</DialogTitle>
       <DialogContent>
         <Grid container justifyContent="space-between" sx={{ marginBottom: '24px' }}>
           <Grid item xs={12} sm={12} sx={{ width: '100%', position: 'relative' }}>
-            <Search setText={setGroupSearchText} onClickHandle={handleShowSearch}/>
+            <Search setText={setGroupSearchText} onClickHandle={handleShowSearch} />
             {showSearch && (
               <Paper
                 sx={{
                   position: 'absolute',
                   zIndex: 1,
-                  width: "100%",
+                  width: '100%',
                   maxHeight: '300px',
                   overflowY: 'auto',
                   overflowX: 'hidden',
@@ -232,11 +234,11 @@ const YourComponent: React.FC<YourComponentProps> = ({ open, onClose, apiRespons
                   padding: '8px',
                   borderRadius: '12px',
                   boxShadow: '0px 2px 10px rgba(0, 0, 0, 0.1)',
-                  marginTop: "12px",
+                  marginTop: '12px',
                 }}
               >
                 <List>
-                  {finalSearchResult.map((result : IGroup) => (
+                  {finalSearchResult.map((result: IGroup) => (
                     <ListItem
                       key={result?._id}
                       button
@@ -317,11 +319,11 @@ const YourComponent: React.FC<YourComponentProps> = ({ open, onClose, apiRespons
                   </TableCell>
                   <TableCell>
                     <Select
-                      sx={{ height: "38px", width: "100px" }}
+                      sx={{ height: '38px', width: '100px' }}
                       value={rule.onCancel}
                       onChange={(e) => handleSelectChange(index, 'onCancel', e.target.value)}
                     >
-                      {Object.entries(onCancel).map(([key, value] : any) => (
+                      {Object.entries(onCancel).map(([key, value]: any) => (
                         <MenuItem key={key} value={key}>
                           {value}
                         </MenuItem>
@@ -333,7 +335,7 @@ const YourComponent: React.FC<YourComponentProps> = ({ open, onClose, apiRespons
                       draggable
                       onDragStart={(e) => handleDragStart(e, index)}
                       sx={{
-                        background: 'transparent'
+                        background: 'transparent',
                       }}
                     >
                       <DragIndicatorIcon />
@@ -341,12 +343,14 @@ const YourComponent: React.FC<YourComponentProps> = ({ open, onClose, apiRespons
                   </TableCell>
                   <TableCell>
                     <IconButton onClick={() => handleRemoveRow(index)}>
-                      <DeleteIcon sx={{ 
-                        color: theme.palette.primary.light,
-                        '&:hover': {
-                          color: theme.palette.primary.main,
-                        },
-                      }}/>
+                      <DeleteIcon
+                        sx={{
+                          color: theme.palette.primary.light,
+                          '&:hover': {
+                            color: theme.palette.primary.main,
+                          },
+                        }}
+                      />
                     </IconButton>
                   </TableCell>
                 </StyledTableRow>
@@ -362,7 +366,7 @@ const YourComponent: React.FC<YourComponentProps> = ({ open, onClose, apiRespons
         <Button onClick={onClose}>Cancel</Button>
       </DialogActions>
     </Dialog>
-  );
-};
+  )
+}
 
-export default YourComponent;
+export default YourComponent

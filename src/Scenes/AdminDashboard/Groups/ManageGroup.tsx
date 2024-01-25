@@ -1,27 +1,26 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import React, { useState } from 'react'
-import Grid from '@mui/material/Grid';
-import { Box, Tab, Tabs } from '@mui/material';
-import CustomTabPanel from '../../../Components/Common/CustomTabPanel';
-import AddGroupMember from './AddGroupMember';
-import RemoveGroupMember from './RemoveGroupMember';
-import EditableGroup from './updateGroup';
+import Grid from '@mui/material/Grid'
+import { Box, Tab, Tabs } from '@mui/material'
+import CustomTabPanel from '../../../Components/Common/CustomTabPanel'
+import AddGroupMember from './AddGroupMember'
+import RemoveGroupMember from './RemoveGroupMember'
+import EditableGroup from './updateGroup'
 
 function a11yProps(index: number) {
   return {
     id: `group-tab-${index}`,
     'aria-controls': `group-tabpanel-${index}`,
-  };
+  }
 }
 
 export default function ManageGroup(props: any) {
-  const { group } =props
-  const [value, setValue] = useState<number>(0);
-
+  const { group } = props
+  const [value, setValue] = useState<number>(0)
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
-    setValue(newValue);
-  };
+    setValue(newValue)
+  }
 
   return (
     <Grid>
@@ -32,17 +31,15 @@ export default function ManageGroup(props: any) {
           <Tab label="Remove Group Members" {...a11yProps(2)} />
         </Tabs>
       </Box>
-      <CustomTabPanel value={value} index={0} sx={{p: 0}}>
-        <EditableGroup {...props}/>
+      <CustomTabPanel value={value} index={0} sx={{ p: 0 }}>
+        <EditableGroup {...props} />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={1} sx={{p: 0}}>
-        <AddGroupMember group={group}/>
+      <CustomTabPanel value={value} index={1} sx={{ p: 0 }}>
+        <AddGroupMember group={group} />
       </CustomTabPanel>
-      <CustomTabPanel value={value} index={2} sx={{p: 0}}>
+      <CustomTabPanel value={value} index={2} sx={{ p: 0 }}>
         <RemoveGroupMember />
       </CustomTabPanel>
     </Grid>
   )
 }
-
-

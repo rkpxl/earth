@@ -1,36 +1,35 @@
 import React from 'react'
-import Layout from '../../../Scenes/Home'
-import Departments from "../../../Scenes/AdminDashboard/Departments";
-import axiosInstance from '../../../Utils/axiosUtil';
-import NoDataFound from '../../../Components/Common/NoData';
+import Departments from '../../../Scenes/AdminDashboard/Departments'
+import axiosInstance from '../../../Utils/axiosUtil'
+import NoDataFound from '../../../Components/Common/NoData'
 
-function index({departments, isAuthenticated } : any) {
-  if(departments.length < 1) {
-    return (<NoDataFound />)
+function index({ departments, isAuthenticated }: any) {
+  if (departments.length < 1) {
+    return <NoDataFound />
   }
 
   return (
-   <>
-      <Departments departments={departments}/>
+    <>
+      <Departments departments={departments} />
     </>
   )
 }
 
-export const getServerSideProps = async function getServerSideProps(context : any) {
+export const getServerSideProps = async function getServerSideProps(context: any) {
   axiosInstance.context = context
   try {
-    const response = await axiosInstance.get('/auth/validate-token');
-    if(response.status === 200) {
-      const departments = await axiosInstance.get('/department');
+    const response = await axiosInstance.get('/auth/validate-token')
+    if (response.status === 200) {
+      const departments = await axiosInstance.get('/department')
       return {
         props: {
           isAuthenticated: true,
-          departments: departments.data
+          departments: departments.data,
         },
-      };
+      }
     }
   } catch (err) {
-    console.error("error", err)
+    console.error('error', err)
   }
 
   return {
@@ -38,7 +37,7 @@ export const getServerSideProps = async function getServerSideProps(context : an
       destination: '/login',
       permanent: false,
     },
-  };
+  }
 }
 
 export default index

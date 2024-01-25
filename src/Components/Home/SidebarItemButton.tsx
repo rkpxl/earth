@@ -1,10 +1,10 @@
-import ExpandLess from "@mui/icons-material/ExpandLess"
-import ExpandMore from "@mui/icons-material/ExpandMore"
-import { Box, Button } from "@mui/material"
+import ExpandLess from '@mui/icons-material/ExpandLess'
+import ExpandMore from '@mui/icons-material/ExpandMore'
+import { Box, Button } from '@mui/material'
 
-export const SidebarItemButton = (props : any) : JSX.Element => {
-    const {handleClick, active, isAdmin, icon, title, open} = props
-    return (
+export const SidebarItemButton = (props: any): JSX.Element => {
+  const { handleClick, active, isAdmin, icon, title, open } = props
+  return (
     <Button
       key={title}
       onClick={handleClick}
@@ -21,15 +21,16 @@ export const SidebarItemButton = (props : any) : JSX.Element => {
         textTransform: 'none',
         width: '100%',
         '& .MuiButton-startIcon': {
-          color: active ? 'primary.light' : 'neutral.400'
+          color: active ? 'primary.light' : 'neutral.400',
         },
         '&:hover': {
-          backgroundColor: 'rgba(255,255,255, 0.08)' 
-        }
+          backgroundColor: 'rgba(255,255,255, 0.08)',
+        },
       }}
     >
       <Box sx={{ flexGrow: 1, display: 'flex', justifyContent: 'space-between' }}>
         {title} {isAdmin && (open ? <ExpandMore /> : <ExpandLess />)}
       </Box>
-  </Button>)
+    </Button>
+  )
 }

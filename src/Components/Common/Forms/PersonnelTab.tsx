@@ -1,90 +1,116 @@
-import { Button, CircularProgress, FormControl, Grid, IconButton, InputLabel, MenuItem, Paper, Select, TextField } from '@mui/material';
+import {
+  Button,
+  CircularProgress,
+  FormControl,
+  Grid,
+  IconButton,
+  InputLabel,
+  MenuItem,
+  Paper,
+  Select,
+  TextField,
+} from '@mui/material'
 import React from 'react'
-import DeleteIcon from '@mui/icons-material/Delete';
+import DeleteIcon from '@mui/icons-material/Delete'
 
 interface PersonnelTabProps {
-  rows: Array<any>,
-  handleInputChange: Function,
-  removeRow: Function,
-  toggelSearchBarToAddPerson: Function,
-  isDisabled: boolean,
+  rows: Array<any>
+  handleInputChange: Function
+  removeRow: Function
+  toggelSearchBarToAddPerson: Function
+  isDisabled: boolean
 }
 
-const PersonnelTab = (props : PersonnelTabProps) : JSX.Element => {
+const PersonnelTab = (props: PersonnelTabProps): JSX.Element => {
+  const {
+    rows,
+    handleInputChange,
+    removeRow,
+    toggelSearchBarToAddPerson,
+    isDisabled = false,
+  } = props
 
-  const { rows, handleInputChange, removeRow, toggelSearchBarToAddPerson, isDisabled = false } = props
-
-  if(!rows) {
-    return (<><CircularProgress /></>);
+  if (!rows) {
+    return (
+      <>
+        <CircularProgress />
+      </>
+    )
   }
 
   return (
     <>
-      {rows.map((row : any, index : number) => (
-          <Paper key={index} elevation={3} style={{ padding: '10px', margin: '10px' }}>
-            <Grid container spacing={2}>
-              <Grid item xs={12} sm={5}>
-                <TextField
-                  label="Name"
-                  variant="outlined"
-                  value={row.name}
-                  onChange={(e) => handleInputChange(index, 'name', e.target.value)}
-                  fullWidth
-                  disabled={true}
-                />
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <FormControl variant="outlined" fullWidth>
-                  <InputLabel>Role</InputLabel>
-                  <Select
-                    value={row.role}
-                    onChange={(e) => handleInputChange(index, 'role', e.target.value)}
-                    label="Role"
-                    disabled={index === 0 || isDisabled}
-                  >
-                    <MenuItem value="pi">PI</MenuItem>
-                    <MenuItem value="copi">Co-PI</MenuItem>
-                    <MenuItem value="advisor">Advisor</MenuItem>
-                    <MenuItem value="assistance">Assistance</MenuItem>
-                    <MenuItem value="labassistance">Lab-Assistance</MenuItem>
-                    <MenuItem value="external">External</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={6} sm={3}>
-                <FormControl variant="outlined" fullWidth>
-                  <InputLabel>Access</InputLabel>
-                  <Select
-                    value={row.access}
-                    onChange={(e) => handleInputChange(index, 'access', e.target.value)}
-                    label="Access"
-                    disabled={index === 0 || isDisabled}
-                  >
-                    <MenuItem value="ADMIN">Admin</MenuItem>
-                    <MenuItem value="WRITE">Write</MenuItem>
-                    <MenuItem value="READ">Read</MenuItem>
-                  </Select>
-                </FormControl>
-              </Grid>
-              <Grid item xs={12} sm={1} sx={{display: 'flex', justifyContent: 'center'}}>
-                <IconButton
-                  onClick={() => removeRow(index)}
-                  color="secondary"
-                  aria-label="delete"
-                  style={{ float: 'left', height: "100%", fontSize: "32px" }}
+      {rows.map((row: any, index: number) => (
+        <Paper key={index} elevation={3} style={{ padding: '10px', margin: '10px' }}>
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={5}>
+              <TextField
+                label="Name"
+                variant="outlined"
+                value={row.name}
+                onChange={(e) => handleInputChange(index, 'name', e.target.value)}
+                fullWidth
+                disabled={true}
+              />
+            </Grid>
+            <Grid item xs={6} sm={3}>
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel>Role</InputLabel>
+                <Select
+                  value={row.role}
+                  onChange={(e) => handleInputChange(index, 'role', e.target.value)}
+                  label="Role"
                   disabled={index === 0 || isDisabled}
                 >
-                  <DeleteIcon fontSize="inherit" />
-                </IconButton>
-              </Grid>
+                  <MenuItem value="pi">PI</MenuItem>
+                  <MenuItem value="copi">Co-PI</MenuItem>
+                  <MenuItem value="advisor">Advisor</MenuItem>
+                  <MenuItem value="assistance">Assistance</MenuItem>
+                  <MenuItem value="labassistance">Lab-Assistance</MenuItem>
+                  <MenuItem value="external">External</MenuItem>
+                </Select>
+              </FormControl>
             </Grid>
-          </Paper>
-        ))}
-        <Button variant="contained" color="primary" onClick={() => toggelSearchBarToAddPerson()} sx={{ margin: '8px'}} disabled={isDisabled}>
-          Add
-        </Button>
+            <Grid item xs={6} sm={3}>
+              <FormControl variant="outlined" fullWidth>
+                <InputLabel>Access</InputLabel>
+                <Select
+                  value={row.access}
+                  onChange={(e) => handleInputChange(index, 'access', e.target.value)}
+                  label="Access"
+                  disabled={index === 0 || isDisabled}
+                >
+                  <MenuItem value="ADMIN">Admin</MenuItem>
+                  <MenuItem value="WRITE">Write</MenuItem>
+                  <MenuItem value="READ">Read</MenuItem>
+                </Select>
+              </FormControl>
+            </Grid>
+            <Grid item xs={12} sm={1} sx={{ display: 'flex', justifyContent: 'center' }}>
+              <IconButton
+                onClick={() => removeRow(index)}
+                color="secondary"
+                aria-label="delete"
+                style={{ float: 'left', height: '100%', fontSize: '32px' }}
+                disabled={index === 0 || isDisabled}
+              >
+                <DeleteIcon fontSize="inherit" />
+              </IconButton>
+            </Grid>
+          </Grid>
+        </Paper>
+      ))}
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => toggelSearchBarToAddPerson()}
+        sx={{ margin: '8px' }}
+        disabled={isDisabled}
+      >
+        Add
+      </Button>
     </>
   )
 }
 
-export default PersonnelTab;
+export default PersonnelTab
