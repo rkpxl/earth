@@ -79,7 +79,7 @@ const DocumentComponent = (props : DocumentComponentProps) => {
             </Grid>
             <Grid item xs={6} sm={1}>
               <IconButton
-                  color="secondary"
+                  color="primary"
                   onClick={() => handleDeleteDocument(index)}
                   style={{ height: '100%', textAlign: 'center', display: 'flex', alignItems: 'center'  }}
                   disabled={isDisabled}
@@ -92,12 +92,12 @@ const DocumentComponent = (props : DocumentComponentProps) => {
     <Button variant="contained" color="primary" onClick={handleAddButtonClick} disabled={isDisabled}>
       Add Document
     </Button>
-    <input
-    type="file"
-    ref={fileInputRef}
-    style={{ display: 'none' }}
-    onChange={handleFileInputChange}
-    />
+      <input
+        type="file"
+        ref={fileInputRef}
+        style={{ display: 'none' }}
+        onChange={handleFileInputChange}
+      />
     </div>
   );
 };

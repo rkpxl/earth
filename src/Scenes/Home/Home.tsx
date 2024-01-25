@@ -1,9 +1,9 @@
 import React from 'react'
 import Head from 'next/head';
 import { Box, Button, Container, Grid } from '@mui/material';
-import DoneTask from '../../Components/Home/DoneTasks';
+import AllProtocols from '../../Components/Home/AllProtocols';
 import Progress from '../../Components/Home/Progress';
-import PendingTask from '../../Components/Home/PendingTask';
+import PendingProtocols from '../../Components/Home/PendingProtocols';
 import { LatestTasks } from '../../Components/Home/LatestTasks'
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -12,6 +12,7 @@ import axios from 'axios';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useHomeContext } from '../../pages';
 import { ICompliance } from '../../Utils/types/type';
+import axiosInstance from '../../Utils/axiosUtil';
 
 interface TaskData {}
 
@@ -21,7 +22,7 @@ interface TaskPageProps {
 
 const Home = () => {
   const homeContext = useHomeContext()
-  const {  isAuthenticated, compliances } = homeContext
+  const { compliances, allProtocols, allApprovals } = homeContext
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const [popOpen, setPopOpen] = React.useState(false);
   const [complianceType, setComplianceType] = React.useState<ICompliance>()
@@ -69,7 +70,7 @@ const Home = () => {
       <Box component="main"
         sx={{
           flexGrow: 1,
-          py: 4
+          py: 2
         }}
       >
         <Box sx={{
@@ -87,8 +88,8 @@ const Home = () => {
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
             onClick={handleClick}
-            color="secondary"
-            sx={{ background: "secondary"}}
+            color="primary"
+            sx={{ background: "primary.main"}}
           >
             Create new protocol
           </Button>
@@ -97,7 +98,7 @@ const Home = () => {
             aria-labelledby="demo-positioned-button"
             anchorEl={anchorEl}
             open={open}
-            onClose={handlePopOpen}
+            onClose={handleClose}
             sx={{ mt: 5}}
             anchorOrigin={{
               vertical: 'top',
@@ -108,7 +109,7 @@ const Home = () => {
               horizontal: 'left',
             }}
           >
-            {compliances.map((comp : ICompliance) => (<MenuItem key={comp._id} onClick={() => onComplienceClick(comp)}>{comp.title}</MenuItem>))}
+            {compliances?.map((comp : ICompliance) => (<MenuItem key={comp._id} onClick={() => onComplienceClick(comp)}>{comp.title}</MenuItem>))}
           </Menu>
         </Box>
         <Container maxWidth={false}>
@@ -117,10 +118,10 @@ const Home = () => {
             spacing={2}
           >
             <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <DoneTask donetask={doneTask.length}/>
+              <AllProtocols allProtocols={allProtocols?.total}/>
             </Grid>
             <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <PendingTask length={pendingTask.length} task={pendingTask}/>
+              <PendingProtocols length={allApprovals?.total} task={pendingTask} />
             </Grid>
             <Grid item lg={4} sm={6} xl={3} xs={12}>
               <Progress progress={Math.round(((doneTask.length/((pendingTask.length + doneTask.length) || 1) ) * 100))}/>

@@ -1,4 +1,3 @@
-// reducers/snackbar.ts
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as type from '../../Utils/types/type'
 

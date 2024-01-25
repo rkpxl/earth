@@ -47,7 +47,6 @@ export default function RemoveGroupMember(props:any) {
           user_id: selectedMembers
         }
       });
-      console.log('response',response)
       if(response.status < 300) {
         dispatch(showMessage({message: 'All Peoples Deleted', severity: 'success'}))
         queryClient.refetchQueries(['member', searchText] as RefetchQueryFilters);

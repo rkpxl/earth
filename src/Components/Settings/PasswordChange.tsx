@@ -3,6 +3,9 @@ import { Alert, Box, Button, Card, CardContent, CardHeader, Divider, Snackbar, T
 import axios from 'axios';
 import { useRouter } from 'next/router';
 import { parseJwt } from '../../Utils/signin';
+import axiosInstance from '../../Utils/axiosUtil';
+import { showMessage } from '../../Store/reducers/snackbar';
+import { useDispatch } from 'react-redux';
 
 const PasswordChange = (props : any) => {
   const [values, setValues] = useState({
@@ -16,6 +19,7 @@ const PasswordChange = (props : any) => {
   const [errorMessage, setErrorMessage] = useState(`Both input isn't equal`);
   const [token, setToken] = useState<any>(null)
   const router = useRouter();
+  const dispatch = useDispatch()
 
   const handleIncorrectInput = () => {
     setOpenIncorrectInput(true);
@@ -56,28 +60,28 @@ const PasswordChange = (props : any) => {
     }
   }, [router.query])
 
-  const handleUpdate = () => {
+  const handleUpdate = async () => {
     if(values.password !== values.confirm) {
       handleIncorrectInput()
     } else {
       if(token) {
         const user : any = parseJwt(token)
-        axios.put(process.env.NEXT_PUBLIC_HOST_URL + '/users/reset-password', {
-          email: user.email,
-          password: values.password,
-        }, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          }}).then((response) => {
+        try {
+          const response = await axiosInstance.put('/user/update-reset-password',{
+            email: user.email,
+            password: values.password,
+          }, {
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }})
+  
           if(response.status < 300) {
-            handleSuccess()
-            router.push("/login")
-          }
-        }).catch((e) => {
-          console.error(e)
-          setErrorMessage("Please try again")
-          handleIncorrectInput()
-        })
+            dispatch(showMessage({message: "Updated Successfully", severity: "success"}));
+            router.push('/')
+          } 
+        } catch (err) {
+          console.error(err)
+        }
       } else {
         axios.put(process.env.NEXT_PUBLIC_HOST_URL + '/users/updatePassword', {
           email: localStorage.getItem('email'),

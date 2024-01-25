@@ -6,12 +6,13 @@ import Header from '../../../Components/Admin Dashboard/Common/Header';
 import AdminCard from '../../../Components/Admin Dashboard/Common/AdminCard';
 import { useDispatch, useSelector } from 'react-redux';
 import * as type from '../../../Utils/types/type';
-import { CircularProgress } from '@mui/material';
+import { CircularProgress, Pagination } from '@mui/material';
 import axiosInstance from '../../../Utils/axiosUtil';
 import { openConfirmation } from '../../../Store/reducers/confirm';
 import ConfirmationPopup from '../../../Components/Common/ConfirmationDialog';
 import { showMessage } from '../../../Store/reducers/snackbar';
 import { fetchDepartments } from '../../../Store/reducers/department';
+import GlobalPagination from '../../../Components/Common/GlobalPagination';
 
 
 export default function Department(props: any) {
@@ -19,6 +20,10 @@ export default function Department(props: any) {
   const { data , loading, error } = useSelector((state: type.RootState) => state.department);
   const departments = data || props.departments || []
   const dispatch : type.AppDispatch = useDispatch();
+  // const [pageData, setPageData] = useState({
+  //   currentPage: 1,
+  //   pageSize: 10
+  // })
 
   const handleOpenConfirmation = (args: any[]) => {
     dispatch(
@@ -43,13 +48,17 @@ export default function Department(props: any) {
     dispatch(fetchDepartments())
   }
 
+  // const onChangeAPICall = (page : number, pageSize: number) => {
+  //   dispatch(fetchDepartments())
+  // }
+
   const handleClickOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-  };
+  };  
 
   if(loading) {
     return (
@@ -68,10 +77,18 @@ export default function Department(props: any) {
     <Grid>
       <Header onClickHandle={handleClickOpen} title="Department" buttonText="Create New Departments"/>
       <PopUp open={open} onClose={handleClose} onSave={handleClose}/>
-      {departments.map((dep : any, index : number) => (
+      {departments?.map((dep : any, index : number) => (
       <div key={dep.id}>
         <AdminCard card={dep} onDelete={() => handleOpenConfirmation(dep.id)}/>
       </div>))}
+      {/* {departments?.total > 10 ? 
+        <GlobalPagination 
+        totalItems={departments?.total} 
+        onChange={setPageData}
+        onChangeAPICall={onChangeAPICall}
+        pageData={pageData}
+      />
+      : null} */}
       <ConfirmationPopup handleConfirm={handleConfirmation} />
     </Grid>
   )

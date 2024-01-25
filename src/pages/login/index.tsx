@@ -7,9 +7,7 @@ import axiosInstance from '../../Utils/axiosUtil';
 
 const Login = () => {
   return (
-    <Layout>
-      <Component />
-    </Layout>
+    <Component />
   );
 };
 
@@ -17,9 +15,7 @@ export const getServerSideProps = async function getServerSideProps(context : an
   axiosInstance.context = context
   try {
     const response = await axiosInstance.get('/auth/validate-token', context);
-    console.log("response", response)
     if(response.status === 200) {
-      console.log("inside response")
       return {
         redirect: {
           destination: '/',
@@ -28,7 +24,7 @@ export const getServerSideProps = async function getServerSideProps(context : an
       };
     }
   } catch (err) {
-    console.error("error", err)
+    console.error("login server error", err)
   }
 
   

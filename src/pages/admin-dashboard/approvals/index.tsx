@@ -1,13 +1,16 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Layout from '../../../Scenes/Home'
 import Approvals from "../../../Components/Admin Dashboard/Approvals";
+import { useRouter } from 'next/router';
 
-function index() {
+function Index() {
+  const router = useRouter()
+
   return (
-   <Layout><Approvals /></Layout>
+   <><Approvals /></>
   )
 }
 
-index.propTypes = {}
+Index.propTypes = {}
 
-export default index
+export default Index

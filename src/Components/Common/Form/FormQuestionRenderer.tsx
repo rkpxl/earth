@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { ReactEventHandler, useContext, useMemo } from 'react';
 import TextFieldComponent from './TextFieldComponent';
 import SingleSelectComponent from './SingleSelectComponent';
 import MultiSelectComponent from './MultiSelectComponent';
@@ -8,83 +8,109 @@ import Grid from '@mui/material/Grid';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../../Utils/types/type';
 import { updateAnswer } from '../../../Store/reducers/form';
-
-const questionContainerStyle = {
-  padding: '4px',
-  border: '1px solid #ddd',
-  borderRadius: '8px',
-  marginBottom: '16px',
-};
+import axiosInstance from '../../../Utils/axiosUtil';
+import { showMessage } from '../../../Store/reducers/snackbar';
+import Router from 'next/router';
+import { useProtocolContext } from '../../../Scenes/Protocol/Protocol';
 
 interface FormQuestionRendererProps {
   question: any;
   questionNumber: number;
-  values?: any[];
-  tabId: number
+  tabId: number;
+  qIdMap: Record<string, string>
 }
 
-const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, question, questionNumber }) => {
-  const { questionType, dependent, isFullWidth,  ...rest } = question;
-  const dispatch = useDispatch()
-  const stateAnswer = useSelector((state: RootState) => state.form.answers[tabId] ?? {});
+const ProtocolQuestionContext = React.createContext<any>(null);
 
-  const answers = useMemo(() => stateAnswer, [stateAnswer]);
-  const handleAnswerChange = (newAnswer: string) => {
-    dispatch(updateAnswer({ tabIndex: tabId, id: question?.id, answer: newAnswer }));
+const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, question, qIdMap }) => {
+  const { questionType, dependent, isFullWidth,  ...rest } = question;
+  const { id } = Router.query
+  const { compliance, questionNumber  } = useProtocolContext()
+  const dispatch = useDispatch()
+  const answers = useSelector((state: RootState) => state.form?.tabs?.[tabId]?.questions ?? {});
+
+  
+
+
+  const handleAnswerChange = (newAnswer: any) => {
+    dispatch(updateAnswer({ tabIndex: tabId, id: question?._id, answer: newAnswer }));
   };
 
-  if(dependent?.key && dependent?.value) {
-    if(!answers[dependent?.key] || answers[dependent?.key].toLocaleLowerCase() !==  dependent.value.toLocaleLowerCase()) {
+  if (dependent?.key && dependent?.value) {
+    const dependentAnswer = answers[qIdMap[dependent?.key]]?.answer;
+    if (!dependentAnswer) {
       return;
+    }
+    if (Array.isArray(dependentAnswer)) {
+      if (!dependentAnswer.includes(dependent.value)) {
+        return;
+      }
+    } else {
+      if (dependentAnswer.toLowerCase() !== dependent.value.toLowerCase()) {
+        return;
+      }
+    }
+  }
+
+  const handleQuestionSubmit = async (e : React.FocusEvent<HTMLElement>) => {
+    if(e) {
+      e.preventDefault()
+    }
+    
+    try {
+      const response : any = await axiosInstance.post('/answer', {
+        answer: answers[question?._id]?.answer || '',
+        question_id: question._id,
+        tabId: tabId,
+        protocol_id: id,
+        complianceId:compliance.id
+      })
+      if(response.status < 300) {
+        dispatch(showMessage({message: 'Youe Answer Saved', severity: 'success', duration: 500}))
+      } else {
+        dispatch(showMessage({message: 'Youe Answer Not Saved', severity: 'warning', duration: 600}))
+      }
+    } catch (err) {
+      dispatch(showMessage({message: 'Youe Answer Not Saved, Please try after some time', severity: 'error', duration: 2000}))
     }
   }
 
   return (
-    <Grid item xs={12} sm={isFullWidth ? 12 : 6}>
-      {questionType === 'text' && 
-        <TextFieldComponent 
-          {...rest} 
-          questionNumber={questionNumber} 
-          handleAnswerChange={handleAnswerChange} 
-          answer={answers[question?.id] || ''}
-        />}
-      {questionType === 'yesno' && 
-        <SingleSelectComponent 
-          {...rest} 
-          questionNumber={questionNumber} 
-          handleAnswerChange={handleAnswerChange} 
-          answer={answers[question?.id] || ''}
-        />}
-      {questionType === 'multiselect' && 
-        <MultiSelectComponent 
-          {...rest} 
-          questionNumber={questionNumber} 
-          handleAnswerChange={handleAnswerChange} 
-          answer={answers[question?.id] || ''}
-        />}
-      {questionType === 'dropdown' && 
-        <DropdownComponent 
-          {...rest} 
-          questionNumber={questionNumber} 
-          handleAnswerChange={handleAnswerChange} 
-          answer={answers[question?.id] || ''}
-        />}
-      {questionType === 'range' && 
-        <RangeComponent 
-          {...rest} 
-          questionNumber={questionNumber} 
-          handleAnswerChange={handleAnswerChange} 
-          answer={answers[question?.id] || ''}
-        />}
-    </Grid>
+    <ProtocolQuestionContext.Provider value={{ ...rest, handleAnswerChange, handleQuestionSubmit, compliance, answers, question }}>
+      <Grid item xs={12} sm={isFullWidth ? 12 : 6}>
+        {(questionType === 'text' || questionType === 'bigtext') && 
+          <TextFieldComponent 
+            questionNumber={questionNumber} 
+            bigBox={questionType === 'bigtext'}
+          />}
+        {questionType === 'yesno' && 
+          <SingleSelectComponent 
+            {...rest} 
+            questionNumber={questionNumber} 
+          />}
+        {questionType === 'multiselect' && 
+          <MultiSelectComponent 
+            {...rest} 
+            questionNumber={questionNumber} 
+          />}
+        {questionType === 'dropdown' && 
+          <DropdownComponent 
+            {...rest} 
+            questionNumber={questionNumber} 
+          />}
+        {questionType === 'range' && 
+          <RangeComponent 
+            {...rest} 
+            q uestionNumber={questionNumber} 
+          />}
+      </Grid>
+    </ProtocolQuestionContext.Provider>
   );
 };
 
 export default FormQuestionRenderer;
 
-
-
-function dispatch(arg0: { payload: { tabIndex: string; id: number; answer: string; }; type: "form/updateAnswer"; }) {
-  throw new Error('Function not implemented.');
-}
+export const useProtocolQuestionContext = () => {
+  return useContext(ProtocolQuestionContext);
+};
 

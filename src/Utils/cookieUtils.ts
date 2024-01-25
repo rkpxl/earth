@@ -12,11 +12,9 @@ export const getCookie = (name: string): string | undefined => {
 
 export const removeAllCookie = () => {
   Object.keys(cookies.getAll()).forEach((cookieName) => {
-    console.log('cookieName', cookieName)
     cookies.remove(cookieName, { path: '/' });
   });
   Object.keys(localStorage).forEach((key) => {
-    console.log('key', key)
     localStorage.removeItem(key);
   });
 };

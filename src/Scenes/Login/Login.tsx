@@ -1,19 +1,25 @@
-import React, { Suspense } from 'react'
+import React, { Suspense, useState } from 'react'
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import CircularProgress from '@mui/material/CircularProgress';
-import { Box, Button, Container, Grid, TextField, Typography } from '@mui/material';
+import { Box, Button, Container, Grid, Link, TextField, Typography } from '@mui/material';
 import axios from 'axios'
 import { parseJwt } from '../../Utils/signin';
 import { setCookie } from '../../Utils/cookieUtils';
+import axiosInstance from '../../Utils/axiosUtil';
+import { useDispatch } from 'react-redux';
+import { showMessage } from '../../Store/reducers/snackbar';
 
 
 const Login = () => {
+  const router = useRouter()
+  const dispatch = useDispatch()
   const [error, setError] = React.useState('');
   const [isLoading, setIsLoading] = React.useState(false)
-  const router = useRouter()
+  const [isPasswordForgot, setIsPasswordForgot] = useState(false)
+
   const formik = useFormik({
     initialValues: {
       email: '',
@@ -25,13 +31,33 @@ const Login = () => {
         .email('Must be a valid email')
         .max(255)
         .required('Email is required'),
-      password: Yup
+      password: !isPasswordForgot ? Yup
         .string()
         .max(255)
-        .required('Password is required')
+        .required('Password is required') : 
+        Yup.string()
+        .max(255)
     }),
-    onSubmit: () => {
+    onSubmit: async () => {
       setIsLoading(true)
+      if(isPasswordForgot) {
+        try {
+          const response = await axiosInstance.post('/auth/reset-password', {
+            email: formik.values.email
+          })
+  
+          if(response.status < 300) {
+            dispatch(showMessage({message: "Please check your email", severity: "success", duration: 4000}))
+          } else {
+            dispatch(showMessage({message: "Something went wrong, try again later", severity: "error", duration: 4000}))
+          } 
+        } catch (err) {
+          console.error(err)
+          dispatch(showMessage({message: "Something went wrong, try again later", severity: "error", duration: 4000}))
+        }
+        setIsLoading(false)
+        return;
+      }
       axios.post(process.env.NEXT_PUBLIC_HOST_URL + '/auth/signin', {
         email: formik.values.email,
         password: formik.values.password
@@ -44,23 +70,23 @@ const Login = () => {
 
           // Decode the payload from base64
           // Store the token in local storage or a secure HTTP-only cookie
-          localStorage.setItem('name', user?.name);
+          localStorage.setItem('name', user.name);
           localStorage.setItem('primartDepartment', user?.primartDepartment);
           localStorage.setItem('org', user?.org);
           localStorage.setItem('orgId', user?.orgId);
           localStorage.setItem('email', user?.email);
           localStorage.setItem('exp', user?.exp);
-          localStorage.setItem('_id', user?._id);
+          localStorage.setItem('_id', user._id);
           localStorage.setItem('type', user?.type);
           localStorage.setItem('authToken', token);
 
-          setCookie('name', user?.name);
+          setCookie('name', user.name);
           setCookie('primaryDepartment', user?.primaryDepartment);
           setCookie('org', user?.org);
           setCookie('orgId', user?.orgId);
           setCookie('email', user?.email);
           setCookie('exp', user?.exp);
-          setCookie('_id', user?._id);
+          setCookie('_id', user._id);
           setCookie('type', user?.type);
           setCookie('authToken', token);
 
@@ -74,6 +100,8 @@ const Login = () => {
         });
     }
   });
+
+  const toggleForgotPassword = () => { setIsPasswordForgot((prev) => !prev)}
 
   const handleGoogleSubmit =  () => {}
 
@@ -175,7 +203,7 @@ const Login = () => {
               value={formik.values.email}
               variant="outlined"
             />
-            <TextField
+            {isPasswordForgot ? null : <TextField
               error={Boolean(formik.touched.password && formik.errors.password)}
               fullWidth
               helperText={formik.touched.password && formik.errors.password}
@@ -187,7 +215,7 @@ const Login = () => {
               type="password"
               value={formik.values.password}
               variant="outlined"
-            />
+            /> }
             <Box sx={{ py: 2 }}>
               <Button
                 color="primary"
@@ -197,16 +225,21 @@ const Login = () => {
                 type="submit"
                 variant="contained"
               >
-                {isLoading ? <CircularProgress size="27px" sx={{ color: '#5048E5' }}/> : 'Sign In Now'}
+                {isLoading ? <CircularProgress size="27px" sx={{ color: '#5048E5' }}/> : isPasswordForgot ? 'Submit' :'Sign In Now'}
               </Button>
             </Box>
-            <Typography
-              color="textSecondary"
-              variant="body2"
-            >
-              Don&apos;t have an account?
-              {' '}
-            </Typography>
+            <Grid container>
+              <Grid item xs>
+                <Link onClick={toggleForgotPassword} variant="body2" sx={{ cursor: "pointer" }}>
+                  Forgot password?
+                </Link>
+              </Grid>
+              <Grid item>
+                <Link href="#" variant="body2">
+                  {"Don't have an account? Sign Up"}
+                </Link>
+              </Grid>
+            </Grid>
           </form>
         </Container>
       </Box>

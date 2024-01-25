@@ -17,7 +17,7 @@ export interface APIResponse<T = any> {
 export interface IDepartment {
   _id?: string;
   name?: string;
-  id?: string;
+  id?: number;
   orgId?: string;
   type?: string;
   isActive?: string;
@@ -58,8 +58,9 @@ export interface IMember {
 }
 
 export interface ICompliance {
+  complianceType: any;
   _id?: string;
-  id?: string;
+  id?: number;
   orgId?: string;
   isActive?: boolean;
   type?: string;
@@ -98,6 +99,7 @@ export interface IQuestion {
   orgId?: string;
   description?: string;
   isActive?: boolean;
+  isRequired?: boolean;
   type?: string; // You might want to replace this with a more specific type
   createdBy?: string;
   title?: string;
@@ -114,7 +116,105 @@ export interface IQuestion {
   __v?: number;
 }
 
-export type QuestionType = 'text' | 'dropdown' | 'yesno' | 'bigtext' | 'multiselect' 
+export interface IUser {
+  _id: string;
+  email: string;
+  type: string;
+  accessLevel: string;
+  name: string;
+  secondaryDepartmentsId?: string[]; // Adjust the type accordingly
+  orgId: number;
+  isActive: boolean;
+  createdBy: string;
+  createdAt: string; // Assuming it's a string in ISO date format
+  updatedAt: string; // Assuming it's a string in ISO date format
+  __v: number;
+  primaryDepartmentId: number;
+}
+
+export interface IProtocol {
+  _id: string;
+  piName: string;
+  pi_id: string;
+  title: string;
+  description: string;
+  status: string;
+  actionStatus: string;
+  protocolAction: string;
+  currentAssignee_id: string;
+  department: string;
+  approvers: Array<Object>;
+  complianceId: number;
+  isActive: boolean;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface IAnswer {
+  _id: string;
+  answer: string;
+  lastWriterName: string;
+  complianceId: number;
+  tabId: number;
+  question_id: string;
+  protocol_id: string;
+  type: string;
+  createdBy: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  previousAnswer: string;
+}
+
+export interface IComment {
+  comment: string;
+  writerName: string;
+  complianceId: number;
+  tabId: number;
+  question_id: string;
+  protocol_id: string;
+  type: string;
+  createdBy: string;
+  _id: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export interface IDocument {
+  _id: string;
+  docLink: string;
+  title: string;
+  description?: string;
+  protocol_id: string;
+  complianceId: number;
+  tabId: number;
+  createdBy: string;
+  providerName: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+  previousDocLink: string;
+  markedUpVersion?: string;
+}
+
+export interface IApproval {
+  _id: string;
+  orgId: number;
+  isActive: boolean;
+  createdBy: string;
+  approver_id: string;
+  protocol_id: IProtocol | string; // Update the type accordingly, as it seems to be a string in your example
+  flow_id: string;
+  status: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
+export type QuestionType = 'text' | 'dropdown' | 'yesno' | 'bigtext' | 'multiselect' | 'info'
 export type SnackbarSeverity = 'success' | 'error' | 'warning'
 export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;

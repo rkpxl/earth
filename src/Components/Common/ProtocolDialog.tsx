@@ -2,10 +2,12 @@ import React from 'react';
 import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, TextareaAutosize, Typography, Button } from '@mui/material';
 import { Formik as Formic, Form, Field, ErrorMessage } from 'formik';
 import PopUp from './Dialog'
-import { departments } from '../../data/fixData';
 import { useRouter } from 'next/router';
 import { useHomeContext } from '../../pages';
 import { ICompliance, IDepartment } from '../../Utils/types/type';
+import axiosInstance from '../../Utils/axiosUtil';
+import { showMessage } from '../../Store/reducers/snackbar';
+import { useDispatch } from 'react-redux';
 
 
 
@@ -42,8 +44,9 @@ interface IProps {
 const ProtocolPopUp = (props : IProps) : JSX.Element => {
   const homeContext = useHomeContext()
   const { departments } = homeContext
-  const { complianceType } = props
-  const Router = useRouter()
+  const { complianceType, handleClose } = props
+  const router = useRouter()
+  const dispatch = useDispatch()
 
   const validateForm = (values: FormValues) => {
     const errors: Partial<FormValues> = {};
@@ -62,10 +65,25 @@ const ProtocolPopUp = (props : IProps) : JSX.Element => {
     return errors;
   };
 
-  const handleSubmit = (values: FormValues, { setSubmitting }: any) => {
+  console.group('complianceType', complianceType)
+
+  const handleSubmit = async (values: FormValues, { setSubmitting }: any) => {
     // Handle form submission logic here
     if(complianceType?.id) {
-      Router.push(`/forms/${complianceType?.id}?title=${values.title}&dept=${values.department}&description=${values.description}`)
+      const response : any = await axiosInstance.post('/protocol', {
+        title: values.title,
+        description: values.description,
+        department: values.department,
+        complianceId: complianceType.id,
+        ruleId: complianceType?.approvalRulesId
+      })
+      if(response.status < 300) {
+        dispatch(showMessage({ message: 'Protocol is drafted', severity: 'success' }));
+        handleClose()
+        router.push(`/forms/${response?.data?._id.toString()}`)
+      } else {
+        dispatch(showMessage({ message: 'Somehitng went wrong, please try again', severity: 'error' }));
+      }
       setSubmitting(false);
     }
   };
@@ -91,8 +109,8 @@ const ProtocolPopUp = (props : IProps) : JSX.Element => {
                 <FormControl fullWidth>
                   <InputLabel>Department</InputLabel>
                   <Select {...field} label="Department">
-                    {departments.map((dep : IDepartment, index : number) => (
-                      <MenuItem value={dep.id} key={index.toString()}>{dep.name}</MenuItem>
+                    {departments?.data?.map((dep : IDepartment, index : number) => (
+                      <MenuItem value={dep.name} key={index.toString()}>{dep.name}</MenuItem>
                     ))}
                   </Select>
                 </FormControl>

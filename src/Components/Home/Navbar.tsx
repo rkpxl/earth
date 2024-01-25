@@ -11,7 +11,7 @@ import { AccountPopover } from '../Common/AccountPopover';
 
 const NavbarRoot = styled(AppBar)(({ theme } : any) => ({
   backgroundColor: theme.palette.background.paper,
-  boxShadow: theme?.shadows[3]
+  boxShadow: theme?.shadows[5]
 }));
 
 export const Navbar = (props : any) => {
@@ -22,14 +22,14 @@ export const Navbar = (props : any) => {
   return (
     <>
       <NavbarRoot
-        sx={{
-          left: {
-            lg: 280
-          },
-          width: {
-            lg: 'calc(100% - 280px)'
-          }
-        }}
+        // sx={{
+        //   left: {
+        //     lg: 250
+        //   },
+        //   width: {
+        //     lg: 'calc(100% - 250px)'
+        //   }
+        // }}
         {...other}>
         <Toolbar
           disableGutters

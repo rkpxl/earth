@@ -5,6 +5,7 @@ import { Sidebar } from '../../Components/Home/Sidebar';
 import { Navbar } from '../../Components/Home/Navbar'
 import React from 'react';
 import { useRouter } from 'next/router';
+import { getCookie } from '../../Utils/cookieUtils';
 
 const HomeLayoutRoot = styled('div')(({ theme }) => ({
   display: 'flex',
@@ -12,7 +13,7 @@ const HomeLayoutRoot = styled('div')(({ theme }) => ({
   maxWidth: '100%',
   paddingTop: 64,
   [theme.breakpoints.up('lg')]: {
-    paddingLeft: 280
+    paddingLeft: 250
   }
 }));
 
@@ -29,6 +30,10 @@ const HomeLayout = (props : any) => {
     // Update the isAdmin state based on the user type
     setIsAdmin(userType === 'superAdmin' || userType === 'admin');
   }, []);
+
+  if(router.pathname.includes('login')) {
+    return (<>{children}</>)
+  }
 
   return (
     <main>

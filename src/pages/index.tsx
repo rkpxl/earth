@@ -3,16 +3,15 @@ import type { NextPage } from 'next'
 import Layout from '../Scenes/Home/HomeLayout'
 import HomePage from '../Scenes/Home/Home'
 import axiosInstance from '../Utils/axiosUtil'
+import { Page } from '../Utils/constants'
 
 const HomeContext = React.createContext<any>(null);
 
-const Home: NextPage = ({ isAuthenticated, compliances, departments } : any) => {
+const Home: NextPage = ({ isAuthenticated, compliances, departments, allProtocols, allApprovals } : any) => {
   return (
-    <Layout>
-      <HomeContext.Provider value={{ isAuthenticated, compliances, departments }}>
-        <HomePage />
-      </HomeContext.Provider>
-    </Layout>
+    <HomeContext.Provider value={{ isAuthenticated, compliances, departments, allProtocols, allApprovals }}>
+      <HomePage />
+    </HomeContext.Provider>
   )
 }
 
@@ -23,16 +22,20 @@ export const getServerSideProps = async function getServerSideProps(context : an
     if(response.status === 200) {
       const compliances = await axiosInstance.get('/compliance');
       const departments = await axiosInstance.get('/department');
+      const allProtocols = await axiosInstance.get('/protocol/get-all');
+      const allApprovals = await axiosInstance.get('/approval/all-active');
       return {
         props: {
           isAuthenticated: true,
           compliances: compliances.data,
-          departments: departments.data
+          departments: departments.data,
+          allProtocols: allProtocols.data,
+          allApprovals: allApprovals.data,
         },
       };
     }
   } catch (err) {
-    console.error("error", err)
+    console.error("home server error", err)
   }
 
   return {

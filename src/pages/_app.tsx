@@ -1,29 +1,29 @@
- import {
+import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
 import Head from 'next/head';
-import { CacheProvider } from '@emotion/react';
-import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
-import { createEmotionCache } from '../Utils/create-emotion-cache';
 import { theme } from '../Theme';
 import { Provider } from 'react-redux';
 import Store from '../Store';
 import Snackbar from '../Components/Common/Snackbar';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { AppProps } from 'next/app';
+import { AppCacheProvider } from '@mui/material-nextjs/v14-pagesRouter';
+import '../../styles/globals.css'
+import HomeLayout from '../Scenes/Home/HomeLayout';
+import axiosInstance from '../Utils/axiosUtil';
+import GlobalLoading from '../Components/Common/GlobalLoading';
 
-
-const clientSideEmotionCache = createEmotionCache();
 const queryClient = new QueryClient();
 
-function MyApp({ Component, pageProps }: any) {
-  const getLayout = Component.getLayout ?? ((page: any) => page);
+function MyApp(props: AppProps) {
+  const { Component, pageProps } = props;
 
   return (
-    <CacheProvider value={clientSideEmotionCache}>
+    <AppCacheProvider {...props}>
       <Head>
         <title>Knowledge Link</title>
         <meta
@@ -31,21 +31,46 @@ function MyApp({ Component, pageProps }: any) {
           content="initial-scale=1, width=device-width"
         />
       </Head>
-      <LocalizationProvider dateAdapter={AdapterDateFns}>
-        <ThemeProvider theme={theme}>
-          <CssBaseline />
-          <Provider store={Store}>
-            <QueryClientProvider client={queryClient}>
-              {/* For hydration */}
-                {getLayout(<Component {...pageProps} />)}
-                <Snackbar />
-                <ReactQueryDevtools initialIsOpen={true} />
-            </QueryClientProvider>
-          </Provider>
-        </ThemeProvider>
-      </LocalizationProvider>
-    </CacheProvider>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <Provider store={Store}>
+          <QueryClientProvider client={queryClient}>
+            <HomeLayout>
+              <Component {...pageProps} />
+            </HomeLayout>
+            <Snackbar />
+            <GlobalLoading />
+            <ReactQueryDevtools initialIsOpen={true} />
+          </QueryClientProvider>
+        </Provider>
+      </ThemeProvider>
+    </AppCacheProvider>
   );
+}
+
+
+export const getServerSideProps = async function getServerSideProps(context : any) {
+  axiosInstance.context = context
+  try {
+    const response = await axiosInstance.get('/auth/validate-token', context);
+    if(response.status === 200) {
+      return {
+        redirect: {
+          destination: '/',
+          permanent: false,
+        },
+      };
+    }
+  } catch (err) {
+    console.error("error", err)
+  }
+
+  
+  return {
+    props: {
+      isAuthenticated: false,
+    },
+  };
 }
 
 export default MyApp;

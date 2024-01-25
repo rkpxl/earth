@@ -1,4 +1,12 @@
 import { createTheme } from '@mui/material';
+import { Roboto } from 'next/font/google';
+
+
+export const roboto = Roboto({
+  weight: ['300', '400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+});
 
 export const theme = createTheme({
   breakpoints: {
@@ -132,6 +140,7 @@ export const theme = createTheme({
     }
   },
   palette: {
+    // @ts-ignore
     neutral: {
       100: '#F3F4F6',
       200: '#E5E7EB',
@@ -266,34 +275,42 @@ export const theme = createTheme({
       lineHeight: 1.66
     },
     h1: {
+      color: 'black',
       fontWeight: 700,
       fontSize: '3.5rem',
       lineHeight: 1.375
     },
     h2: {
+      color: 'black',
       fontWeight: 700,
       fontSize: '3rem',
       lineHeight: 1.375
     },
     h3: {
+      color: 'black',
       fontWeight: 700,
       fontSize: '2.25rem',
       lineHeight: 1.375
     },
     h4: {
+      color: 'black',
       fontWeight: 700,
       fontSize: '2rem',
       lineHeight: 1.375
     },
     h5: {
+      color: 'black',
       fontWeight: 600,
       fontSize: '1.5rem',
       lineHeight: 1.375
     },
     h6: {
+      color: 'black',
       fontWeight: 600,
       fontSize: '1.125rem',
       lineHeight: 1.375
     }
   }
 });
+
+export default theme

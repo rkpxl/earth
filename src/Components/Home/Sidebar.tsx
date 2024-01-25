@@ -15,6 +15,7 @@ import ShieldIcon from '@mui/icons-material/Shield';
 import GroupIcon from '@mui/icons-material/Group';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks';
+import RouteIcon from '@mui/icons-material/Route';
 
 const ItemCount = 4
 
@@ -36,7 +37,7 @@ export const Sidebar = (props : any) => {
     title: 'Settings'
   },
   {
-    href: '/settings',
+    href: '/publication',
     icon: (<LibraryBooksIcon fontSize="small" />),
     title: 'Publication'
   },])
@@ -48,27 +49,32 @@ export const Sidebar = (props : any) => {
         icon: (<InboxIcon fontSize="small" />),
         title: 'Dashboard', 
         subRoute: [
+          // {
+          //   href: '/admin-dashboard/dashboard',
+          //   icon: (<InboxIcon fontSize="small" />),
+          //   title: 'Protocol'
+          // },
+          // {
+          //   href: '/admin-dashboard/analytics',
+          //   icon: (<InboxIcon fontSize="small" />),
+          //   title: 'Analytics'
+          // },
+          // {
+          //   href: '/admin-dashboard/approvals',
+          //   icon: (<DraftsIcon fontSize="small" />),
+          //   title: 'Approvals'
+          // },
+          // {
+          //   href: '/admin-dashboard/workflows',
+          //   icon: (<SendIcon fontSize="small" />),
+          //   title: 'Workflows'
+          // },
           {
-            href: '/admin-dashboard/analytics',
-            icon: (<InboxIcon fontSize="small" />),
-            title: 'Analytics'
-          },
-          {
-            href: '/admin-dashboard/approvals',
-            icon: (<DraftsIcon fontSize="small" />),
-            title: 'Approvals'
-          },
-          {
-            href: '/admin-dashboard/workflows',
-            icon: (<SendIcon fontSize="small" />),
-            title: 'Workflows'
-          },
-          {
-            href: '/admin-dashboard/reports',
-            icon: (<StarBorder fontSize="small" />),
-            title: 'Reports'
-          },
-          {
+          //   href: '/admin-dashboard/reports',
+          //   icon: (<StarBorder fontSize="small" />),
+          //   title: 'Reports'
+          // },
+          // {
             href: '/admin-dashboard/departments',
             icon: (<ApartmentIcon fontSize="small" />),
             title: 'Departments'
@@ -82,6 +88,11 @@ export const Sidebar = (props : any) => {
             href: '/admin-dashboard/compliance',
             icon: (<ShieldIcon fontSize="small" />),
             title: 'Compliance'
+          },
+          {
+            href: '/admin-dashboard/approval-rule',
+            icon: (<RouteIcon fontSize="small" />),
+            title: 'Approval Rule'
           },
           {
             href: '/admin-dashboard/register',
@@ -175,7 +186,7 @@ export const Sidebar = (props : any) => {
           sx: {
             backgroundColor: 'neutral.900',
             color: '#FFFFFF',
-            width: 280
+            width: 250
           }
         }}
         variant="permanent"
@@ -194,7 +205,7 @@ export const Sidebar = (props : any) => {
         sx: {
           backgroundColor: 'neutral.900',
           color: '#FFFFFF',
-          width: 280
+          width: 250
         }
       }}
       sx={{ zIndex: (theme) => theme.zIndex.appBar + 100 }}

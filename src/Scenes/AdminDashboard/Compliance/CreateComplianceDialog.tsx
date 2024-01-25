@@ -8,12 +8,16 @@ import {
   FormControlLabel,
   Switch,
   FormHelperText,
+  Select,
+  MenuItem,
 } from '@mui/material';
 import axiosInstance from '../../../Utils/axiosUtil';
 import { showMessage } from '../../../Store/reducers/snackbar';
 import { AppDispatch } from '../../../Utils/types/type';
 import { useDispatch } from 'react-redux';
 import { fetchCompliances } from '../../../Store/reducers/compliance';
+import { Page } from '../../../Utils/constants';
+import { useQuery } from '@tanstack/react-query';
 
 interface State {
   name: string;
@@ -109,6 +113,20 @@ const AddDialog: React.FC<AddDialogProps> = ({ open, onClose, onSubmit }) => {
     dispatch({ type: 'change', field, value });
   };
 
+
+  const { data: approvalRule } = useQuery({
+    queryKey: ['get-approval-rules'],
+    queryFn: async () => {
+      try {
+        const approvalRule = await axiosInstance.get('/approval-rules');
+        return approvalRule.data
+      } catch (err) {
+        console.error(err)
+      }
+    }
+  })
+
+
   const handleSave = async () => {
     await dispatch({ type: 'validate' });
 
@@ -158,6 +176,8 @@ const AddDialog: React.FC<AddDialogProps> = ({ open, onClose, onSubmit }) => {
     onClose()
     dispatch({ type: 'reset' });
   }
+
+  const approvalRuleName = approvalRule?.filter((ap : any) => ap.id == parseInt(state.approvalRulesId))[0]?.id || ''
 
   return (
     <Dialog open={open} onClose={onDialogClose} maxWidth="xs" fullWidth>
@@ -227,15 +247,19 @@ const AddDialog: React.FC<AddDialogProps> = ({ open, onClose, onSubmit }) => {
           }
           label="Is External Submission"
         />
-        <TextField
-          label="Approval Rules ID"
-          fullWidth
-          margin="normal"
-          value={state.approvalRulesId}
-          onChange={(e) => handleTextChange('approvalRulesId', e.target.value)}
-        />
+        <Select
+            sx={{ width: "100%" }}
+            value={approvalRuleName}
+            onChange={(e) => handleTextChange('approvalRulesId', e.target.value)}
+          >
+            {approvalRule?.map((rule : any) => (
+              <MenuItem key={rule._is} value={rule.id}>
+                {rule?.title}
+              </MenuItem>
+            ))}
+          </Select>
         <FormHelperText error>{state.errors.general}</FormHelperText>
-        <Button variant="contained" color="primary" onClick={handleSave}>
+        <Button variant="contained" color="primary" onClick={handleSave} sx={{ mt: 1}}>
           Save
         </Button>
       </DialogContent>

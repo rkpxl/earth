@@ -1,13 +1,20 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import Layout from '../../../Scenes/Home'
 import Analytics from "../../../Components/Admin Dashboard/Analytics";
+import { useRouter } from 'next/router';
 
-function index() {
+function Index() {
+  const router = useRouter()
+
+  useEffect(() => {
+    router.push("/admin-dashboard/departments")
+  },[])
+
   return (
-   <Layout><Analytics /></Layout>
+   <><Analytics /></>
   )
 }
 
-index.propTypes = {}
+Index.propTypes = {}
 
-export default index
+export default Index

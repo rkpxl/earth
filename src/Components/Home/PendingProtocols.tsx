@@ -3,7 +3,7 @@ import ArrowRightIcon from '@mui/icons-material/ArrowRight';
 import PeopleIcon from '@mui/icons-material/PeopleOutlined';
 import NextLink from 'next/link';
 
-export const PendingTask = (props : any) => {
+export const PendingProtocols = (props : any) => {
   const { length, task } = props;
   return(
     <Card {...props} sx={{ height: '100%' }}>
@@ -19,7 +19,7 @@ export const PendingTask = (props : any) => {
               gutterBottom
               variant="overline"
             >
-              Pending Tasks
+              Pending Approvals
             </Typography>
             <Typography
               color="textPrimary"
@@ -62,10 +62,10 @@ export const PendingTask = (props : any) => {
         >
           <NextLink
             style={{width: '100%'}}
-            href="/pending-tasks"
+            href="/pending-protocols"
           >
             <Button
-              color="secondary"
+              color="primary"
               endIcon={<ArrowRightIcon fontSize="small" />}
               size="small"
               variant="text"
@@ -79,4 +79,4 @@ export const PendingTask = (props : any) => {
     </Card>
 )};
 
-export default PendingTask;
+export default PendingProtocols;

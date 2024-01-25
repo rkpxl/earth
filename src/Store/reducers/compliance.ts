@@ -3,6 +3,7 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as type from '../../Utils/types/type'
 import axiosInstance from '../../Utils/axiosUtil';
 import { ICompliance } from '../../Utils/types/type';
+import { Page } from '../../Utils/constants';
 
 
 
@@ -19,8 +20,14 @@ const initialState: ComplianceState = {
 };
 
 export const fetchCompliances = createAsyncThunk('compliance/fetchCompliances', async () => {
+  // const { page = Page.defaultPage, pageSize = Page.defaultPageSize } = params;
   try {
-    const response: type.APIResponse<Array<ICompliance>> = await axiosInstance.get('/compliance');
+    const response: type.APIResponse<Array<ICompliance>> = await axiosInstance.get('/compliance', {
+      // params: {
+      //   page: page,
+      //   pageSize: pageSize,
+      // },
+    });
     return response.data;
   } catch (error) {
     throw error || 'Error fetching compliances';

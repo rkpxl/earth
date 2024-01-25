@@ -3,11 +3,13 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import * as type from '../../Utils/types/type'
 import axiosInstance from '../../Utils/axiosUtil';
 import { IGroup } from '../../Utils/types/type';
+import { Page } from '../../Utils/constants';
 
 
 
 interface GroupState {
-  data: IGroup[] | undefined;
+  // data: { data: IGroup[] , total: number} | undefined;
+  data: IGroup[] | undefined,
   loading: boolean;
   error: string | null;
 }
@@ -20,12 +22,19 @@ const initialState: GroupState = {
 
 export const fetchGroups = createAsyncThunk('group/fetchGroups', async () => {
   try {
-    const response: type.APIResponse<Array<IGroup>> = await axiosInstance.get('/group');
+    // const { page = Page.defaultPage, pageSize = Page.defaultPageSize, searchtext = '' } = params;
+    const response: type.APIResponse<IGroup[]> = await axiosInstance.get('/group', {
+      // params: {
+      //   page: page,
+      //   pageSize: pageSize,
+      // },
+    });
     return response.data;
   } catch (error) {
     throw error || 'Error fetching groups';
   }
 });
+
 const groupSlice = createSlice({
   name: 'group',
   initialState,
@@ -45,6 +54,10 @@ const groupSlice = createSlice({
     setError: (state, action: PayloadAction<string | null>) => {
       state.error = action.payload;
     },
+
+    groupSearch: (state, action: PayloadAction<{searchText: string}>) => {
+      const { searchText } = action.payload
+    }
   },
   extraReducers: (builder) => {
     // Handling the pending, fulfilled, and rejected states of fetchGroups
