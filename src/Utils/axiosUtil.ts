@@ -18,7 +18,11 @@ axiosInstance.interceptors.request.use((config: any) => {
   if (typeof localStorage === 'undefined' && config.headers) {
     const cookie = axiosInstance.context?.req?.headers?.cookie;
     config.headers.Cookie = cookie || '';
+  } else {
+    const cookie = document.cookie;
+    config.headers.Cookie = cookie || '';
   }
+  return config;
   return config;
 });
 
