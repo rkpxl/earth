@@ -10,9 +10,9 @@ interface IProps {
 const PendingTasks = ({ allApprovals }: IProps) => {
   const router = useRouter()
 
-  const handleRowClick = (e: any, row: IProtocol) => {
+  const handleRowClick = (e: any, row: any) => {
     e.preventDefault()
-    router.push(`/forms/${row._id}`)
+    router.push(`/forms/${row?.protocol_id?._id}?approver=${row?._id}`)
   }
 
   return (

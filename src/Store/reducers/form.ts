@@ -49,7 +49,7 @@ const formSlice = createSlice({
   name: 'form',
   initialState,
   reducers: {
-    initState: () => initialState,
+    initFormState: () => initialState,
     updateTab: (
       state,
       action: PayloadAction<{
@@ -195,7 +195,7 @@ const formSlice = createSlice({
 export default formSlice.reducer
 
 export const {
-  initState,
+  initFormState,
   updateTabInfo,
   updateTab,
   fetchAllQuestionsAndAnswers,

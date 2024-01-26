@@ -18,6 +18,7 @@ import { ICompliance, IDepartment } from '../../Utils/types/type'
 import axiosInstance from '../../Utils/axiosUtil'
 import { showMessage } from '../../Store/reducers/snackbar'
 import { useDispatch } from 'react-redux'
+import { initFormState } from '../../Store/reducers/form'
 
 interface StyledErrorMessageProps {
   name: string
@@ -75,13 +76,14 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
 
   const handleSubmit = async (values: FormValues, { setSubmitting }: any) => {
     // Handle form submission logic here
+    dispatch(initFormState())
     if (complianceType?.id) {
       const response: any = await axiosInstance.post('/protocol', {
         title: values.title,
         description: values.description,
         department: values.department,
         complianceId: complianceType.id,
-        ruleId: complianceType?.approvalRulesId,
+        ruleId: parseInt(complianceType?.approvalRulesId || '-1'),
       })
       if (response.status < 300) {
         dispatch(showMessage({ message: 'Protocol is drafted', severity: 'success' }))
@@ -115,7 +117,7 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
                   <FormControl fullWidth>
                     <InputLabel>Department</InputLabel>
                     <Select {...field} label="Department">
-                      {departments?.data?.map((dep: IDepartment, index: number) => (
+                      {departments?.map((dep: IDepartment, index: number) => (
                         <MenuItem value={dep.name} key={index.toString()}>
                           {dep.name}
                         </MenuItem>

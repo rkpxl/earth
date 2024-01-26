@@ -96,6 +96,20 @@ const EditableTable: React.FC<EditableTableProps> = ({
     generateExcel(sortedData, title, setIsLoading)
   }
 
+  function formatColumnValue(column : string, row : any) {
+    if (column === 'createdAt' || column === 'updatedAt') {
+      return getStandatedDateWithTime(row[column]);
+    } else if (column === 'isActive') {
+      return row[column] ? 'Active' : 'Not Active';
+    } else if(column === 'protocol_id' && typeof row[column] === 'object') {
+      return row[column]?._id;
+    } else if (typeof row[column] === 'object') {
+      return JSON.stringify(row[column]);
+    } else {
+      return row[column];
+    } 
+  }
+
   const columns = Object.keys(data[0])
   const visibleColumnsForDialog = columns.filter((column) => !excludedColumns.includes(column))
 
@@ -237,15 +251,7 @@ const EditableTable: React.FC<EditableTableProps> = ({
                     (column, columnIndex) =>
                       visibleColumns[column] && (
                         <TableCell key={columnIndex}>
-                          {column === 'createdAt' || column === 'updatedAt'
-                            ? getStandatedDateWithTime(row[column])
-                            : column === 'isActive'
-                              ? row[column]
-                                ? 'Active'
-                                : 'Not Active'
-                              : typeof row[column] === 'object'
-                                ? JSON.stringify(row[column])
-                                : row[column]}
+                          {formatColumnValue(column, row)}
                         </TableCell>
                       ),
                   )}
