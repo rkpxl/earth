@@ -96,18 +96,18 @@ const EditableTable: React.FC<EditableTableProps> = ({
     generateExcel(sortedData, title, setIsLoading)
   }
 
-  function formatColumnValue(column : string, row : any) {
+  function formatColumnValue(column: string, row: any) {
     if (column === 'createdAt' || column === 'updatedAt') {
-      return getStandatedDateWithTime(row[column]);
+      return getStandatedDateWithTime(row[column])
     } else if (column === 'isActive') {
-      return row[column] ? 'Active' : 'Not Active';
-    } else if(column === 'protocol_id' && typeof row[column] === 'object') {
-      return row[column]?._id;
+      return row[column] ? 'Active' : 'Not Active'
+    } else if (column === 'protocol_id' && typeof row[column] === 'object') {
+      return row[column]?._id
     } else if (typeof row[column] === 'object') {
-      return JSON.stringify(row[column]);
+      return JSON.stringify(row[column])
     } else {
-      return row[column];
-    } 
+      return row[column]
+    }
   }
 
   const columns = Object.keys(data[0])
@@ -250,9 +250,7 @@ const EditableTable: React.FC<EditableTableProps> = ({
                   {visibleColumnsForDialog.map(
                     (column, columnIndex) =>
                       visibleColumns[column] && (
-                        <TableCell key={columnIndex}>
-                          {formatColumnValue(column, row)}
-                        </TableCell>
+                        <TableCell key={columnIndex}>{formatColumnValue(column, row)}</TableCell>
                       ),
                   )}
                 </TableRow>

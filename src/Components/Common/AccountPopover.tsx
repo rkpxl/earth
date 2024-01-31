@@ -2,7 +2,6 @@ import React from 'react'
 import Router from 'next/router'
 import PropTypes from 'prop-types'
 import { Box, MenuItem, MenuList, Popover, Typography } from '@mui/material'
-import cookies from 'react-cookie'
 import { removeAllCookie } from '../../Utils/cookieUtils'
 
 export const AccountPopover = (props: any) => {

@@ -20,7 +20,7 @@ const Forms: React.FC = (): JSX.Element => {
       pathname: router.pathname,
       query: {},
     })
-  }, [])
+  }, [router])
 
   return (
     <>

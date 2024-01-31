@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import { Box, Container, Typography } from '@mui/material'
 import PasswordChange from '../../Components/Settings/PasswordChange'
-import { GetStaticPaths, GetStaticProps } from 'next'
 
 const Page = () => (
   <>

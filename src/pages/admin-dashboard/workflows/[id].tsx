@@ -7,7 +7,7 @@ export default function WorkFlowMoreDetails() {
 
   useEffect(() => {
     router.push('/admin-dashboard/departments')
-  }, [])
+  }, [router])
   return (
     <>
       <Workflows id={router.query.id} />

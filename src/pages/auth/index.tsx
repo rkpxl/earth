@@ -6,7 +6,7 @@ const IndexPage = () => {
 
   useEffect(() => {
     router.push('/auth/password-update')
-  }, [])
+  }, [router])
   return null
 }
 

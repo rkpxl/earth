@@ -1,13 +1,5 @@
 import React from 'react'
-import {
-  Grid,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Grid, FormControl, InputLabel, MenuItem, Select, Typography } from '@mui/material'
 import CommentJustification from './CommentJustification'
 import { useProtocolQuestionContext } from './FormQuestionRenderer'
 

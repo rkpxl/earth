@@ -7,12 +7,9 @@ import {
   DialogTitle,
   TextField,
   List,
-  ListItem,
   ListItemText,
   ListItemButton,
 } from '@mui/material'
-import { GetStaticPaths, GetStaticProps } from 'next'
-import axios from 'axios'
 
 interface PersonnelPerson {
   userId: string | null

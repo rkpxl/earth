@@ -7,7 +7,7 @@ const DoneTasks = () => {
 
   useEffect(() => {
     router.push('/admin-dashboard/departments')
-  }, [])
+  }, [router])
 
   return (
     <>

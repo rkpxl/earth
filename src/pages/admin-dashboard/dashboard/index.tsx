@@ -7,7 +7,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     router.push('/admin-dashboard/departments')
-  }, [])
+  }, [router])
 
   return (
     <>

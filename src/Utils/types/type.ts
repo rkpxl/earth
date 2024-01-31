@@ -213,6 +213,30 @@ export interface IApproval {
   __v: number
 }
 
+export enum IApprovalAction {
+  Initial,
+  Amendment,
+  ConReview,
+}
+
+export interface IFlow {
+  _id: string
+  title: string
+  description: string
+  piName: string
+  actionType: IApprovalAction
+  approver_name: string
+  status: string
+  createdAt: string
+  updatedAt: string
+}
+
+export const ApprovalAction = {
+  Initial: 'Initial Application',
+  Amendment: 'Amendment',
+  ConReview: 'Continue Review',
+}
+
 export type QuestionType = 'text' | 'dropdown' | 'yesno' | 'bigtext' | 'multiselect' | 'info'
 export type SnackbarSeverity = 'success' | 'error' | 'warning'
 export type RootState = ReturnType<typeof store.getState>

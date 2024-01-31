@@ -1,39 +1,48 @@
 import React from 'react'
 import Head from 'next/head'
 import { Box, Button, Container, Grid } from '@mui/material'
-import AllProtocols from '../../Components/Home/AllProtocols'
-import Progress from '../../Components/Home/Progress'
-import PendingProtocols from '../../Components/Home/PendingProtocols'
+// import Progress from '../../Components/Home/Progress'
 import { LatestTasks } from '../../Components/Home/LatestTasks'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import ProtocolPopUp from '../../Components/Common/ProtocolDialog'
-import axios from 'axios'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { useHomeContext } from '../../pages'
 import { ICompliance } from '../../Utils/types/type'
-import axiosInstance from '../../Utils/axiosUtil'
-
-interface TaskData {}
-
-interface TaskPageProps {
-  taskData: any
-}
+import HomePageCard from '../../Components/Home/HomePageCard'
 
 const Home = () => {
   const homeContext = useHomeContext()
-  const { compliances, allProtocols, allApprovals } = homeContext
+  const { compliances, allProtocols, allApprovals, allActiveApprovals } = homeContext
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [popOpen, setPopOpen] = React.useState(false)
   const [complianceType, setComplianceType] = React.useState<ICompliance>()
   const [allTask, setAllTask] = React.useState<any>([])
-  const [pendingTask, setPendingTask] = React.useState([])
-  const [doneTask, setApprovedTask] = React.useState([])
   const open = Boolean(anchorEl)
+
+  const homeCard = [
+    {
+      title: 'Your Protocol Portfolio',
+      icon: '/static/images/tick.svg',
+      nextPageRoute: '/all-protocols',
+      count: allProtocols?.total,
+    },
+    {
+      title: 'Pending Decision Protocols',
+      icon: '/static/images/info.svg',
+      nextPageRoute: '/pending-protocols',
+      count: allApprovals?.total,
+    },
+    {
+      title: 'Protocol Portfolio History',
+      icon: '/static/images/paper.svg',
+      nextPageRoute: '/all-protocol-status',
+      count: allActiveApprovals?.total,
+    },
+  ]
 
   React.useEffect(() => {
     setAllTask([])
-    setApprovedTask([])
   }, [])
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -117,23 +126,17 @@ const Home = () => {
           </Menu>
         </Box>
         <Container maxWidth={false}>
-          <Grid container spacing={2}>
-            <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <AllProtocols allProtocols={allProtocols?.total} />
-            </Grid>
-            <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <PendingProtocols length={allApprovals?.total} task={pendingTask} />
-            </Grid>
-            <Grid item lg={4} sm={6} xl={3} xs={12}>
-              <Progress
-                progress={Math.round(
-                  (doneTask.length / (pendingTask.length + doneTask.length || 1)) * 100,
-                )}
-              />
-            </Grid>
-            <Grid item lg={8} md={12} xl={9} xs={12}>
-              {/* <LatestOrders /> */}
-            </Grid>
+          <Grid container spacing={2} mb={2}>
+            {homeCard.map((card) => (
+              <Grid item key={card.title} lg={4} sm={6} xl={3} xs={12}>
+                <HomePageCard
+                  count={card.count}
+                  title={card.title}
+                  icon={card.icon}
+                  nextPageRoute={card.nextPageRoute}
+                />
+              </Grid>
+            ))}
           </Grid>
           <LatestTasks task={allTask} />
           <ProtocolPopUp

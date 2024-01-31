@@ -1,13 +1,5 @@
 import React from 'react'
-import {
-  Grid,
-  FormControl,
-  FormGroup,
-  FormControlLabel,
-  Checkbox,
-  TextField,
-  Typography,
-} from '@mui/material'
+import { Grid, FormControl, FormGroup, FormControlLabel, Checkbox, Typography } from '@mui/material'
 import CommentJustification from './CommentJustification'
 import { useProtocolQuestionContext } from './FormQuestionRenderer'
 

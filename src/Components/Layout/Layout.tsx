@@ -24,7 +24,7 @@ const Layout: React.FC<LayoutProps> = ({ children, isAuthenticated }) => {
     if (!isTokenValid && currentPath != '/login') {
       router.push('/login')
     }
-  }, [])
+  }, [router, currentPath])
 
   return <Suspense fallback={<CircularProgress />}>{children}</Suspense>
 }

@@ -15,8 +15,11 @@ const loadingSlice = createSlice({
   name: 'loading',
   initialState,
   reducers: {
-    toggleLoading: (state) => {
-      state.isLoading = !state.isLoading
+    startLoading: (state) => {
+      state.isLoading = true
+    },
+    endLoading: (state) => {
+      state.isLoading = false
     },
   },
 })
@@ -24,4 +27,4 @@ const loadingSlice = createSlice({
 export default loadingSlice.reducer
 
 // Exporting the synchronous actions
-export const { toggleLoading } = loadingSlice.actions
+export const { startLoading, endLoading } = loadingSlice.actions

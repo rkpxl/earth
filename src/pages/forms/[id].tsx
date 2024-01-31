@@ -14,11 +14,13 @@ import Loading from '../../Components/Common/Loading'
 import IconButton from '@mui/material/IconButton'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { generatePDF } from '../../Utils/fileGenerator'
-import { toggleLoading } from '../../Store/reducers/loading'
+import { startLoading, endLoading } from '../../Store/reducers/loading'
+import LifeCycle from '../../Scenes/Protocol/LifeCycle'
 
 interface IProps {
   compliance: ICompliance
   protocol: IProtocol
+  flow: any
 }
 
 function a11yProps(index: number) {
@@ -30,7 +32,7 @@ function a11yProps(index: number) {
 
 export default function DynamicForm(props: IProps) {
   const router = useRouter()
-  const { compliance, protocol } = props
+  const { compliance, protocol, flow } = props
   const { id: protocol_id } = router.query as { id: string }
   const formData = useSelector((state: RootState) => state.form)
   const [value, setValue] = useState<number>(0)
@@ -69,9 +71,9 @@ export default function DynamicForm(props: IProps) {
   }
 
   const handleDownloadOption = async () => {
-    dispatch(toggleLoading())
+    dispatch(startLoading())
     await generatePDF(formData, protocolData)
-    dispatch(toggleLoading())
+    dispatch(endLoading())
     handleMenuClose()
   }
 
@@ -112,7 +114,7 @@ export default function DynamicForm(props: IProps) {
           variant="scrollable"
           aria-label="basic tabs example"
         >
-          <Tab label="Summary" {...a11yProps(0)} />
+          <Tab label="Life Cycle" {...a11yProps(0)} />
           {compliance?.tabNames
             ?.sort((a: any, b: any) => parseInt(a.position) - parseInt(b.position))
             .map((step) => {
@@ -135,7 +137,7 @@ export default function DynamicForm(props: IProps) {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        Summary
+        <LifeCycle flow={flow} />
       </CustomTabPanel>
       {compliance?.tabNames
         ?.sort((a: any, b: any) => parseInt(a.position) - parseInt(b.position))
@@ -181,11 +183,13 @@ export const getServerSideProps = async function getServerSideProps(context: any
         }
       }
       const compliance = await axiosInstance.get(`/compliance/${protocol.data.complianceId}`)
+      const flow = await axiosInstance.get(`/flow/protocol/${id}`)
       return {
         props: {
           isAuthenticated: true,
           compliance: compliance.data,
           protocol: protocol.data,
+          flow: flow.data,
         },
       }
     }

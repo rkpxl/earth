@@ -36,7 +36,7 @@ export default function ManageComplianceMember(props: IProps) {
       setData(response.data)
       setLoading(false)
     })()
-  }, [])
+  }, [id, tabNumber])
 
   const handleOpenConfirmation = (args: any) => {
     dispatch(

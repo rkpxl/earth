@@ -6,6 +6,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { showMessage } from '../../../Store/reducers/snackbar'
 import { validateForm, validateFormHelper } from '../../../Store/reducers/form'
 import { useRouter } from 'next/router'
+import { endLoading, startLoading } from '../../../Store/reducers/loading'
 
 interface IProps {
   compliance: ICompliance
@@ -23,21 +24,30 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
   const submitHandle = async () => {
     const isAllSet = validateFormHelper(formRootData)
     const { approver } = router.query
-    console.log('id', router.query)
     dispatch(validateForm())
     if (isAllSet) {
       try {
-        let response: any;
-        if(reviewer === "Approve") {
-          if(protocol.status === "Draft") {
+        let response: any
+        dispatch(startLoading())
+        if (reviewer === 'Approve') {
+          if (protocol.status === 'Draft' || protocol.status === 'rejected') {
             response = await axiosInstance.post('/flow', {
               protocol_id: protocol._id,
             })
           } else {
             response = await axiosInstance.put(`/approval/approve?_id=${approver}`)
           }
+        } else {
+          if (protocol.status === 'Draft') {
+            dispatch(
+              showMessage({ message: 'Please select approve to process', severity: 'success' }),
+            )
+          } else {
+            response = await axiosInstance.put(`/approval/reject?_id=${approver}`)
+          }
         }
-        if (response?.status < 300) { 
+        dispatch(endLoading())
+        if (response?.status < 300) {
           dispatch(showMessage({ message: 'Submited', severity: 'success' }))
           router.push('/')
         } else {
@@ -52,6 +62,7 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
         showMessage({ message: 'Fill all required answers', severity: 'warning', duration: 5000 }),
       )
     }
+    dispatch(endLoading())
   }
 
   useEffect(() => {
@@ -84,14 +95,14 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
             required
             label="Select reviewer"
             size="small"
-            onChange={(e : any) => setReviewer(e.target.value)}
+            onChange={(e: any) => setReviewer(e.target.value)}
           >
             {/* {protocol?.approvers?.map((option: any, index: number) => (
               <MenuItem key={index} value={option}>
                 {`${option.name} ${option?.role ? '-' : ''} ${option?.role || ''}`}
               </MenuItem>
             ))} */}
-            {["Approve", "Reject"].map((option: any, index: number) => (
+            {['Approve', 'Reject'].map((option: any, index: number) => (
               <MenuItem key={index} value={option}>
                 {option}
               </MenuItem>

@@ -47,7 +47,7 @@ const AdminDashboard = (): JSX.Element => {
 
   useEffect(() => {
     fetchData()
-  }, [])
+  }, [fetchData])
 
   return (
     <Grid p={3}>

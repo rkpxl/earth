@@ -1,5 +1,5 @@
 import React from 'react'
-import { Grid, Slider, TextField } from '@mui/material'
+import { Grid, Slider } from '@mui/material'
 import CommentJustification from './CommentJustification'
 import { useProtocolQuestionContext } from './FormQuestionRenderer'
 

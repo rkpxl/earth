@@ -14,10 +14,8 @@ import {
 } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete'
 import axiosInstance from '../../../Utils/axiosUtil'
-import { Console } from 'console'
 import { useDispatch, useSelector } from 'react-redux'
 import { showMessage } from '../../../Store/reducers/snackbar'
-import { RefetchQueryFilters, useQueryClient } from '@tanstack/react-query'
 import { updateAnswer } from '../../../Store/reducers/form'
 
 interface IProps {

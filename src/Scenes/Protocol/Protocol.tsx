@@ -1,8 +1,7 @@
-/* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect, useState } from 'react'
-import { IAnswer, ICompliance, IProtocol, IQuestion, RootState } from '../../Utils/types/type'
+import React, { useContext } from 'react'
+import { IAnswer, ICompliance, IProtocol, IQuestion } from '../../Utils/types/type'
 import axiosInstance from '../../Utils/axiosUtil'
-import { Grid, Paper, Typography, List, ListItem, ListItemText, ListItemIcon } from '@mui/material'
+import { Grid, Paper, Typography, List, ListItem, ListItemText } from '@mui/material'
 import FormQuestionRenderer from '../../Components/Common/Form/FormQuestionRenderer'
 import { useQuery } from '@tanstack/react-query'
 import Router from 'next/router'

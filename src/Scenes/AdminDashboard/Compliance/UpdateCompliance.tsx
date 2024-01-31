@@ -120,7 +120,15 @@ export default function UpdateCompliance(props: IProps) {
         tabNames: compliance.tabNames,
       },
     })
-  }, [])
+  }, [
+    compliance.title,
+    compliance.description,
+    compliance.tabCount,
+    compliance.isParallelApproval,
+    compliance.isExternalSubmission,
+    compliance.approvalRulesId,
+    compliance.tabNames,
+  ])
 
   const handleTabCountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const count = parseInt(event.target.value, 10) || 1
