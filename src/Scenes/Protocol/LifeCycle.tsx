@@ -10,7 +10,11 @@ import MenuItem from '@mui/material/MenuItem'
 import { Box, Grid } from '@mui/material'
 import { getStandatedDateWithTime } from '../../Utils/dateTime'
 import axiosInstance from '../../Utils/axiosUtil'
-import { ApprovalAction, IFlow } from '../../Utils/types/type'
+import { IFlow, TActionProtocol } from '../../Utils/types/type'
+import { useDispatch } from 'react-redux'
+import confirm, { openConfirmation } from '../../Store/reducers/confirm'
+import ConfirmationPopup from '../../Components/Common/ConfirmationDialog'
+import { useRouter } from 'next/router'
 
 interface DetailsData {
   [key: string]: any
@@ -20,17 +24,47 @@ interface IProps {
   flow: Array<IFlow>
 }
 
+const ApprovalAction = [
+  { key: 'AMENDMENT', value: 'Amendment'},
+  { key: 'REVISE', value: 'Revise'},
+  { key: 'EXPIRE', value: 'Expire'},
+  { key: 'CLOSURE', value: 'Closure'},
+  { key: 'CONREV', value: 'Continuous Review' }
+]
+
 export default function LifeCycle({ flow }: IProps) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [detailsData, setDetailsData] = useState<DetailsData>({})
   const [accordionLoading, setAccordionLoading] = useState(false)
+  const dispatch = useDispatch()
+  const router = useRouter()
+  const { id } = router.query
 
   const handleClick = (event: any) => {
     setAnchorEl(event.currentTarget)
   }
 
-  const handleClose = () => {
+  const handleClose = (action? : string) => {
+    if(action) {
+      dispatch(
+        openConfirmation({
+          args: action
+        }),
+      )
+    }
     setAnchorEl(null)
+  }
+
+  const handleConfirmation = async (action: string) => {
+    try {
+      const response = await axiosInstance.post('/flow/action', {
+        protocol_id: id,
+        actionType: action,
+      })
+      console.log('response', response)
+    } catch (err) {
+      console.error(err)
+    }
   }
 
   const handleAccordionChange = async (panelIndex: number, item: any) => {
@@ -64,15 +98,12 @@ export default function LifeCycle({ flow }: IProps) {
             anchorEl={anchorEl}
             keepMounted
             open={Boolean(anchorEl)}
-            onClose={handleClose}
+            onClose={() => handleClose()}
             sx={{
               mt: 1,
             }}
           >
-            <MenuItem onClick={handleClose}>Amendment</MenuItem>
-            <MenuItem onClick={handleClose}>Admin Amendment</MenuItem>
-            <MenuItem onClick={handleClose}>Continue Review</MenuItem>
-            <MenuItem onClick={handleClose}>Terminate</MenuItem>
+            {ApprovalAction.map((a) => (<MenuItem key={a.key} onClick={() => handleClose(a.key)}>{a.value}</MenuItem>))}
           </Menu>
         </Grid>
       </Grid>
@@ -132,8 +163,7 @@ export default function LifeCycle({ flow }: IProps) {
             <Grid container spacing={2} alignItems="center" justifyContent="space-between">
               <Grid item xs={12} sm={6} md={3}>
                 <Typography variant="body2" fontSize="16px">
-                  {/* @ts-ignore */}
-                  {ApprovalAction?.[item?.actionType] || ''}
+                  {item?.actionType || ''}
                 </Typography>
               </Grid>
               <Grid item xs={12} sm={6} md={3}>
@@ -214,6 +244,7 @@ export default function LifeCycle({ flow }: IProps) {
           </AccordionDetails>
         </Accordion>
       ))}
+      <ConfirmationPopup handleConfirm={handleConfirmation} />
     </div>
   )
 }

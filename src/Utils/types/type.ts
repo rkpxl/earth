@@ -231,11 +231,20 @@ export interface IFlow {
   updatedAt: string
 }
 
-export const ApprovalAction = {
-  Initial: 'Initial Application',
-  Amendment: 'Amendment',
-  ConReview: 'Continue Review',
-}
+export type TActionProtocol =
+  | 'AMENDMENT'
+  | 'CONREV'
+  | 'REVISE'
+  | 'EXPIRE'
+  | 'CLOSURE';
+
+export const ApprovalAction: Record<TActionProtocol, string> = {
+  AMENDMENT: 'Amendment',
+  REVISE: 'Revise',
+  EXPIRE: 'Expire',
+  CLOSURE: 'Closure',
+  CONREV: 'Continuous Review'
+};
 
 export type QuestionType = 'text' | 'dropdown' | 'yesno' | 'bigtext' | 'multiselect' | 'info'
 export type SnackbarSeverity = 'success' | 'error' | 'warning'

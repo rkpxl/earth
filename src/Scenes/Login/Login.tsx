@@ -116,9 +116,13 @@ const Login = () => {
     setIsPasswordForgot((prev) => !prev)
   }
 
-  const handleGoogleSubmit = () => {}
+  const handleGoogleSubmit = () => {
+    dispatch(showMessage({message: "Please refer to email and password", severity: "warning"}))
+  }
 
-  const handleFBSubmit = () => {}
+  const handleFBSubmit = () => {
+    dispatch(showMessage({message: "Please refer to email and password", severity: "warning"}))
+  }
 
   return (
     <Suspense fallback={<CircularProgress />}>
@@ -237,11 +241,11 @@ const Login = () => {
                   Forgot password?
                 </Link>
               </Grid>
-              <Grid item>
+              {/* <Grid item>
                 <Link href="#" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
-              </Grid>
+              </Grid> */}
             </Grid>
           </form>
         </Container>

@@ -174,6 +174,7 @@ export const getServerSideProps = async function getServerSideProps(context: any
     const response = await axiosInstance.get('/auth/validate-token')
     if (response.status === 200) {
       const protocol: any = await axiosInstance.get(`/protocol/${id}`)
+      console.log('protocol', protocol)
       if (!protocol) {
         return {
           redirect: {
