@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import Approvals from '../../../Components/Admin Dashboard/Approvals'
-import { useRouter } from 'next/router'
+import axiosInstance from '../../../Utils/axiosUtil'
 
-function Index() {
+function Index({  protocolAnalytics } : any) {
   return (
     <>
       <Approvals />
@@ -10,6 +10,6 @@ function Index() {
   )
 }
 
-Index.propTypes = {}
+
 
 export default Index

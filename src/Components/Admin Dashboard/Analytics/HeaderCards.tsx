@@ -5,33 +5,58 @@ import Typography from '@mui/material/Typography'
 import Grid from '@mui/material/Grid'
 import { Doughnut } from 'react-chartjs-2'
 import 'chart.js/auto'
+import { useAnalyticsContext } from '../../../pages/admin-dashboard/analytics'
+import { getAnalyticsColor } from '../../../Utils/util'
+import { ChartOptions } from 'chart.js/auto'
+
+
+const options: ChartOptions<"doughnut"> = {
+  maintainAspectRatio: false,
+  plugins: {
+    legend: {
+      position: 'right',
+    },
+  },
+};
+
 
 const Dashboard = () => {
-  const cardStyle = {
-    boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
-    marginBottom: '16px',
-    padding: '16px',
-    height: '100%',
-    width: '100%',
-  }
 
-  // Sample data for the pie chart
-  const chartData = {
-    labels: ['Approved', 'Rejected'],
-    datasets: [
-      {
-        data: [30, 10],
-        backgroundColor: ['#36A2EB', '#FF6384'],
-        hoverBackgroundColor: ['#36A2EB', '#FF6384'],
-      },
-    ],
-  }
+  const { protocolAnalytics } = useAnalyticsContext()
+  let totalProtocolCount = 0
+
+  const consolidatedData = protocolAnalytics.totalStatusCounts.reduce((acc : any, { _id, count } : any) => {
+    // Normalize status names
+    const status = _id.charAt(0).toUpperCase() + _id.slice(1).toLowerCase();
+    acc[status] = (acc[status] || 0) + count;
+    totalProtocolCount += count;
+    return acc;
+  }, {});
+
+  const labels = Object.keys(consolidatedData);
+  const data = Object.values(consolidatedData);
+
+  // Generate random colors for each segment
+  const backgroundColor = labels.map((l,i) => getAnalyticsColor(i));
+
+  const doughnutChartData = {
+    labels,
+    datasets: [{
+      data,
+      backgroundColor,
+    }]
+  };
 
   return (
     <Grid container spacing={2} mt={3} pl={3} pr={3}>
-      {/* First Card: Workflow Information */}
       <Grid item xs={12} md={4}>
-        <Card style={cardStyle}>
+        <Card sx={{
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          marginBottom: '16px',
+          padding: '16px',
+          height: '100%',
+          width: '100%',
+        }}>
           <CardContent>
             <Typography variant="h6" gutterBottom>
               Total Workflows
@@ -45,13 +70,22 @@ const Dashboard = () => {
 
       {/* Second Card: Chart */}
       <Grid item xs={12} md={4}>
-        <Card style={cardStyle}>
+        <Card style={{
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          marginBottom: '16px',
+          padding: '16px',
+          height: '100%',
+          width: '100%',
+        }}>
+          <Typography variant="h6" gutterBottom>
+            Protocol Chart
+          </Typography>
+          <Typography variant="body2">
+            Total Protocol: {totalProtocolCount}
+          </Typography>
           <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>
-            <Typography variant="h6" gutterBottom>
-              Workflows Chart
-            </Typography>
-            <div style={{ width: '200px', height: '200px' }}>
-              <Doughnut data={chartData} width="200px" height="200px" />
+            <div style={{ width: '100%', height: '200px' }}>
+              <Doughnut data={doughnutChartData} options={options} width="100%" height="300px" />
             </div>
           </CardContent>
         </Card>
@@ -59,7 +93,13 @@ const Dashboard = () => {
 
       {/* Third Card: Analytics Information */}
       <Grid item xs={12} md={4}>
-        <Card style={cardStyle}>
+        <Card style={{
+          boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+          marginBottom: '16px',
+          padding: '16px',
+          height: '100%',
+          width: '100%',
+        }}>
           <CardContent>
             <Typography variant="h6" gutterBottom>
               Analytics

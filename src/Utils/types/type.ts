@@ -246,6 +246,16 @@ export const ApprovalAction: Record<TActionProtocol, string> = {
   CONREV: 'Continuous Review'
 };
 
+export interface ISnapshot {
+  _id: string;
+  protocol_id: string;
+  title: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+  __v: number;
+}
+
 export type QuestionType = 'text' | 'dropdown' | 'yesno' | 'bigtext' | 'multiselect' | 'info'
 export type SnackbarSeverity = 'success' | 'error' | 'warning'
 export type RootState = ReturnType<typeof store.getState>

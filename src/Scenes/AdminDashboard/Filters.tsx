@@ -14,6 +14,17 @@ interface Filters {
   status: string
 }
 
+const ApprovalAction = [
+  { key: 'AMENDMENT', value: 'Amendment'},
+  { key: 'REVISE', value: 'Revise'},
+  { key: 'EXPIRE', value: 'Expire'},
+  { key: 'CLOSURE', value: 'Closure'},
+  { key: 'CONREV', value: 'Continuous Review' },
+  { key: 'APPROVED', value: 'Approved' },
+  { key: 'DRAFT', value: 'Draft' },
+  { key: 'REVIEW', value: 'Review' },
+]
+
 const FiltersComponent: React.FC<FiltersComponentProps> = ({
   filters,
   setFilters,
@@ -66,9 +77,7 @@ const FiltersComponent: React.FC<FiltersComponentProps> = ({
             onChange={(e) => handleFilterChange('status', e.target.value as string)}
           >
             <MenuItem value="">Select</MenuItem>
-            <MenuItem value="PENDING">Pending</MenuItem>
-            <MenuItem value="REJECTED">Rejected</MenuItem>
-            <MenuItem value="APPROVED">Approved</MenuItem>
+            {ApprovalAction.map((a) => <MenuItem key={a.key} value={a.value}>{a.value}</MenuItem>)}
           </Select>
         </FormControl>
       </Grid>

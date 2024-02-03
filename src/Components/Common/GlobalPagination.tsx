@@ -1,12 +1,6 @@
-import React, { useState, lazy, Suspense } from 'react'
-
-const Pagination = lazy(() => import('@mui/material/Pagination'))
-const Loading = lazy(() => import('./Loading'))
-const Select = lazy(() => import('@mui/material/Select'))
-const MenuItem = lazy(() => import('@mui/material/MenuItem'))
-const InputLabel = lazy(() => import('@mui/material/InputLabel'))
-const FormControl = lazy(() => import('@mui/material/FormControl'))
-const Box = lazy(() => import('@mui/system/Box'))
+import React, { Suspense } from 'react'
+import Loading from './Loading'
+import {Pagination, Select, MenuItem, FormControl, Box } from '@mui/material'
 interface GlobalPaginationProps {
   totalItems: number
   onChange: Function

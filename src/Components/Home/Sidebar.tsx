@@ -12,8 +12,7 @@ import GroupIcon from '@mui/icons-material/Group'
 import ApartmentIcon from '@mui/icons-material/Apartment'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks'
 import RouteIcon from '@mui/icons-material/Route'
-
-const ItemCount = 4
+import AnalyticsIcon from '@mui/icons-material/Analytics';
 
 export const Sidebar = (props: any) => {
   const { open, onClose } = props
@@ -47,16 +46,16 @@ export const Sidebar = (props: any) => {
         icon: <InboxIcon fontSize="small" />,
         title: 'Dashboard',
         subRoute: [
-          // {
-          //   href: '/admin-dashboard/dashboard',
-          //   icon: (<InboxIcon fontSize="small" />),
-          //   title: 'Protocol'
-          // },
-          // {
-          //   href: '/admin-dashboard/analytics',
-          //   icon: (<InboxIcon fontSize="small" />),
-          //   title: 'Analytics'
-          // },
+          {
+            href: '/admin-dashboard/dashboard',
+            icon: (<InboxIcon fontSize="small" />),
+            title: 'Protocols'
+          },
+          {
+            href: '/admin-dashboard/analytics',
+            icon: (<AnalyticsIcon fontSize="small" />),
+            title: 'Analytics'
+          },
           // {
           //   href: '/admin-dashboard/approvals',
           //   icon: (<DraftsIcon fontSize="small" />),

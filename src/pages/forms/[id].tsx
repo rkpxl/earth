@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
 import React, { useState } from 'react'
 import axiosInstance from '../../Utils/axiosUtil'
-import { AppDispatch, ICompliance, IProtocol, RootState } from '../../Utils/types/type'
+import { AppDispatch, ICompliance, IFlow, IProtocol, ISnapshot, RootState } from '../../Utils/types/type'
 import { Box, Menu, MenuItem, Tab, Tabs } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import CustomTabPanel from '../../Components/Common/CustomTabPanel'
@@ -16,11 +16,13 @@ import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { generatePDF } from '../../Utils/fileGenerator'
 import { startLoading, endLoading } from '../../Store/reducers/loading'
 import LifeCycle from '../../Scenes/Protocol/LifeCycle'
+import { showMessage } from '../../Store/reducers/snackbar'
 
 interface IProps {
-  compliance: ICompliance
-  protocol: IProtocol
-  flow: any
+  compliance: ICompliance;
+  protocol: IProtocol;
+  snapshots: Array<ISnapshot>;
+  flow: Array<IFlow>;
 }
 
 function a11yProps(index: number) {
@@ -32,7 +34,7 @@ function a11yProps(index: number) {
 
 export default function DynamicForm(props: IProps) {
   const router = useRouter()
-  const { compliance, protocol, flow } = props
+  const { compliance, protocol, flow, snapshots } = props
   const { id: protocol_id } = router.query as { id: string }
   const formData = useSelector((state: RootState) => state.form)
   const [value, setValue] = useState<number>(0)
@@ -77,6 +79,26 @@ export default function DynamicForm(props: IProps) {
     handleMenuClose()
   }
 
+  const handleSnapshot = async () => {
+    try {
+      dispatch(startLoading())
+      const response = await axiosInstance.post('/snapshot', {
+        protocol_id,
+        title: protocolData?.protocolAction,
+        description: new Date().getDate()
+      })
+      if(response.status < 300) {
+        dispatch(showMessage({message: "Snapshot has been taken", severity: "success"}))
+      } else {
+        dispatch(showMessage({message: "Please try again", severity: "warning"}))
+      }
+    } catch (err) {
+       console.error(err)
+    } finally {
+      dispatch(endLoading())
+    }
+  }
+
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
@@ -106,7 +128,7 @@ export default function DynamicForm(props: IProps) {
           onClose={handleMenuClose}
         >
           <MenuItem onClick={handleDownloadOption}>Download PDF</MenuItem>
-          {/* Add more download options as needed */}
+          <MenuItem onClick={handleSnapshot}>Take Snapshot</MenuItem>
         </Menu>
         <Tabs
           value={value}
@@ -114,7 +136,7 @@ export default function DynamicForm(props: IProps) {
           variant="scrollable"
           aria-label="basic tabs example"
         >
-          <Tab label="Life Cycle" {...a11yProps(0)} />
+          <Tab label="Manage" {...a11yProps(0)} />
           {compliance?.tabNames
             ?.sort((a: any, b: any) => parseInt(a.position) - parseInt(b.position))
             .map((step) => {
@@ -137,7 +159,7 @@ export default function DynamicForm(props: IProps) {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <LifeCycle flow={flow} />
+        <LifeCycle flow={flow} snapshots={snapshots}/>
       </CustomTabPanel>
       {compliance?.tabNames
         ?.sort((a: any, b: any) => parseInt(a.position) - parseInt(b.position))
@@ -174,7 +196,6 @@ export const getServerSideProps = async function getServerSideProps(context: any
     const response = await axiosInstance.get('/auth/validate-token')
     if (response.status === 200) {
       const protocol: any = await axiosInstance.get(`/protocol/${id}`)
-      console.log('protocol', protocol)
       if (!protocol) {
         return {
           redirect: {
@@ -183,14 +204,18 @@ export const getServerSideProps = async function getServerSideProps(context: any
           },
         }
       }
-      const compliance = await axiosInstance.get(`/compliance/${protocol.data.complianceId}`)
-      const flow = await axiosInstance.get(`/flow/protocol/${id}`)
+      const [compliance, flow, snapshots] = await Promise.all([
+        axiosInstance.get(`/compliance/${protocol.data.complianceId}`),
+        axiosInstance.get(`/flow/protocol/${id}`),
+        axiosInstance.get(`/snapshot?id=${id}`)
+      ]);
       return {
         props: {
           isAuthenticated: true,
           compliance: compliance.data,
           protocol: protocol.data,
-          flow: flow.data,
+          flow: flow?.data || [],
+          snapshots: snapshots?.data || []
         },
       }
     }
