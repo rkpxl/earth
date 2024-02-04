@@ -42,6 +42,12 @@ const validateFormHelper = (state: FormState): boolean => {
     })
   })
 
+  state?.tabs['98']?.questions['mandatoryApprovers']?.answer?.map((ma: any) => {
+    if (!ma.approver_id || !ma.approverName) {
+      isAllSet = false
+    }
+  })
+
   return isAllSet
 }
 
@@ -162,6 +168,12 @@ const formSlice = createSlice({
             state.tabs[tabIndex].questions[questionId].isError = false
           }
         })
+      })
+      state?.tabs['98']?.questions['mandatoryApprovers']?.answer?.map((ma: any) => {
+        if (!ma.approver_id || !ma.approverName) {
+          isAllset = false
+          state.tabs['98'].tabInfo.isError = true
+        }
       })
       state.isAllRequiredFilled = isAllset
     },

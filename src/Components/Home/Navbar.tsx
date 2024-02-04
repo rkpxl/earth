@@ -1,10 +1,14 @@
 import { useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from '@emotion/styled'
-import { AppBar, Avatar, Box, IconButton, Toolbar } from '@mui/material'
+import { AppBar, Avatar, Badge, Box, IconButton, Toolbar, Tooltip } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
+import SearchIcon from '@mui/icons-material/Search'
+import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
 import { UserCircle as UserCircleIcon } from '../../icons/user-circle'
 import { AccountPopover } from '../Common/AccountPopover'
+import { useRouter } from 'next/router'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 const NavbarRoot = styled(AppBar)(({ theme }: any) => ({
   backgroundColor: theme.palette.background.paper,
@@ -15,20 +19,11 @@ export const Navbar = (props: any) => {
   const { onSidebarOpen, ...other } = props
   const settingsRef = useRef(null)
   const [openAccountPopover, setOpenAccountPopover] = useState(false)
+  const router = useRouter()
 
   return (
     <>
-      <NavbarRoot
-        // sx={{
-        //   left: {
-        //     lg: 250
-        //   },
-        //   width: {
-        //     lg: 'calc(100% - 250px)'
-        //   }
-        // }}
-        {...other}
-      >
+      <NavbarRoot {...other}>
         <Toolbar
           disableGutters
           sx={{
@@ -37,6 +32,14 @@ export const Navbar = (props: any) => {
             px: 2,
           }}
         >
+          {router.pathname !== '/' && ( // Conditionally render the back button
+            <IconButton
+              onClick={() => router.back()} // Use router.back() to navigate to the previous page
+              sx={{ mr: 2 }}
+            >
+              <ArrowBackIcon fontSize="small" />
+            </IconButton>
+          )}
           <IconButton
             onClick={onSidebarOpen}
             sx={{
@@ -48,23 +51,19 @@ export const Navbar = (props: any) => {
           >
             <MenuIcon fontSize="small" />
           </IconButton>
-          {/* <Tooltip title="Search">
+          <Tooltip title="Search">
             <IconButton sx={{ ml: 1 }}>
               <SearchIcon fontSize="small" />
             </IconButton>
-          </Tooltip> */}
+          </Tooltip>
           <Box sx={{ flexGrow: 1 }} />
-          {/* <Tooltip title="Notifications">
+          <Tooltip title="Notifications">
             <IconButton sx={{ ml: 1 }}>
-              <Badge
-                badgeContent={4}
-                color="primary"
-                variant="dot"
-              >
-                <BellIcon fontSize="small" />
+              <Badge badgeContent={4} color="primary" variant="dot">
+                <NotificationsNoneIcon fontSize="small" />
               </Badge>
             </IconButton>
-          </Tooltip> */}
+          </Tooltip>
           <Avatar
             onClick={() => setOpenAccountPopover(true)}
             ref={settingsRef}

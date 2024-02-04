@@ -5,8 +5,7 @@ import axiosInstance from '../../../Utils/axiosUtil'
 
 const AnalyticsContext = React.createContext<any>(null)
 
-
-function Index({ protocolAnalytics } : any) {
+function Index({ protocolAnalytics }: any) {
   const router = useRouter()
 
   return (
@@ -41,9 +40,8 @@ export const getServerSideProps = async function getServerSideProps(context: any
   }
 }
 
-
 export const useAnalyticsContext = () => {
-  return useContext(AnalyticsContext);
+  return useContext(AnalyticsContext)
 }
 
 export default Index

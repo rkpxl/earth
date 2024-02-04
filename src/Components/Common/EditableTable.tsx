@@ -44,7 +44,15 @@ const EditableTable: React.FC<EditableTableProps> = ({
   pageData,
   setPageData,
   handleRowClick,
-  excludedColumns = ['_id', '__v', 'pi_id', 'currentAssignee_id', 'createdBy', 'approvers'],
+  excludedColumns = [
+    '_id',
+    '__v',
+    'pi_id',
+    'mandatoryApprovers',
+    'currentAssignee_id',
+    'createdBy',
+    'approvers',
+  ],
 }) => {
   const { data, total } = tableData
   const [showColumnsDialog, setShowColumnsDialog] = useState(false)

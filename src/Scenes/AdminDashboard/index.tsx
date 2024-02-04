@@ -32,7 +32,6 @@ const AdminDashboard = (): JSX.Element => {
     pageSize: Page.defaultPageSize,
   })
 
-
   const { data, isLoading, isError, refetch } = useQuery({
     queryKey: ['protocol-dashboard'],
     queryFn: async () => {
@@ -42,29 +41,34 @@ const AdminDashboard = (): JSX.Element => {
           params: {
             ...filters,
             pageSize: pageData.pageSize,
-            page: pageData.currentPage
-          }
+            page: pageData.currentPage,
+          },
         })
-        if(response.status > 300) {
-          dispatch(showMessage({message: "Something went wring referesh your page", severity: "warning"}))
+        if (response.status > 300) {
+          dispatch(
+            showMessage({
+              message: 'Something went wring referesh your page',
+              severity: 'warning',
+            }),
+          )
           return []
         }
 
-        return response.data;
+        return response.data
       } catch (err) {
         console.error(err)
       } finally {
         dispatch(endLoading())
       }
-    }
+    },
   })
 
-  const handleApplyFilter= () => {
+  const handleApplyFilter = () => {
     refetch()
   }
 
-  if(isLoading) {
-    return (<Loading />)
+  if (isLoading) {
+    return <Loading />
   }
 
   return (

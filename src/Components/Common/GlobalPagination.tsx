@@ -1,6 +1,6 @@
 import React, { Suspense } from 'react'
 import Loading from './Loading'
-import {Pagination, Select, MenuItem, FormControl, Box } from '@mui/material'
+import { Pagination, Select, MenuItem, FormControl, Box } from '@mui/material'
 interface GlobalPaginationProps {
   totalItems: number
   onChange: Function

@@ -1,7 +1,14 @@
 import { useRouter } from 'next/router'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import axiosInstance from '../../Utils/axiosUtil'
-import { AppDispatch, ICompliance, IFlow, IProtocol, ISnapshot, RootState } from '../../Utils/types/type'
+import {
+  AppDispatch,
+  ICompliance,
+  IFlow,
+  IProtocol,
+  ISnapshot,
+  RootState,
+} from '../../Utils/types/type'
 import { Box, Menu, MenuItem, Tab, Tabs } from '@mui/material'
 import { useDispatch, useSelector } from 'react-redux'
 import CustomTabPanel from '../../Components/Common/CustomTabPanel'
@@ -17,12 +24,14 @@ import { generatePDF } from '../../Utils/fileGenerator'
 import { startLoading, endLoading } from '../../Store/reducers/loading'
 import LifeCycle from '../../Scenes/Protocol/LifeCycle'
 import { showMessage } from '../../Store/reducers/snackbar'
+import { updateAnswer } from '../../Store/reducers/form'
+import TitleDescriptionDialog from '../../Components/Common/TitleDescriptionDialog'
 
 interface IProps {
-  compliance: ICompliance;
-  protocol: IProtocol;
-  snapshots: Array<ISnapshot>;
-  flow: Array<IFlow>;
+  compliance: ICompliance
+  protocol: IProtocol
+  snapshots: Array<ISnapshot>
+  flow: Array<IFlow>
 }
 
 function a11yProps(index: number) {
@@ -39,6 +48,11 @@ export default function DynamicForm(props: IProps) {
   const formData = useSelector((state: RootState) => state.form)
   const [value, setValue] = useState<number>(0)
   const [tabValue, setTabValue] = useState<number>(0)
+  const [snapshot, setSnapshot] = useState({
+    title: '',
+    description: '',
+  })
+  const [isSnapshotDialogOpen, setIsSnapshotDialogOpen] = useState(false)
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const dispatch: AppDispatch = useDispatch()
 
@@ -84,24 +98,32 @@ export default function DynamicForm(props: IProps) {
       dispatch(startLoading())
       const response = await axiosInstance.post('/snapshot', {
         protocol_id,
-        title: protocolData?.protocolAction,
-        description: new Date().getDate()
+        title: snapshot.title,
+        description: snapshot.description,
       })
-      if(response.status < 300) {
-        dispatch(showMessage({message: "Snapshot has been taken", severity: "success"}))
+      if (response.status < 300) {
+        dispatch(showMessage({ message: 'Snapshot has been taken', severity: 'success' }))
       } else {
-        dispatch(showMessage({message: "Please try again", severity: "warning"}))
+        dispatch(showMessage({ message: 'Please try again', severity: 'warning' }))
       }
     } catch (err) {
-       console.error(err)
+      console.error(err)
     } finally {
       dispatch(endLoading())
+      setIsSnapshotDialogOpen(false)
+      handleMenuClose()
     }
   }
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue)
   }
+
+  useEffect(() => {
+    dispatch(
+      updateAnswer({ tabIndex: 98, id: 'mandatoryApprovers', answer: protocol.mandatoryApprovers }),
+    )
+  }, [protocol])
 
   if (isLoading) {
     return <Loading />
@@ -128,7 +150,7 @@ export default function DynamicForm(props: IProps) {
           onClose={handleMenuClose}
         >
           <MenuItem onClick={handleDownloadOption}>Download PDF</MenuItem>
-          <MenuItem onClick={handleSnapshot}>Take Snapshot</MenuItem>
+          <MenuItem onClick={() => setIsSnapshotDialogOpen(true)}>Take Snapshot</MenuItem>
         </Menu>
         <Tabs
           value={value}
@@ -153,13 +175,19 @@ export default function DynamicForm(props: IProps) {
                 />
               )
             })}
-          <Tab label="Personnel" {...a11yProps(compliance?.tabNames?.length + 1)} />
+          <Tab
+            label="Personnel"
+            {...a11yProps(compliance?.tabNames?.length + 1)}
+            style={
+              formData?.tabs['98']?.tabInfo?.isError ? { color: 'red' } : { color: '#65748B ' }
+            }
+          />
           <Tab label="Attachment" {...a11yProps(compliance?.tabNames?.length + 2)} />
           <Tab label="Submit" {...a11yProps(compliance?.tabNames?.length + 3)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <LifeCycle flow={flow} snapshots={snapshots}/>
+        <LifeCycle flow={flow} snapshots={snapshots} />
       </CustomTabPanel>
       {compliance?.tabNames
         ?.sort((a: any, b: any) => parseInt(a.position) - parseInt(b.position))
@@ -185,6 +213,13 @@ export default function DynamicForm(props: IProps) {
       <CustomTabPanel value={value} index={compliance?.tabNames?.length + 3}>
         <FormSubmit compliance={compliance} protocol={protocol} />
       </CustomTabPanel>
+      <TitleDescriptionDialog
+        open={isSnapshotDialogOpen}
+        data={snapshot}
+        setData={setSnapshot}
+        handleClose={() => setIsSnapshotDialogOpen(false)}
+        handleSubmit={handleSnapshot}
+      />
     </>
   )
 }
@@ -207,15 +242,15 @@ export const getServerSideProps = async function getServerSideProps(context: any
       const [compliance, flow, snapshots] = await Promise.all([
         axiosInstance.get(`/compliance/${protocol.data.complianceId}`),
         axiosInstance.get(`/flow/protocol/${id}`),
-        axiosInstance.get(`/snapshot?id=${id}`)
-      ]);
+        axiosInstance.get(`/snapshot?id=${id}`),
+      ])
       return {
         props: {
           isAuthenticated: true,
           compliance: compliance.data,
           protocol: protocol.data,
           flow: flow?.data || [],
-          snapshots: snapshots?.data || []
+          snapshots: snapshots?.data || [],
         },
       }
     }

@@ -148,6 +148,8 @@ export interface IProtocol {
   createdBy: string
   createdAt: string
   updatedAt: string
+  aditionalApprovers: Array<any>
+  mandatoryApprovers: Array<any>
   __v: number
 }
 
@@ -231,29 +233,24 @@ export interface IFlow {
   updatedAt: string
 }
 
-export type TActionProtocol =
-  | 'AMENDMENT'
-  | 'CONREV'
-  | 'REVISE'
-  | 'EXPIRE'
-  | 'CLOSURE';
+export type TActionProtocol = 'AMENDMENT' | 'CONREV' | 'REVISE' | 'EXPIRE' | 'CLOSURE'
 
 export const ApprovalAction: Record<TActionProtocol, string> = {
   AMENDMENT: 'Amendment',
   REVISE: 'Revise',
   EXPIRE: 'Expire',
   CLOSURE: 'Closure',
-  CONREV: 'Continuous Review'
-};
+  CONREV: 'Continuous Review',
+}
 
 export interface ISnapshot {
-  _id: string;
-  protocol_id: string;
-  title: string;
-  description: string;
-  createdAt: string;
-  updatedAt: string;
-  __v: number;
+  _id: string
+  protocol_id: string
+  title: string
+  description: string
+  createdAt: string
+  updatedAt: string
+  __v: number
 }
 
 export type QuestionType = 'text' | 'dropdown' | 'yesno' | 'bigtext' | 'multiselect' | 'info'

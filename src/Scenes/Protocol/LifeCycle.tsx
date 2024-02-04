@@ -7,7 +7,20 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
-import { Box, CircularProgress, Divider, Grid, Link, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow } from '@mui/material'
+import {
+  Box,
+  CircularProgress,
+  Divider,
+  Grid,
+  Link,
+  Paper,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+} from '@mui/material'
 import { getStandatedDate, getStandatedDateWithTime } from '../../Utils/dateTime'
 import axiosInstance from '../../Utils/axiosUtil'
 import { IFlow, ISnapshot, TActionProtocol } from '../../Utils/types/type'
@@ -24,16 +37,16 @@ interface DetailsData {
 }
 
 interface IProps {
-  flow: Array<IFlow>,
+  flow: Array<IFlow>
   snapshots: Array<ISnapshot>
 }
 
 const ApprovalAction = [
-  { key: 'AMENDMENT', value: 'Amendment'},
-  { key: 'REVISE', value: 'Revise'},
-  { key: 'EXPIRE', value: 'Expire'},
-  { key: 'CLOSURE', value: 'Closure'},
-  { key: 'CONREV', value: 'Continuous Review' }
+  { key: 'AMENDMENT', value: 'Amendment' },
+  { key: 'REVISE', value: 'Revise' },
+  { key: 'EXPIRE', value: 'Expire' },
+  { key: 'CLOSURE', value: 'Closure' },
+  { key: 'CONREV', value: 'Continuous Review' },
 ]
 
 export default function LifeCycle({ flow, snapshots }: IProps) {
@@ -48,11 +61,11 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
     setAnchorEl(event.currentTarget)
   }
 
-  const handleClose = (action? : string) => {
-    if(action) {
+  const handleClose = (action?: string) => {
+    if (action) {
       dispatch(
         openConfirmation({
-          args: action
+          args: action,
         }),
       )
     }
@@ -66,13 +79,16 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
         protocol_id: id,
         actionType: action,
       })
-      if(response.status < 300) {
-        dispatch(showMessage({message: "Your action performed", severity: "success"}))
-      } else {
-        dispatch(showMessage({message: "Please complete your current approval process", severity: "warning"}))
-      } 
+      if (response.status < 300) {
+        dispatch(showMessage({ message: 'Your action performed', severity: 'success' }))
+      }
     } catch (err) {
-      dispatch(showMessage({message: "Please complete your current approval process", severity: "warning"}))
+      dispatch(
+        showMessage({
+          message: 'Please complete your current approval process',
+          severity: 'warning',
+        }),
+      )
       console.error(err)
     } finally {
       dispatch(endLoading())
@@ -91,74 +107,77 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
   }
 
   return (
-    <div style={{ }}>
-      <Box sx={{ 
-        maxHeight: '60vh',
-        overflowY: 'auto',
-        backgroundColor: 'transparent'
-      }}
+    <div style={{}}>
+      <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 1 }}>
+        <Grid item>
+          <Typography variant="h5">Life Cycle</Typography>
+        </Grid>
+        <Grid item>
+          <Button
+            aria-controls="simple-menu"
+            aria-haspopup="true"
+            onClick={handleClick}
+            variant="contained"
+          >
+            Action
+          </Button>
+          <Menu
+            id="simple-menu"
+            anchorEl={anchorEl}
+            keepMounted
+            open={Boolean(anchorEl)}
+            onClose={() => handleClose()}
+            sx={{
+              mt: 1,
+            }}
+          >
+            {ApprovalAction.map((a) => (
+              <MenuItem key={a.key} onClick={() => handleClose(a.key)}>
+                {a.value}
+              </MenuItem>
+            ))}
+          </Menu>
+        </Grid>
+      </Grid>
+      <AccordionSummary
+        aria-controls={`panel-header-a-content`}
+        id={`panel-headera-header`}
+        sx={{
+          background: 'white',
+          marginBottom: '12px',
+          borderRadius: '12px',
+        }}
       >
-        <Grid container justifyContent="space-between" alignItems="center" sx={{ mb: 1}}>
-          <Grid item>
-            <Typography variant='h5'>
-              Life Cycle
+        <Grid container spacing={2} alignItems="center" justifyContent="space-between">
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="body1" fontSize="18px">
+              Action
             </Typography>
           </Grid>
-          <Grid item>
-            <Button
-              aria-controls="simple-menu"
-              aria-haspopup="true"
-              onClick={handleClick}
-              variant="contained"
-            >
-              Action
-            </Button>
-            <Menu
-              id="simple-menu"
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={() => handleClose()}
-              sx={{
-                mt: 1,
-              }}
-            >
-              {ApprovalAction.map((a) => (<MenuItem key={a.key} onClick={() => handleClose(a.key)}>{a.value}</MenuItem>))}
-            </Menu>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="body1" fontSize="18px">
+              Status
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="body1" fontSize="18px">
+              Active
+            </Typography>
+          </Grid>
+          <Grid item xs={12} sm={6} md={3}>
+            <Typography variant="body1" fontSize="18px">
+              Created At
+            </Typography>
           </Grid>
         </Grid>
-        <AccordionSummary
-          aria-controls={`panel-header-a-content`}
-          id={`panel-headera-header`}
-          sx={{
-            background: 'white',
-            marginBottom: '12px',
-            borderRadius: '12px',
-          }}
-        >
-          <Grid container spacing={2} alignItems="center" justifyContent="space-between">
-            <Grid item xs={12} sm={6} md={3}>
-              <Typography variant="body1" fontSize="18px">
-                Action
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Typography variant="body1" fontSize="18px">
-                Status
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Typography variant="body1" fontSize="18px">
-                Active
-              </Typography>
-            </Grid>
-            <Grid item xs={12} sm={6} md={3}>
-              <Typography variant="body1" fontSize="18px">
-                Created At
-              </Typography>
-            </Grid>
-          </Grid>
-        </AccordionSummary>
+      </AccordionSummary>
+      <Box
+        sx={{
+          maxHeight: '50vh',
+          overflowY: 'auto',
+          backgroundColor: 'transparent',
+        }}
+      >
         {flow.map((item: any, index: any) => (
           <Accordion
             key={item._id + index}
@@ -237,7 +256,7 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
                   </Typography>
                 </Grid>
               </Grid>
-              {detailsData[index] ?
+              {detailsData[index] ? (
                 detailsData[index].map((e: IFlow) => {
                   return (
                     <Grid container sx={{ mt: 1 }} key={e._id}>
@@ -265,60 +284,76 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
                       </Grid>
                     </Grid>
                   )
-                }) : <Loading /> }
+                })
+              ) : (
+                <Loading />
+              )}
             </AccordionDetails>
           </Accordion>
         ))}
       </Box>
-      <Divider sx={{mt: 4}}/>
+      <Divider sx={{ mt: 4 }} />
       <Grid container spacing={2} sx={{ marginTop: 2 }}>
         <Grid item xs={12} sm={6}>
-          <Typography variant="h6" sx={{ marginBottom: 2 }}>Snapshots</Typography>
-          {snapshots.length > 0 ? <TableContainer component={Paper} elevation={3}>
-            <Table aria-label="snapshots table">
-              <TableHead>
-                <TableRow>
-                  <TableCell>Title</TableCell>
-                  <TableCell>Description</TableCell>
-                  <TableCell>Created At</TableCell>
-                  <TableCell align="right">Action</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {snapshots.map((snapshot) => (
-                  <TableRow
-                    key={snapshot._id}
-                    sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      <Typography variant="body1" fontWeight="bold" noWrap>
-                        {snapshot.title}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                        {snapshot.description}
-                      </Typography>
-                    </TableCell>
-                    <TableCell>
-                      <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
-                        {getStandatedDate(snapshot.createdAt)} {/* Assuming getStandatedDate is a function you've defined */}
-                      </Typography>
-                    </TableCell>
-                    <TableCell align="right">
-                      <Link href="#" sx={{ display: 'block' }}>View</Link>
-                    </TableCell>
+          <Typography variant="body2" sx={{ marginBottom: 2 }}>
+            Snapshots
+          </Typography>
+          {snapshots.length > 0 ? (
+            <TableContainer component={Paper} elevation={3}>
+              <Table aria-label="snapshots table">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Title</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell>Created At</TableCell>
+                    <TableCell align="right">Action</TableCell>
                   </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer> : 
-            <Typography variant='body2' sx={{ display: 'flex', justifyContent: "center"}} >No Snapshot Found</Typography>
-          }
+                </TableHead>
+                <TableBody>
+                  {snapshots.map((snapshot) => (
+                    <TableRow
+                      key={snapshot._id}
+                      sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        <Typography variant="body2" noWrap>
+                          {snapshot.title}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                          {snapshot.description}
+                        </Typography>
+                      </TableCell>
+                      <TableCell>
+                        <Typography variant="body2" sx={{ color: 'text.secondary' }} noWrap>
+                          {getStandatedDate(snapshot.createdAt)}{' '}
+                          {/* Assuming getStandatedDate is a function you've defined */}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="right">
+                        <Link href="#" sx={{ display: 'block' }}>
+                          View
+                        </Link>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </TableContainer>
+          ) : (
+            <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'center' }}>
+              No Snapshot Found
+            </Typography>
+          )}
         </Grid>
         <Grid item xs={12} sm={6}>
-          <Typography variant="h6" sx={{ marginBottom: 2 }}>Notifications</Typography>
-          <Typography variant='body2' sx={{ display: 'flex', justifyContent: "center"}} >No Notification Found</Typography>
+          <Typography variant="h6" sx={{ marginBottom: 2 }}>
+            Notifications
+          </Typography>
+          <Typography variant="body2" sx={{ display: 'flex', justifyContent: 'center' }}>
+            No Notification Found
+          </Typography>
         </Grid>
       </Grid>
       <ConfirmationPopup handleConfirm={handleConfirmation} />

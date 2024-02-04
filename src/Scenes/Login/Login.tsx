@@ -117,11 +117,11 @@ const Login = () => {
   }
 
   const handleGoogleSubmit = () => {
-    dispatch(showMessage({message: "Please refer to email and password", severity: "warning"}))
+    dispatch(showMessage({ message: 'Please refer to email and password', severity: 'warning' }))
   }
 
   const handleFBSubmit = () => {
-    dispatch(showMessage({message: "Please refer to email and password", severity: "warning"}))
+    dispatch(showMessage({ message: 'Please refer to email and password', severity: 'warning' }))
   }
 
   return (

@@ -15,10 +15,10 @@ interface Filters {
 }
 
 const ApprovalAction = [
-  { key: 'AMENDMENT', value: 'Amendment'},
-  { key: 'REVISE', value: 'Revise'},
-  { key: 'EXPIRE', value: 'Expire'},
-  { key: 'CLOSURE', value: 'Closure'},
+  { key: 'AMENDMENT', value: 'Amendment' },
+  { key: 'REVISE', value: 'Revise' },
+  { key: 'EXPIRE', value: 'Expire' },
+  { key: 'CLOSURE', value: 'Closure' },
   { key: 'CONREV', value: 'Continuous Review' },
   { key: 'APPROVED', value: 'Approved' },
   { key: 'DRAFT', value: 'Draft' },
@@ -77,7 +77,11 @@ const FiltersComponent: React.FC<FiltersComponentProps> = ({
             onChange={(e) => handleFilterChange('status', e.target.value as string)}
           >
             <MenuItem value="">Select</MenuItem>
-            {ApprovalAction.map((a) => <MenuItem key={a.key} value={a.value}>{a.value}</MenuItem>)}
+            {ApprovalAction.map((a) => (
+              <MenuItem key={a.key} value={a.value}>
+                {a.value}
+              </MenuItem>
+            ))}
           </Select>
         </FormControl>
       </Grid>
