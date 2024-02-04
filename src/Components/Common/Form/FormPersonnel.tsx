@@ -150,7 +150,6 @@ export default function FormPersonnel({ compliance, protocol }: IProps) {
   }
 
   const addApprover = (approver: any) => {
-    console.log(approver)
     setSelectedApprover(approver)
     setIsGroupOpen(true)
   }

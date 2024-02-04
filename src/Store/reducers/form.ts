@@ -7,8 +7,6 @@ interface QuestionAnswerPair {
   questionTitle: string
   isRequired: boolean
 }
-
-interface ValidateFormPayload {}
 interface Tab {
   id?: number
   position?: number

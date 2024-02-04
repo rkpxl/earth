@@ -46,6 +46,9 @@ const EditableTable: React.FC<EditableTableProps> = ({
   handleRowClick,
   excludedColumns = [
     '_id',
+    'orgId',
+    'complianceId',
+    'rule_id',
     '__v',
     'pi_id',
     'mandatoryApprovers',

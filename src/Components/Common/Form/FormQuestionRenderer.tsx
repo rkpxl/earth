@@ -53,7 +53,6 @@ const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, ques
     if (e) {
       e.preventDefault()
     }
-
     try {
       const response: any = await axiosInstance.post('/answer', {
         answer: answers[question?._id]?.answer || '',

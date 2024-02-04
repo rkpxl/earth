@@ -25,12 +25,13 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({
         </Typography>
       </Grid>
       <Grid item xs={11}>
-        <FormControl fullWidth variant="outlined" onBlur={(e) => handleQuestionSubmit(e)}>
+        <FormControl fullWidth variant="outlined">
           <InputLabel>Select an option</InputLabel>
           <Select
             value={answers[question?._id]?.answer}
             onChange={handleChange}
             label="Select an option"
+            onBlur={(e) => handleQuestionSubmit(e)}
           >
             {question?.answerOptions?.map((option: any, index: any) => (
               <MenuItem key={index} value={option}>

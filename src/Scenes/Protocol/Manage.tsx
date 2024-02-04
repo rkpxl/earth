@@ -23,9 +23,9 @@ import {
 } from '@mui/material'
 import { getStandatedDate, getStandatedDateWithTime } from '../../Utils/dateTime'
 import axiosInstance from '../../Utils/axiosUtil'
-import { IFlow, ISnapshot, TActionProtocol } from '../../Utils/types/type'
+import { IFlow, ISnapshot } from '../../Utils/types/type'
 import { useDispatch } from 'react-redux'
-import confirm, { openConfirmation } from '../../Store/reducers/confirm'
+import { openConfirmation } from '../../Store/reducers/confirm'
 import ConfirmationPopup from '../../Components/Common/ConfirmationDialog'
 import { useRouter } from 'next/router'
 import Loading from '../../Components/Common/Loading'
@@ -295,7 +295,7 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
       <Divider sx={{ mt: 4 }} />
       <Grid container spacing={2} sx={{ marginTop: 2 }}>
         <Grid item xs={12} sm={6}>
-          <Typography variant="body2" sx={{ marginBottom: 2 }}>
+          <Typography variant="h6" sx={{ marginBottom: 2 }}>
             Snapshots
           </Typography>
           {snapshots.length > 0 ? (
@@ -332,7 +332,12 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
                         </Typography>
                       </TableCell>
                       <TableCell align="right">
-                        <Link href="#" sx={{ display: 'block' }}>
+                        <Link
+                          href={`/snapshot/${snapshot._id}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          sx={{ display: 'block' }}
+                        >
                           View
                         </Link>
                       </TableCell>

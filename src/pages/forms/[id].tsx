@@ -22,7 +22,7 @@ import IconButton from '@mui/material/IconButton'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { generatePDF } from '../../Utils/fileGenerator'
 import { startLoading, endLoading } from '../../Store/reducers/loading'
-import LifeCycle from '../../Scenes/Protocol/LifeCycle'
+import LifeCycle from '../../Scenes/Protocol/Manage'
 import { showMessage } from '../../Store/reducers/snackbar'
 import { updateAnswer } from '../../Store/reducers/form'
 import TitleDescriptionDialog from '../../Components/Common/TitleDescriptionDialog'
@@ -242,7 +242,7 @@ export const getServerSideProps = async function getServerSideProps(context: any
       const [compliance, flow, snapshots] = await Promise.all([
         axiosInstance.get(`/compliance/${protocol.data.complianceId}`),
         axiosInstance.get(`/flow/protocol/${id}`),
-        axiosInstance.get(`/snapshot?id=${id}`),
+        axiosInstance.get(`/snapshot/protocol?id=${id}`),
       ])
       return {
         props: {
