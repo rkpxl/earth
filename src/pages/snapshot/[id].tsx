@@ -1,12 +1,13 @@
 import React from 'react'
 import axiosInstance from '../../Utils/axiosUtil'
+import SnapshotComponent from '../../Scenes/Snapshot'
 
 interface IProps {
   snapshot: any
 }
 
 export default function Snapshot({ snapshot }: IProps) {
-  return <div>Snapshot</div>
+  return <SnapshotComponent snapshot={snapshot} />
 }
 
 export const getServerSideProps = async function getServerSideProps(context: any) {

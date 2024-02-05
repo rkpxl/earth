@@ -21,7 +21,7 @@ const DropdownComponent: React.FC<DropdownComponentProps> = ({
     <Grid container spacing={1}>
       <Grid item xs={12} sm={12}>
         <Typography sx={{ fontWeight: '420', fontSize: '16px', marginBottom: '6px' }} variant="h6">
-          {questionNumber ? 'Q' + questionNumber + ' ' : ''} {title}
+          {questionNumber ? 'Q' + '. ' : ''} {title}
         </Typography>
       </Grid>
       <Grid item xs={11}>

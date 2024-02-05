@@ -4,6 +4,7 @@ import axiosInstance from '../../../Utils/axiosUtil'
 import { useDispatch } from 'react-redux'
 import { showMessage } from '../../../Store/reducers/snackbar'
 import { RefetchQueryFilters, useQueryClient } from '@tanstack/react-query'
+import { endLoading, startLoading } from '../../../Store/reducers/loading'
 
 interface AddDocumentDialogProps {
   open: boolean
@@ -88,6 +89,8 @@ const DocumentAttachDialog: React.FC<AddDocumentDialogProps> = ({
       dispatch(showMessage({ message: 'Please attach file' }))
       return
     }
+    dispatch(startLoading())
+    onClose()
     try {
       const docUri = await uploadDoc(documentFile)
       const doc = await axiosInstance.post('/document', {
@@ -104,10 +107,13 @@ const DocumentAttachDialog: React.FC<AddDocumentDialogProps> = ({
     } catch (err) {
       console.error(err)
       dispatch(showMessage({ message: 'Document Not Added', severity: 'error' }))
+    } finally {
+      dispatch(endLoading())
+      setDocumentFile(null)
+      setVersionFile(null)
+      setTitle('')
+      setDescription('')
     }
-    onClose()
-    setDocumentFile(null)
-    setVersionFile(null)
   }
   const handleFileInputChange = (event: any, isVersion: boolean) => {
     const file = event.target.files[0]
