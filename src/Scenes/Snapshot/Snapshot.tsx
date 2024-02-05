@@ -2,6 +2,7 @@ import React from 'react'
 import { Tabs, Tab, Box, Typography, FormControl, TextField, Select, MenuItem, FormControlLabel, Checkbox, RadioGroup, Radio, Grid, Paper } from '@mui/material';
 import SnapshotTabPanel from '../../Components/Snapshot/SnapshotTabPanel';
 import SnapshotProtocolInfo from '../../Components/Snapshot/SnapshotProtocolInfo';
+import SnapshotDocuemt from '../../Components/Snapshot/SnapshotDocument';
 
 function separateByTabId(arr : Array<any>) {
   const result : any = {};
@@ -39,10 +40,11 @@ export default function Snapshot({ snapshot } : any) {
     <Box sx={{ width: '100%' }}>
       <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
         <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-        <Tab label="Protocol" {...a11yProps(0)} key={0} />
-          {compliance.tabNames.map((tab : any, index : number) => (
-            <Tab label={tab.name} {...a11yProps(index + 1)} key={tab.position} />
-          ))}
+          <Tab label="Protocol" {...a11yProps(0)} key={0} />
+            {compliance.tabNames.map((tab : any, index : number) => (
+              <Tab label={tab.name} {...a11yProps(index + 1)} key={tab.position} />
+            ))}
+          <Tab label="Documents" {...a11yProps(compliance.tabNames.length + 1)} key={compliance.tabNames.length + 1} />
         </Tabs>
       </Box>
       {value === 0 && <SnapshotProtocolInfo protocol={snapshot.data.protocol}/>}
@@ -91,6 +93,7 @@ export default function Snapshot({ snapshot } : any) {
           </Grid>
         </SnapshotTabPanel>
       ))}
+      {value === compliance.tabNames.length + 1 && <SnapshotDocuemt documents={snapshot.data.documents}/>}
     </Box>
   )
 }
