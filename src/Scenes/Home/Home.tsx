@@ -1,12 +1,10 @@
 import React from 'react'
 import Head from 'next/head'
 import { Box, Button, Container, Grid } from '@mui/material'
-// import Progress from '../../Components/Home/Progress'
 import { LatestTasks } from '../../Components/Home/LatestTasks'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import ProtocolPopUp from '../../Components/Common/ProtocolDialog'
-import { GetStaticPaths, GetStaticProps } from 'next'
 import { useHomeContext } from '../../pages'
 import { ICompliance } from '../../Utils/types/type'
 import HomePageCard from '../../Components/Home/HomePageCard'
@@ -17,7 +15,6 @@ const Home = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null)
   const [popOpen, setPopOpen] = React.useState(false)
   const [complianceType, setComplianceType] = React.useState<ICompliance>()
-  const [allTask, setAllTask] = React.useState<any>([])
   const open = Boolean(anchorEl)
 
   const homeCard = [
@@ -40,10 +37,6 @@ const Home = () => {
       count: allActiveApprovals?.total,
     },
   ]
-
-  React.useEffect(() => {
-    setAllTask([])
-  }, [])
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget)
@@ -138,7 +131,7 @@ const Home = () => {
               </Grid>
             ))}
           </Grid>
-          <LatestTasks task={allTask} />
+          <LatestTasks />
           <ProtocolPopUp
             handleClose={handlePopClose}
             popOpen={popOpen}
@@ -151,15 +144,4 @@ const Home = () => {
   )
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  const paths: any[] = []
-
-  return { paths, fallback: false }
-}
-
-export const getStaticProps: GetStaticProps = async ({ params }: any) => {
-  return {
-    props: {},
-  }
-}
 export default Home

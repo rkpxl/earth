@@ -19,6 +19,7 @@
     "@types/prop-types": "^15.7.5",
     "axios": "^1.4.0",
     "jspdf": "^2.5.1",
+    "moment": "^2.30.1",
     "next": "13.4.8",
     "react-cookie": "^6.1.1",
     "react-dom": "18.2.0",

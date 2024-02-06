@@ -1,5 +1,6 @@
-import { format } from 'date-fns'
-import PerfectScrollbar from 'react-perfect-scrollbar'
+import React, { useMemo } from 'react';
+import { format } from 'date-fns';
+import PerfectScrollbar from 'react-perfect-scrollbar';
 import {
   Box,
   Card,
@@ -11,76 +12,76 @@ import {
   TableRow,
   TableSortLabel,
   Tooltip,
-} from '@mui/material'
-import { SeverityPill } from '../Common/SeverityPills'
+} from '@mui/material';
+import { SeverityPill } from '../Common/SeverityPills';
+import { useHomeContext } from '../../pages';
+import { getStandatedDateWithTime } from '../../Utils/dateTime';
+import { IApproval, IProtocol } from '../../Utils/types/type';
 
-export const LatestTasks = (props: any) => {
-  const { task } = props
+export const LatestTasks = () => {
+  const { allProtocols, allApprovals } = useHomeContext();
+
+  const finalArray = useMemo(() => {
+    const approvals = allApprovals?.data?.map((ap : IApproval) => ({ ...ap, type: 'Pending Decision' }));
+    const protocols = allProtocols?.data?.map((ap : IProtocol) => ({ ...ap, type: 'Protocol' }));
+
+    const combinedArray = [...(approvals || []), ...(protocols || [])];
+    return combinedArray
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // Assuming createdAt is a string date
+      .slice(0, 10)
+      .map((t) => ({
+        title: t.title,
+        description: t.description,
+        piName: t.piName,
+        status: t.status,
+        createdAt: t.createdAt,
+        type: t.type,
+      }));
+  }, [allApprovals?.data, allProtocols?.data]);
+
   return (
-    <Card {...props}>
-      <CardHeader title="Latest Tasks" />
+    <Card>
+      <CardHeader title="Latest Activity" />
       <PerfectScrollbar>
         <Box sx={{ minWidth: 800 }}>
           <Table>
             <TableHead>
               <TableRow>
-                <TableCell>Protocol Id</TableCell>
-                <TableCell>Creator</TableCell>
-                <TableCell sortDirection="desc">
-                  <Tooltip enterDelay={300} title="Sort">
-                    <TableSortLabel active direction="desc">
-                      Start Date
-                    </TableSortLabel>
-                  </Tooltip>
-                </TableCell>
+                <TableCell>Type</TableCell>
+                <TableCell>Title</TableCell>
+                <TableCell>Description</TableCell>
+                <TableCell>PiName</TableCell>
                 <TableCell>Status</TableCell>
+                <TableCell>Created At</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {task.map((e: any) => {
-                const protocol = JSON.parse(e.rawJson)
-                return (
-                  <TableRow hover key={e._id}>
-                    <TableCell>{e._id.slice(-6).toString().toUpperCase()}</TableCell>
-                    <TableCell>{protocol?.creator}</TableCell>
-                    <TableCell>
-                      {protocol?.date ? format(protocol?.date, 'dd/MM/yyyy') : ''}
-                    </TableCell>
-                    <TableCell>
-                      <SeverityPill
-                        color={
-                          (e.status === 'APPROVED' && 'success') ||
-                          (e.status === 'REJECTED' && 'error') ||
-                          (e.status === 'PENDING' && 'warning') ||
-                          'warning'
-                        }
-                      >
-                        {e.status}
-                      </SeverityPill>
-                    </TableCell>
-                  </TableRow>
-                )
-              })}
+              {finalArray.map((e, index) => (
+                <TableRow hover key={index}>
+                  <TableCell>{e.type}</TableCell>
+                  <TableCell>{e.title || ''}</TableCell>
+                  <TableCell>{e.description || ''}</TableCell>
+                  <TableCell>{e.piName}</TableCell>
+                  <TableCell>
+                    <SeverityPill
+                      color={
+                        ((e.status.toLowerCase() === 'approved' || e.status.toLowerCase() === 'draft' ) && 'success') ||
+                        (e.status.toLowerCase() === 'rejected' && 'error') ||
+                        (e.status.toLowerCase() === 'review' && 'warning') ||
+                        'warning'
+                      }>
+                      {e.status}
+                    </SeverityPill>
+                  </TableCell>
+                  <TableCell>
+                    {e.createdAt ? getStandatedDateWithTime(e.createdAt) : ''}
+                  </TableCell>
+                </TableRow>
+              ))}
             </TableBody>
           </Table>
         </Box>
       </PerfectScrollbar>
-      {/* <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        p: 2
-      }}
-    >
-      <Button
-        color="secondary"
-        endIcon={<ArrowRightIcon fontSize="small" />}
-        size="small"
-        variant="text"
-      >
-        View all
-      </Button>
-    </Box> */}
     </Card>
-  )
-}
+  );
+};
