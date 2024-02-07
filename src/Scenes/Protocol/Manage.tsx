@@ -227,7 +227,7 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
               <Grid container>
                 <Grid item xs={6} sm={2}>
                   <Typography variant="body1" fontWeight={500}>
-                    Description
+                    Under Review
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={2}>
@@ -261,7 +261,7 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
                   return (
                     <Grid container sx={{ mt: 1 }} key={e._id}>
                       <Grid item xs={6} sm={2}>
-                        <Typography variant="body2">{e?.description || ''}</Typography>
+                        <Typography variant="body2">{e?.groupName || ''}</Typography>
                       </Grid>
                       <Grid item xs={6} sm={2}>
                         <Typography variant="body2">{e?.piName || ''}</Typography>
@@ -270,11 +270,11 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
                         <Typography variant="body2">{e?.approver_name || ''}</Typography>
                       </Grid>
                       <Grid item xs={6} sm={2}>
-                        <Typography variant="body2">{e?.status || ''}</Typography>
+                        <Typography variant="body2">{e?.status.toString() == 'Review' ? 'Under Review' : e?.status}</Typography>
                       </Grid>
                       <Grid item xs={6} sm={2}>
                         <Typography variant="body2">
-                          {e?.createdAt || '' ? getStandatedDateWithTime(e?.createdAt) : ''}
+                          {e?.createdAt || '' ? getStandatedDate(e?.createdAt) : ''}
                         </Typography>
                       </Grid>
                       <Grid item xs={6} sm={2}>

@@ -218,7 +218,6 @@ export default function FormPersonnel({ compliance, protocol }: IProps) {
                     variant="contained"
                     fullWidth
                     onClick={() => {
-                      console.log('click')
                       addApprover(approver)
                     }}
                     sx={{ minHeight: '56px', width: '100%' }}

@@ -222,6 +222,8 @@ export enum IApprovalAction {
 }
 
 export interface IFlow {
+  expireAt: string
+  groupName: string
   _id: string
   title: string
   description: string

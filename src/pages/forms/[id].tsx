@@ -258,7 +258,7 @@ export const getServerSideProps = async function getServerSideProps(context: any
     console.error('error', err)
     return {
       redirect: {
-        destination: '/',
+        destination: '/404',
         permanent: false,
       },
     }

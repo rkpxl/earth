@@ -18,7 +18,7 @@ import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
-import { getStandatedDateWithTime } from '../../Utils/dateTime'
+import { getStandatedDate, getStandatedDateWithTime } from '../../Utils/dateTime'
 import { generateExcel } from '../../Utils/fileGenerator'
 import DownloadIcon from '@mui/icons-material/Download'
 import theme from '../../Theme'
@@ -51,10 +51,14 @@ const EditableTable: React.FC<EditableTableProps> = ({
     'rule_id',
     '__v',
     'pi_id',
+    'protocol_id',
+    'group_id',
+    'flow_id',
     'mandatoryApprovers',
     'currentAssignee_id',
     'createdBy',
     'approvers',
+    'approver_id',
   ],
 }) => {
   const { data, total } = tableData
@@ -108,8 +112,8 @@ const EditableTable: React.FC<EditableTableProps> = ({
   }
 
   function formatColumnValue(column: string, row: any) {
-    if (column === 'createdAt' || column === 'updatedAt') {
-      return getStandatedDateWithTime(row[column])
+    if (column === 'createdAt' || column === 'updatedAt' || column === 'expireAt') {
+      return row[column] ? getStandatedDate(row[column]) : ''
     } else if (column === 'isActive') {
       return row[column] ? 'Active' : 'Not Active'
     } else if (column === 'protocol_id' && typeof row[column] === 'object') {
