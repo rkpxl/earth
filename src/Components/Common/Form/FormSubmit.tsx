@@ -80,8 +80,6 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
         <TextField
           label="Comment"
           variant="outlined"
-          // value={comment}
-          // onChange={(e) => setComment(e.target.value)}
           fullWidth
         />
       </Grid>

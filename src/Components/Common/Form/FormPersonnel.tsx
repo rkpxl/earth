@@ -200,7 +200,7 @@ export default function FormPersonnel({ compliance, protocol }: IProps) {
                   />
                 </Grid>
                 <Grid item xs={6} sm={3}>
-                  <FormControl fullWidth>
+                  <FormControl fullWidth disabled>
                     <InputLabel>Access</InputLabel>
                     <Select
                       value={approver.access}
