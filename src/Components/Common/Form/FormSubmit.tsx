@@ -74,7 +74,6 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
       container
       columnSpacing={2}
       rowSpacing={2}
-      maxWidth="1100px"
       sx={{ marginBottom: '64px' }}
     >
       <Grid item xs={12}>

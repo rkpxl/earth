@@ -182,8 +182,8 @@ export default function DynamicForm(props: IProps) {
               formData?.tabs['98']?.tabInfo?.isError ? { color: 'red' } : { color: '#65748B ' }
             }
           />
-          <Tab label="Attachment" {...a11yProps(compliance?.tabNames?.length + 2)} />
-          <Tab label="Submit" {...a11yProps(compliance?.tabNames?.length + 3)} />
+          <Tab label="Attachment" {...a11yProps(99)} />
+          <Tab label="Submit" {...a11yProps(100,)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
@@ -211,6 +211,13 @@ export default function DynamicForm(props: IProps) {
         <FormAttachment compliance={compliance} protocol={protocol} />
       </CustomTabPanel>
       <CustomTabPanel value={value} index={compliance?.tabNames?.length + 3}>
+        <Protocol
+          key={100}
+          compliance={compliance}
+          tabNumber={100}
+          step={100}
+          protocol={protocolData || protocol}
+        />
         <FormSubmit compliance={compliance} protocol={protocol} />
       </CustomTabPanel>
       <TitleDescriptionDialog
