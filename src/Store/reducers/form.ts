@@ -7,8 +7,6 @@ interface QuestionAnswerPair {
   questionTitle: string
   isRequired: boolean
 }
-
-interface ValidateFormPayload {}
 interface Tab {
   id?: number
   position?: number
@@ -34,12 +32,20 @@ const validateFormHelper = (state: FormState): boolean => {
   let isAllSet = true
   Object.keys(state?.tabs)?.forEach((tabIndex: any) => {
     const tab = state.tabs[tabIndex]
-    Object.keys(tab?.questions)?.forEach((questionId) => {
-      const question = tab.questions[questionId]
-      if (question.isRequired && (question.answer === null || question.answer === '')) {
-        isAllSet = false
-      }
-    })
+    if(tab && tab?.questions) {
+      Object?.keys(tab?.questions)?.forEach((questionId) => {
+        const question = tab.questions[questionId]
+        if (question.isRequired && (question.answer === null || question.answer === '')) {
+          isAllSet = false
+        }
+      })
+    }
+  })
+
+  state?.tabs['98']?.questions['mandatoryApprovers']?.answer?.map((ma: any) => {
+    if (!ma.approver_id || !ma.approverName) {
+      isAllSet = false
+    }
   })
 
   return isAllSet
@@ -49,7 +55,7 @@ const formSlice = createSlice({
   name: 'form',
   initialState,
   reducers: {
-    initState: () => initialState,
+    initFormState: () => initialState,
     updateTab: (
       state,
       action: PayloadAction<{
@@ -152,16 +158,24 @@ const formSlice = createSlice({
       Object.keys(state?.tabs)?.forEach((tabIndex: any) => {
         const tab = state.tabs[tabIndex]
         state.tabs[tabIndex].tabInfo = { isError: false }
-        Object.keys(tab?.questions)?.forEach((questionId) => {
-          const question = tab.questions[questionId]
-          if (question.isRequired && (question.answer === null || question.answer === '')) {
-            state.tabs[tabIndex].tabInfo.isError = true
-            state.tabs[tabIndex].questions[questionId].isError = true
-            isAllset = false
-          } else {
-            state.tabs[tabIndex].questions[questionId].isError = false
-          }
-        })
+        if(tab && tab?.questions) {
+          Object.keys(tab?.questions)?.forEach((questionId) => {
+            const question = tab.questions[questionId]
+            if (question.isRequired && (question.answer === null || question.answer === '')) {
+              state.tabs[tabIndex].tabInfo.isError = true
+              state.tabs[tabIndex].questions[questionId].isError = true
+              isAllset = false
+            } else {
+              state.tabs[tabIndex].questions[questionId].isError = false
+            }
+          })
+        }
+      })
+      state?.tabs['98']?.questions['mandatoryApprovers']?.answer?.map((ma: any) => {
+        if (!ma.approver_id || !ma.approverName) {
+          isAllset = false
+          state.tabs['98'].tabInfo.isError = true
+        }
       })
       state.isAllRequiredFilled = isAllset
     },
@@ -195,7 +209,7 @@ const formSlice = createSlice({
 export default formSlice.reducer
 
 export const {
-  initState,
+  initFormState,
   updateTabInfo,
   updateTab,
   fetchAllQuestionsAndAnswers,

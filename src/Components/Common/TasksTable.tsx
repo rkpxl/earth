@@ -18,7 +18,6 @@ import { SeverityPill } from '../Common/SeverityPills'
 import React from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
-import { closestIndexTo } from 'date-fns/esm'
 
 const tableHeader = [
   {
@@ -90,7 +89,7 @@ export const TasksTable = (props: any) => {
         })
         .catch((e) => console.error(e))
     }
-  }, [])
+  }, [props.type])
 
   return (
     <Card {...props}>

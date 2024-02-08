@@ -148,6 +148,8 @@ export interface IProtocol {
   createdBy: string
   createdAt: string
   updatedAt: string
+  aditionalApprovers: Array<any>
+  mandatoryApprovers: Array<any>
   __v: number
 }
 
@@ -208,6 +210,46 @@ export interface IApproval {
   protocol_id: IProtocol | string // Update the type accordingly, as it seems to be a string in your example
   flow_id: string
   status: string
+  createdAt: string
+  updatedAt: string
+  __v: number
+}
+
+export enum IApprovalAction {
+  Initial,
+  Amendment,
+  ConReview,
+}
+
+export interface IFlow {
+  expireAt: string
+  groupName: string
+  _id: string
+  title: string
+  description: string
+  piName: string
+  actionType: IApprovalAction
+  approver_name: string
+  status: string
+  createdAt: string
+  updatedAt: string
+}
+
+export type TActionProtocol = 'AMENDMENT' | 'CONREV' | 'REVISE' | 'EXPIRE' | 'CLOSURE'
+
+export const ApprovalAction: Record<TActionProtocol, string> = {
+  AMENDMENT: 'Amendment',
+  REVISE: 'Revise',
+  EXPIRE: 'Expire',
+  CLOSURE: 'Closure',
+  CONREV: 'Continuous Review',
+}
+
+export interface ISnapshot {
+  _id: string
+  protocol_id: string
+  title: string
+  description: string
   createdAt: string
   updatedAt: string
   __v: number

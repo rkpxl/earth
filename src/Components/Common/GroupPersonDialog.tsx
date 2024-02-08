@@ -14,6 +14,7 @@ import SearchPage from './Search'
 
 interface IProps {
   open: boolean
+  selectedApprover: any
   onClose: () => void
   addPerson: Function
 }
@@ -38,27 +39,31 @@ const PersonCard: React.FC<PersonCardProps> = ({ name, email, onClick }) => (
       },
     }}
   >
-    <Avatar sx={{ mr: 2 }}>{name[0]}</Avatar>
+    <Avatar sx={{ mr: 2 }}>{name?.[0] || ''}</Avatar>
     <div>
-      <Typography variant="subtitle1">{name}</Typography>
+      <Typography variant="subtitle1">{name || ''}</Typography>
       <Typography variant="body2" color="textSecondary">
-        {email}
+        {email || ''}
       </Typography>
     </div>
   </ListItem>
 )
 
-export default function SearchPeopleDialog({ open, onClose, addPerson }: IProps) {
+export default function GroupPersonDialog({ open, onClose, selectedApprover, addPerson }: IProps) {
   const [searchText, setSearchText] = useState<string>('')
 
   const { data, isLoading, isError } = useQuery({
-    queryKey: ['people', searchText],
+    queryKey: ['group', selectedApprover.group_id, searchText],
     queryFn: async () => {
       if (searchText === '') {
-        const response = await axiosInstance.get(`/user/users-of`)
+        const response = await axiosInstance.get(
+          `/member/group/0/?_id=${selectedApprover.group_id}`,
+        )
         return response.data
       } else {
-        const response = await axiosInstance.get(`/user/search?name=${searchText}`)
+        const response = await axiosInstance.get(
+          `/member/group/0/?_id${selectedApprover.group_id}&name=${searchText}`,
+        )
         return response.data
       }
     },
@@ -72,10 +77,10 @@ export default function SearchPeopleDialog({ open, onClose, addPerson }: IProps)
         <List sx={{ overflowY: 'auto', flexGrow: 1 }}>
           {data?.map((user: any) => (
             <PersonCard
-              key={user._id}
-              name={user.name}
-              email={user.email}
-              onClick={() => addPerson(user)}
+              key={user.user_id._id}
+              name={user.user_id.name}
+              email={user.user_id.email}
+              onClick={() => addPerson(selectedApprover, user)}
             />
           ))}
         </List>

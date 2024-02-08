@@ -75,6 +75,10 @@ const questionDropDown = [
     name: 'Info',
     value: 'info',
   },
+  {
+    name: 'Date Time',
+    value: 'datetime',
+  },
 ]
 
 const initialState: State = {

@@ -11,10 +11,18 @@ const Home: NextPage = ({
   departments,
   allProtocols,
   allApprovals,
+  allActiveApprovals,
 }: any) => {
   return (
     <HomeContext.Provider
-      value={{ isAuthenticated, compliances, departments, allProtocols, allApprovals }}
+      value={{
+        isAuthenticated,
+        compliances,
+        departments,
+        allProtocols,
+        allApprovals,
+        allActiveApprovals,
+      }}
     >
       <HomePage />
     </HomeContext.Provider>
@@ -29,7 +37,8 @@ export const getServerSideProps = async function getServerSideProps(context: any
       const compliances = await axiosInstance.get('/compliance')
       const departments = await axiosInstance.get('/department')
       const allProtocols = await axiosInstance.get('/protocol/get-all')
-      const allApprovals = await axiosInstance.get('/approval/all-active')
+      const allApprovals = await axiosInstance.get('/approval/all-review-ready')
+      const allActiveApprovals = await axiosInstance.get('/approval/all-active')
       return {
         props: {
           isAuthenticated: true,
@@ -37,6 +46,7 @@ export const getServerSideProps = async function getServerSideProps(context: any
           departments: departments.data,
           allProtocols: allProtocols.data,
           allApprovals: allApprovals.data,
+          allActiveApprovals: allActiveApprovals.data,
         },
       }
     }

@@ -5,6 +5,8 @@ import axiosInstance from '../../../Utils/axiosUtil'
 import { useDispatch, useSelector } from 'react-redux'
 import { showMessage } from '../../../Store/reducers/snackbar'
 import { validateForm, validateFormHelper } from '../../../Store/reducers/form'
+import { useRouter } from 'next/router'
+import { endLoading, startLoading } from '../../../Store/reducers/loading'
 
 interface IProps {
   compliance: ICompliance
@@ -17,17 +19,37 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
   const dispatch = useDispatch()
   const formRootData = useSelector((state: RootState) => state.form)
   const [isFormValid, setIsFormValid] = useState(false)
+  const router = useRouter()
 
   const submitHandle = async () => {
     const isAllSet = validateFormHelper(formRootData)
+    const { approver } = router.query
     dispatch(validateForm())
     if (isAllSet) {
       try {
-        const response = await axiosInstance.post('/flow', {
-          protocol_id: protocol._id,
-        })
-        if (response.status < 300) {
+        let response: any
+        dispatch(startLoading())
+        if (reviewer === 'Approve') {
+          if ((protocol.status === 'Draft' || protocol.status === 'Rejected') && !approver) {
+            response = await axiosInstance.post('/flow', {
+              protocol_id: protocol._id,
+            })
+          } else {
+            response = await axiosInstance.put(`/approval/approve?_id=${approver}`)
+          }
+        } else {
+          if (protocol.status === 'Draft') {
+            dispatch(
+              showMessage({ message: 'Please select approve to process', severity: 'success' }),
+            )
+          } else {
+            response = await axiosInstance.put(`/approval/reject?_id=${approver}`)
+          }
+        }
+        dispatch(endLoading())
+        if (response?.status < 300) {
           dispatch(showMessage({ message: 'Submited', severity: 'success' }))
+          router.push('/')
         } else {
           dispatch(showMessage({ message: 'Not Submited', severity: 'warning' }))
         }
@@ -40,6 +62,7 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
         showMessage({ message: 'Fill all required answers', severity: 'warning', duration: 5000 }),
       )
     }
+    dispatch(endLoading())
   }
 
   useEffect(() => {
@@ -51,15 +74,12 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
       container
       columnSpacing={2}
       rowSpacing={2}
-      maxWidth="1100px"
       sx={{ marginBottom: '64px' }}
     >
       <Grid item xs={12}>
         <TextField
           label="Comment"
           variant="outlined"
-          // value={comment}
-          // onChange={(e) => setComment(e.target.value)}
           fullWidth
         />
       </Grid>
@@ -72,11 +92,16 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
             required
             label="Select reviewer"
             size="small"
-            // onChange={(e : any) => setReviewer(e.target.value)}
+            onChange={(e: any) => setReviewer(e.target.value)}
           >
-            {protocol?.approvers?.map((option: any, index: number) => (
+            {/* {protocol?.approvers?.map((option: any, index: number) => (
               <MenuItem key={index} value={option}>
                 {`${option.name} ${option?.role ? '-' : ''} ${option?.role || ''}`}
+              </MenuItem>
+            ))} */}
+            {['Approve', 'Reject'].map((option: any, index: number) => (
+              <MenuItem key={index} value={option}>
+                {option}
               </MenuItem>
             ))}
           </Select>

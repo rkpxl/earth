@@ -3,7 +3,7 @@ import HeaderCard from './HeaderCards'
 import LineChartCard from './LineChartCard'
 import Grid from '@mui/material/Grid'
 
-export default function index() {
+export default function Index() {
   return (
     <Grid mb={4}>
       <HeaderCard />

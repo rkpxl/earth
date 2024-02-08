@@ -1,8 +1,6 @@
-// components/SwitchRow.tsx
 import React, { useState } from 'react'
 import Switch from '@mui/material/Switch'
 import Typography from '@mui/material/Typography'
-import Button from '@mui/material/Button'
 import { useTheme } from '@mui/material/styles'
 import useMediaQuery from '@mui/material/useMediaQuery'
 

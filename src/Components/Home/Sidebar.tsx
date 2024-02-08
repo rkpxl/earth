@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react'
-import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import { Box, Divider, Drawer, Typography, useMediaQuery } from '@mui/material'
@@ -8,16 +7,12 @@ import { Cog as CogIcon } from '../../icons/cog'
 import { UserAdd as UserAddIcon } from '../../icons/user-add'
 import { SidebarItem } from './SidebarItem'
 import InboxIcon from '@mui/icons-material/MoveToInbox'
-import DraftsIcon from '@mui/icons-material/Drafts'
-import SendIcon from '@mui/icons-material/Send'
-import StarBorder from '@mui/icons-material/StarBorder'
 import ShieldIcon from '@mui/icons-material/Shield'
 import GroupIcon from '@mui/icons-material/Group'
 import ApartmentIcon from '@mui/icons-material/Apartment'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks'
 import RouteIcon from '@mui/icons-material/Route'
-
-const ItemCount = 4
+import AnalyticsIcon from '@mui/icons-material/Analytics'
 
 export const Sidebar = (props: any) => {
   const { open, onClose } = props
@@ -51,16 +46,16 @@ export const Sidebar = (props: any) => {
         icon: <InboxIcon fontSize="small" />,
         title: 'Dashboard',
         subRoute: [
-          // {
-          //   href: '/admin-dashboard/dashboard',
-          //   icon: (<InboxIcon fontSize="small" />),
-          //   title: 'Protocol'
-          // },
-          // {
-          //   href: '/admin-dashboard/analytics',
-          //   icon: (<InboxIcon fontSize="small" />),
-          //   title: 'Analytics'
-          // },
+          {
+            href: '/admin-dashboard/dashboard',
+            icon: <InboxIcon fontSize="small" />,
+            title: 'Protocols',
+          },
+          {
+            href: '/admin-dashboard/analytics',
+            icon: <AnalyticsIcon fontSize="small" />,
+            title: 'Analytics',
+          },
           // {
           //   href: '/admin-dashboard/approvals',
           //   icon: (<DraftsIcon fontSize="small" />),

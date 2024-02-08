@@ -1,5 +1,4 @@
-import { Avatar, Box, Card, CardContent, Grid, LinearProgress, Typography } from '@mui/material'
-import InsertChartIcon from '@mui/icons-material/InsertChartOutlined'
+import { Box, Card, CardContent, Grid, LinearProgress, Typography } from '@mui/material'
 
 const customStyles = {
   root: {

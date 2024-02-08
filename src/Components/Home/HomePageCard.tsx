@@ -1,20 +1,25 @@
-import { Avatar, Box, Card, CardContent, Grid, Typography, Button, Divider } from '@mui/material'
+import { Box, Button, Card, CardContent, Grid, Typography, Divider } from '@mui/material'
 import ArrowRightIcon from '@mui/icons-material/ArrowRight'
-import PeopleIcon from '@mui/icons-material/PeopleOutlined'
 import NextLink from 'next/link'
 
-export const PendingProtocols = (props: any) => {
-  const { length, task } = props
+interface IProps {
+  count: number | string
+  title: string
+  icon: string
+  nextPageRoute: string
+}
+
+const HomePageCard = ({ count, title, icon, nextPageRoute }: IProps) => {
   return (
-    <Card {...props} sx={{ height: '100%' }}>
+    <Card sx={{ height: '100%' }}>
       <CardContent>
         <Grid container spacing={3} sx={{ justifyContent: 'space-between' }}>
           <Grid item>
             <Typography color="textSecondary" gutterBottom variant="overline">
-              Pending Approvals
+              {title}
             </Typography>
             <Typography color="textPrimary" variant="h4">
-              {length}
+              {count}
             </Typography>
           </Grid>
           <Grid item>
@@ -26,8 +31,8 @@ export const PendingProtocols = (props: any) => {
               }}
             >
               <img
-                alt="Pending tasks"
-                src="/static/images/info.svg"
+                alt={title}
+                src={icon}
                 style={{
                   display: 'inline-block',
                   maxWidth: '100%',
@@ -49,7 +54,7 @@ export const PendingProtocols = (props: any) => {
             justifyContent: 'flex-start',
           }}
         >
-          <NextLink style={{ width: '100%' }} href="/pending-protocols">
+          <NextLink style={{ width: '100%' }} href={nextPageRoute}>
             <Button
               color="primary"
               endIcon={<ArrowRightIcon fontSize="small" />}
@@ -65,5 +70,4 @@ export const PendingProtocols = (props: any) => {
     </Card>
   )
 }
-
-export default PendingProtocols
+export default HomePageCard

@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import Button from '@mui/material/Button'
 import IconButton from '@mui/material/IconButton'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { CircularProgress } from '@mui/material'
+import { CircularProgress, Link } from '@mui/material'
 
 interface DocumentComponentProps {
   documents: Array<any>
@@ -74,14 +74,14 @@ const DocumentComponent = (props: DocumentComponentProps) => {
             />
           </Grid>
           <Grid item xs={6} sm={1}>
-            <a
+            <Link
               href={document.uri}
               target="_blank"
               rel="noopener noreferrer"
               style={{ height: '100%', textAlign: 'center', display: 'flex', alignItems: 'center' }}
             >
               View
-            </a>
+            </Link>
           </Grid>
           <Grid item xs={6} sm={1}>
             <IconButton

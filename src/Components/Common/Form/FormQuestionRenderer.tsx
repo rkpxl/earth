@@ -12,6 +12,7 @@ import axiosInstance from '../../../Utils/axiosUtil'
 import { showMessage } from '../../../Store/reducers/snackbar'
 import Router from 'next/router'
 import { useProtocolContext } from '../../../Scenes/Protocol/Protocol'
+import DateTimeComponent from './DateTimeComponent'
 
 interface FormQuestionRendererProps {
   question: any
@@ -53,7 +54,6 @@ const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, ques
     if (e) {
       e.preventDefault()
     }
-
     try {
       const response: any = await axiosInstance.post('/answer', {
         answer: answers[question?._id]?.answer || '',
@@ -96,6 +96,9 @@ const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, ques
         )}
         {questionType === 'dropdown' && (
           <DropdownComponent {...rest} questionNumber={questionNumber} />
+        )}
+        {questionType === 'datetime' && (
+          <DateTimeComponent {...rest} q uestionNumber={questionNumber} />
         )}
         {questionType === 'range' && <RangeComponent {...rest} q uestionNumber={questionNumber} />}
       </Grid>

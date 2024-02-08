@@ -1,7 +1,6 @@
 import React, { ChangeEvent } from 'react'
-import { Grid, InputBase, IconButton, Paper, styled } from '@mui/material'
+import { Grid, InputBase, IconButton, Paper } from '@mui/material'
 import SearchIcon from '@mui/icons-material/Search'
-import id from 'date-fns/esm/locale/id/index.js'
 import { debounce } from '../../Utils/util'
 
 interface IProps {

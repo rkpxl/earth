@@ -1,8 +1,15 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import Filters from './Filters'
 import DataTable from './Table'
 import { Grid } from '@mui/material'
-import axios from 'axios'
+import axiosInstance from '../../Utils/axiosUtil'
+import { useQuery } from '@tanstack/react-query'
+import { useDispatch } from 'react-redux'
+import { showMessage } from '../../Store/reducers/snackbar'
+import { endLoading, startLoading } from '../../Store/reducers/loading'
+import { Page } from '../../Utils/constants'
+import EditableTable from '../../Components/Common/EditableTable'
+import Loading from '../../Components/Common/Loading'
 
 interface Filters {
   startDate: string
@@ -18,44 +25,65 @@ const AdminDashboard = (): JSX.Element => {
     searchPerson: '',
     status: '',
   })
+  const dispatch = useDispatch()
   const [tasks, setAllTask] = useState([])
+  const [pageData, setPageData] = useState({
+    currentPage: Page.defaultPage,
+    pageSize: Page.defaultPageSize,
+  })
 
-  const fetchData = () => {
-    const filteredFilters = Object.fromEntries(
-      Object.entries(filters).filter(([key, value]) => value !== ''),
-    )
+  const { data, isLoading, isError, refetch } = useQuery({
+    queryKey: ['protocol-dashboard'],
+    queryFn: async () => {
+      dispatch(startLoading())
+      try {
+        const response = await axiosInstance.get('/protocol/dashboard', {
+          params: {
+            ...filters,
+            pageSize: pageData.pageSize,
+            page: pageData.currentPage,
+          },
+        })
+        if (response.status > 300) {
+          dispatch(
+            showMessage({
+              message: 'Something went wring referesh your page',
+              severity: 'warning',
+            }),
+          )
+          return []
+        }
 
-    axios
-      .get(`${process.env.NEXT_PUBLIC_HOST_URL}/tasks/filter`, {
-        params: {
-          userId: '',
-          org: localStorage.getItem('org'),
-          ...filteredFilters,
-        },
-      })
-      .then((response) => {
-        setAllTask(response.data || [])
-      })
-      .catch((error) => {
-        console.error(error)
-      })
-  }
+        return response.data
+      } catch (err) {
+        console.error(err)
+      } finally {
+        dispatch(endLoading())
+      }
+    },
+  })
 
   const handleApplyFilter = () => {
-    fetchData()
+    refetch()
   }
 
-  useEffect(() => {
-    fetchData()
-  }, [])
+  if (isLoading) {
+    return <Loading />
+  }
 
   return (
-    <Grid p={3}>
-      <Filters handleApplyFilter={handleApplyFilter} filters={filters} setFilters={setFilters} />
-      <Grid mt={3}>
-        <DataTable data={tasks} />
+    <>
+      <Grid p={3}>
+        <Filters handleApplyFilter={handleApplyFilter} filters={filters} setFilters={setFilters} />
       </Grid>
-    </Grid>
+      <EditableTable
+        data={data}
+        title="All Protocols"
+        handleRowClick={() => {}}
+        pageData={pageData}
+        setPageData={setPageData}
+      />
+    </>
   )
 }
 

@@ -5,10 +5,6 @@ import { useEffect } from 'react'
 const Dashboard = () => {
   const router = useRouter()
 
-  useEffect(() => {
-    router.push('/admin-dashboard/departments')
-  }, [])
-
   return (
     <>
       <Component />

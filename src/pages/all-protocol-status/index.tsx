@@ -4,10 +4,10 @@ import { useRouter } from 'next/router'
 import EditableTable from '../../Components/Common/EditableTable'
 
 interface IProps {
-  allApprovals: { data: IApproval[]; total: number }
+  allActiveApprovals: { data: IApproval[]; total: number }
 }
 
-const PendingTasks = ({ allApprovals }: IProps) => {
+const PendingTasks = ({ allActiveApprovals }: IProps) => {
   const router = useRouter()
 
   const handleRowClick = (e: any, row: any) => {
@@ -16,7 +16,11 @@ const PendingTasks = ({ allApprovals }: IProps) => {
   }
 
   return (
-    <EditableTable data={allApprovals} title="Approval Approvals" handleRowClick={handleRowClick} />
+    <EditableTable
+      data={allActiveApprovals}
+      title="All Approvals Status"
+      handleRowClick={handleRowClick}
+    />
   )
 }
 
@@ -25,11 +29,11 @@ export const getServerSideProps = async function getServerSideProps(context: any
   try {
     const response = await axiosInstance.get('/auth/validate-token', context)
     if (response.status === 200) {
-      const allApprovals = await axiosInstance.get('/approval/all-review-ready')
+      const allActiveApprovals = await axiosInstance.get('/approval/all-active')
       return {
         props: {
           isAuthenticated: true,
-          allApprovals: allApprovals.data,
+          allActiveApprovals: allActiveApprovals.data,
         },
       }
     }

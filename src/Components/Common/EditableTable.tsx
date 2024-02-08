@@ -18,7 +18,7 @@ import TableRow from '@mui/material/TableRow'
 import TableCell from '@mui/material/TableCell'
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward'
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward'
-import { getStandatedDateWithTime } from '../../Utils/dateTime'
+import { getStandatedDate, getStandatedDateWithTime } from '../../Utils/dateTime'
 import { generateExcel } from '../../Utils/fileGenerator'
 import DownloadIcon from '@mui/icons-material/Download'
 import theme from '../../Theme'
@@ -44,7 +44,22 @@ const EditableTable: React.FC<EditableTableProps> = ({
   pageData,
   setPageData,
   handleRowClick,
-  excludedColumns = ['_id', '__v', 'pi_id', 'currentAssignee_id', 'createdBy', 'approvers'],
+  excludedColumns = [
+    '_id',
+    'orgId',
+    'complianceId',
+    'rule_id',
+    '__v',
+    'pi_id',
+    'protocol_id',
+    'group_id',
+    'flow_id',
+    'mandatoryApprovers',
+    'currentAssignee_id',
+    'createdBy',
+    'approvers',
+    'approver_id',
+  ],
 }) => {
   const { data, total } = tableData
   const [showColumnsDialog, setShowColumnsDialog] = useState(false)
@@ -94,6 +109,20 @@ const EditableTable: React.FC<EditableTableProps> = ({
 
   const handleDownload = () => {
     generateExcel(sortedData, title, setIsLoading)
+  }
+
+  function formatColumnValue(column: string, row: any) {
+    if (column === 'createdAt' || column === 'updatedAt' || column === 'expireAt') {
+      return row[column] ? getStandatedDate(row[column]) : ''
+    } else if (column === 'isActive') {
+      return row[column] ? 'Active' : 'Not Active'
+    } else if (column === 'protocol_id' && typeof row[column] === 'object') {
+      return row[column]?._id
+    } else if (typeof row[column] === 'object') {
+      return JSON.stringify(row[column])
+    } else {
+      return row[column]
+    }
   }
 
   const columns = Object.keys(data[0])
@@ -236,17 +265,7 @@ const EditableTable: React.FC<EditableTableProps> = ({
                   {visibleColumnsForDialog.map(
                     (column, columnIndex) =>
                       visibleColumns[column] && (
-                        <TableCell key={columnIndex}>
-                          {column === 'createdAt' || column === 'updatedAt'
-                            ? getStandatedDateWithTime(row[column])
-                            : column === 'isActive'
-                              ? row[column]
-                                ? 'Active'
-                                : 'Not Active'
-                              : typeof row[column] === 'object'
-                                ? JSON.stringify(row[column])
-                                : row[column]}
-                        </TableCell>
+                        <TableCell key={columnIndex}>{formatColumnValue(column, row)}</TableCell>
                       ),
                   )}
                 </TableRow>

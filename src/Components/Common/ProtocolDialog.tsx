@@ -1,15 +1,5 @@
 import React from 'react'
-import {
-  Grid,
-  TextField,
-  FormControl,
-  InputLabel,
-  Select,
-  MenuItem,
-  TextareaAutosize,
-  Typography,
-  Button,
-} from '@mui/material'
+import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, Button, Typography, Divider } from '@mui/material'
 import { Formik as Formic, Form, Field, ErrorMessage } from 'formik'
 import PopUp from './Dialog'
 import { useRouter } from 'next/router'
@@ -18,6 +8,7 @@ import { ICompliance, IDepartment } from '../../Utils/types/type'
 import axiosInstance from '../../Utils/axiosUtil'
 import { showMessage } from '../../Store/reducers/snackbar'
 import { useDispatch } from 'react-redux'
+import { initFormState } from '../../Store/reducers/form'
 
 interface StyledErrorMessageProps {
   name: string
@@ -33,6 +24,8 @@ type FormValues = {
   department: string
   title: string
   description: string
+  reviewType: string; 
+  protocolNumber: string;
 }
 
 const initialValues: FormValues = {
@@ -40,6 +33,8 @@ const initialValues: FormValues = {
   department: '',
   title: '',
   description: '',
+  reviewType: '',
+  protocolNumber: '',
 }
 
 interface IProps {
@@ -70,18 +65,24 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
     if (values.description.length > 512) {
       errors.description = 'Maximum 512 characters allowed'
     }
+    if (!values.reviewType) {
+      errors.reviewType = 'Required'; // Add validation for reviewType
+    }
     return errors
   }
 
   const handleSubmit = async (values: FormValues, { setSubmitting }: any) => {
     // Handle form submission logic here
+    dispatch(initFormState())
     if (complianceType?.id) {
       const response: any = await axiosInstance.post('/protocol', {
         title: values.title,
         description: values.description,
         department: values.department,
         complianceId: complianceType.id,
-        ruleId: complianceType?.approvalRulesId,
+        reviewType: values.reviewType,
+        protocolNumber: values.protocolNumber || '',
+        ruleId: parseInt(complianceType?.approvalRulesId || '-1'),
       })
       if (response.status < 300) {
         dispatch(showMessage({ message: 'Protocol is drafted', severity: 'success' }))
@@ -112,10 +113,10 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
             <Grid item xs={12} sm={6}>
               <Field name="department">
                 {({ field }: any) => (
-                  <FormControl fullWidth>
-                    <InputLabel>Department</InputLabel>
-                    <Select {...field} label="Department">
-                      {departments?.data?.map((dep: IDepartment, index: number) => (
+                  <FormControl fullWidth required>
+                    <InputLabel>Department/Division</InputLabel>
+                    <Select {...field} label="Department/Division*">
+                      {departments?.map((dep: IDepartment, index: number) => (
                         <MenuItem value={dep.name} key={index.toString()}>
                           {dep.name}
                         </MenuItem>
@@ -126,9 +127,36 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
               </Field>
               <StyledErrorMessage name="department" />
             </Grid>
+            <Grid xs={12} sx={{ml: 3}}>
+              <Divider sx={{my: 2}}/>
+              <Typography variant="h6">
+                Fill in the protocol details
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field name="reviewType">
+                {({ field }: any) => (
+                  <FormControl fullWidth required>
+                    <InputLabel>Type of review requested</InputLabel>
+                    <Select {...field} label="Type of review requested">
+                      <MenuItem value="Exemption">Exemption from review</MenuItem>
+                      <MenuItem value="Expedited">Expedited review</MenuItem>
+                      <MenuItem value="Committee">Full committee review</MenuItem>
+                    </Select>
+                  </FormControl>
+                )}
+              </Field>
+              <StyledErrorMessage name="reviewType" />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <Field name="protocolNumber">
+                {({ field }: any) => <TextField label="Protocol number" fullWidth {...field} />}
+              </Field>
+              <StyledErrorMessage name="title" />
+            </Grid>
             <Grid item xs={12}>
               <Field name="title">
-                {({ field }: any) => <TextField label="Protocol Title" fullWidth {...field} />}
+                {({ field }: any) => <TextField label="Title of the study" required fullWidth {...field} />}
               </Field>
               <StyledErrorMessage name="title" />
             </Grid>
@@ -139,6 +167,7 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
                     inputProps={{ style: { height: '150px' } }}
                     label="Description"
                     fullWidth
+                    required
                     multiline
                     {...field}
                   />
