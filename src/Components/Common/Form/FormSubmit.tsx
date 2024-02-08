@@ -30,7 +30,7 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
         let response: any
         dispatch(startLoading())
         if (reviewer === 'Approve') {
-          if (protocol.status === 'Draft' || protocol.status === 'rejected') {
+          if ((protocol.status === 'Draft' || protocol.status === 'Rejected') && !approver) {
             response = await axiosInstance.post('/flow', {
               protocol_id: protocol._id,
             })
