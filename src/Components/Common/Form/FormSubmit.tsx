@@ -29,23 +29,28 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
       try {
         let response: any
         dispatch(startLoading())
-        if (reviewer === 'Approve') {
-          if (protocol.status === 'Draft' || protocol.status === 'rejected') {
-            response = await axiosInstance.post('/flow', {
-              protocol_id: protocol._id,
-            })
-          } else {
-            response = await axiosInstance.put(`/approval/approve?_id=${approver}`)
-          }
-        } else {
-          if (protocol.status === 'Draft') {
-            dispatch(
-              showMessage({ message: 'Please select approve to process', severity: 'success' }),
-            )
-          } else {
-            response = await axiosInstance.put(`/approval/reject?_id=${approver}`)
-          }
-        }
+        response = await axiosInstance.post('/approval/update-status', {
+          protocol_id: protocol._id,
+          approval_id: approver || null,
+          status: reviewer === 'Approve' ? 'Approved' : 'Rejected'
+        });
+        // if (reviewer === 'Approve') {
+        //   if (protocol.status === 'Draft' || protocol.status === 'rejected') {
+        //     response = await axiosInstance.post('/flow', {
+        //       protocol_id: protocol._id,
+        //     })
+        //   } else {
+        //     response = await axiosInstance.put(`/approval/approve?_id=${approver}`)
+        //   }
+        // } else {
+        //   if (protocol.status === 'Draft') {
+        //     dispatch(
+        //       showMessage({ message: 'Please select approve to process', severity: 'success' }),
+        //     )
+        //   } else {
+        //     response = await axiosInstance.put(`/approval/reject?_id=${approver}`)
+        //   }
+        // }
         dispatch(endLoading())
         if (response?.status < 300) {
           dispatch(showMessage({ message: 'Submited', severity: 'success' }))
