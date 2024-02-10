@@ -84,13 +84,7 @@ export default function Protocol(props: IProps) {
     return <NoDataFound />
   }
 
-  const questions = data.filter((q: IQuestion) => q?.questionType !== 'info')
-  const infos = data.filter((q: IQuestion) => q?.questionType === 'info')
-  const qIdMap: Record<string, string> = data.reduce((acc: any, { id, _id }: any) => {
-    acc[id] = _id
-    return acc
-  }, {})
-
+  const infos = data.filter((q: IQuestion) => (q?.questionType === 'info' && q?.tabNumber === tabNumber))
   const tabQuestion = data.filter((q: IQuestion) => q?.tabNumber === tabNumber)
 
   return (
@@ -122,7 +116,6 @@ export default function Protocol(props: IProps) {
                 question={question}
                 questionNumber={questionNumber}
                 tabId={tabNumber}
-                qIdMap={qIdMap}
               />
             ))}
           </Grid>

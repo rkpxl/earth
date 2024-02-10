@@ -13,6 +13,7 @@ import ConfirmationPopup from '../../../Components/Common/ConfirmationDialog'
 import { showMessage } from '../../../Store/reducers/snackbar'
 import { fetchDepartments } from '../../../Store/reducers/department'
 import GlobalPagination from '../../../Components/Common/GlobalPagination'
+import NoDataFound from '../../../Components/Common/NoData'
 
 export default function Department(props: any) {
   const [open, setOpen] = useState(false)
@@ -88,6 +89,8 @@ export default function Department(props: any) {
           <AdminCard card={dep} onDelete={() => handleOpenConfirmation(dep.id)} />
         </div>
       ))}
+      {departments?.length === 0 ? <NoDataFound /> : null}
+      
       {/* {departments?.total > 10 ? 
         <GlobalPagination 
         totalItems={departments?.total} 

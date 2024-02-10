@@ -279,7 +279,7 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
                       </Grid>
                       <Grid item xs={6} sm={2}>
                         <Typography variant="body2">
-                          {e?.updatedAt || '' ? getStandatedDateWithTime(e?.updatedAt) : ''}
+                          {e?.updatedAt || '' ? getStandatedDate(e?.updatedAt) : ''}
                         </Typography>
                       </Grid>
                     </Grid>

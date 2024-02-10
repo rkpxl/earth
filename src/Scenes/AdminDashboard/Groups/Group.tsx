@@ -15,6 +15,7 @@ import { openConfirmation } from '../../../Store/reducers/confirm'
 import { fetchGroups } from '../../../Store/reducers/group'
 import { useRouter } from 'next/router'
 import GlobalPagination from '../../../Components/Common/GlobalPagination'
+import NoDataFound from '../../../Components/Common/NoData'
 
 export default function Group(props: any) {
   const router = useRouter()
@@ -104,6 +105,7 @@ export default function Group(props: any) {
           />
         </div>
       ))}
+      {groups?.length < 1 ? <NoDataFound /> : null}
       {/* {groups?.total > 10 ? 
             <GlobalPagination 
               totalItems={groups?.total} 

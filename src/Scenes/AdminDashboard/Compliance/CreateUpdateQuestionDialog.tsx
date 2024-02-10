@@ -125,9 +125,6 @@ const reducer = (state: State, action: Action): State => {
       if (isValid.length > 0) {
         errors.answerOptions = "Value Name can't be empty"
       }
-      if (state.description === '') {
-        errors.description = "Description can't be empty"
-      }
       return { ...state, errors }
     case 'reset':
       return { ...initialState }
@@ -216,7 +213,7 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({
 
     // Check if there are any errors
     const isValid = state.answerOptions.filter((name: any) => name === '')
-    if (!state.title || !state.description) {
+    if (!state.title) {
       return
     } else {
       try {
@@ -255,6 +252,13 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({
               description: state.description,
               isFullWidth: state.isFullWidth,
               isRequired: state.isRequired,
+              dependent:
+                state.depId && state.depValue
+                  ? {
+                      key: state.depId,
+                      value: state.depValue,
+                    }
+                  : {},
             })
 
         if (response.status < 300) {
@@ -303,6 +307,7 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({
             disabled={isUpdate ? isEditing : false}
             error={!!state.errors.title}
             helperText={state.errors.title}
+            multiline
           />
         </Box>
         <Box>
@@ -384,7 +389,7 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({
             </Select>
           </FormControl>
         </Box>
-        {(state.questionType === 'dropdown' || state.questionType === 'multiselect') && (
+        {(state.questionType === 'dropdown' || state.questionType === 'multiselect' || state.questionType === 'info') && (
           <Box marginBottom={2}>
             <TextField
               label="Value Count"
