@@ -33,7 +33,7 @@ const initialValues: FormValues = {
   department: '',
   title: '',
   description: '',
-  reviewType: '',
+  reviewType: 'Expedited',
   protocolNumber: '',
 }
 
@@ -80,12 +80,13 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
         description: values.description,
         department: values.department,
         complianceId: complianceType.id,
+        // reviewType: values.reviewType,
         reviewType: values.reviewType,
         protocolNumber: values.protocolNumber || '',
         ruleId: parseInt(complianceType?.approvalRulesId || '-1'),
       })
       if (response.status < 300) {
-        dispatch(showMessage({ message: 'Protocol is drafted', severity: 'success' }))
+        dispatch(showMessage({ message: 'Application is drafted', severity: 'success' }))
         handleClose()
         router.push(`/forms/${response?.data?._id.toString()}`)
       } else {
@@ -98,7 +99,7 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
   }
 
   return (
-    <PopUp title={`Create a new ${complianceType?.title || ''} protocol`} {...props}>
+    <PopUp title={`Create a new ${complianceType?.title || ''} request`} {...props}>
       <Formic initialValues={initialValues} validate={validateForm} onSubmit={handleSubmit}>
         <Form>
           <Grid container spacing={2}>
@@ -130,10 +131,10 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
             <Grid xs={12} sx={{ml: 3}}>
               <Divider sx={{my: 2}}/>
               <Typography variant="h6">
-                Fill in the protocol details
+                Fill in the request details
               </Typography>
             </Grid>
-            <Grid item xs={12} sm={6}>
+            {/* <Grid item xs={12} sm={6}>
               <Field name="reviewType">
                 {({ field }: any) => (
                   <FormControl fullWidth required>
@@ -147,16 +148,16 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
                 )}
               </Field>
               <StyledErrorMessage name="reviewType" />
-            </Grid>
+            </Grid> */}
             <Grid item xs={12} sm={6}>
               <Field name="protocolNumber">
-                {({ field }: any) => <TextField label="Protocol number" fullWidth {...field} />}
+                {({ field }: any) => <TextField label="Request number" fullWidth {...field} />}
               </Field>
               <StyledErrorMessage name="title" />
             </Grid>
             <Grid item xs={12}>
               <Field name="title">
-                {({ field }: any) => <TextField label="Title of the study" required fullWidth {...field} />}
+                {({ field }: any) => <TextField label="Title of the request" required fullWidth {...field} />}
               </Field>
               <StyledErrorMessage name="title" />
             </Grid>

@@ -84,7 +84,7 @@ const Dashboard = () => {
           }}
         >
           <Typography variant="h6" gutterBottom>
-            Protocol Chart
+            Application Chart
           </Typography>
           <Typography variant="body2">Total Protocol: {totalProtocolCount}</Typography>
           <CardContent sx={{ display: 'flex', justifyContent: 'space-between' }}>

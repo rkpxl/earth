@@ -176,7 +176,7 @@ export default function DynamicForm(props: IProps) {
               )
             })}
           <Tab
-            label="Personnel"
+            label="Approvers"
             {...a11yProps(compliance?.tabNames?.length + 1)}
             style={
               formData?.tabs['98']?.tabInfo?.isError ? { color: 'red' } : { color: '#65748B ' }

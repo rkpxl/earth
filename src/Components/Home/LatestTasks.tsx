@@ -17,6 +17,7 @@ import { SeverityPill } from '../Common/SeverityPills';
 import { useHomeContext } from '../../pages';
 import { getStandatedDateWithTime } from '../../Utils/dateTime';
 import { IApproval, IProtocol } from '../../Utils/types/type';
+import { replaceKeys } from '../../Utils/util';
 
 export const LatestTasks = () => {
   const { allProtocols, allApprovals } = useHomeContext();
@@ -26,7 +27,7 @@ export const LatestTasks = () => {
     const protocols = allProtocols?.data?.map((ap : IProtocol) => ({ ...ap, type: 'Protocol' }));
 
     const combinedArray = [...(approvals || []), ...(protocols || [])];
-    return combinedArray
+    const data = combinedArray
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // Assuming createdAt is a string date
       .slice(0, 10)
       .map((t) => ({
@@ -37,6 +38,12 @@ export const LatestTasks = () => {
         createdAt: t.createdAt,
         type: t.type,
       }));
+      const convertObject = {
+        'piName': 'creator',
+        'currentAssigneeName': 'Under',
+        'protocolAction': 'action',
+      }
+      return replaceKeys(convertObject, data);
   }, [allApprovals?.data, allProtocols?.data]);
 
   return (
@@ -50,18 +57,18 @@ export const LatestTasks = () => {
                 <TableCell>Type</TableCell>
                 <TableCell>Title</TableCell>
                 <TableCell>Description</TableCell>
-                <TableCell>PiName</TableCell>
+                <TableCell>Creator</TableCell>
                 <TableCell>Status</TableCell>
                 <TableCell>Created At</TableCell>
               </TableRow>
             </TableHead>
             <TableBody>
-              {finalArray.map((e, index) => (
+              {finalArray.map((e : any, index : number) => (
                 <TableRow hover key={index}>
                   <TableCell>{e.type}</TableCell>
                   <TableCell>{e.title || ''}</TableCell>
                   <TableCell>{e.description || ''}</TableCell>
-                  <TableCell>{e.piName}</TableCell>
+                  <TableCell>{e.creator}</TableCell>
                   <TableCell>
                     <SeverityPill
                       color={

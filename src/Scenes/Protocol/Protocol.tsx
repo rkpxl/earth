@@ -81,7 +81,11 @@ export default function Protocol(props: IProps) {
   }
 
   if (isError || data?.length < 1) {
-    return <NoDataFound />
+    if(tabNumber != 100) {
+      return <NoDataFound />
+    } else {
+      return;
+    }
   }
 
   const infos = data.filter((q: IQuestion) => (q?.questionType === 'info' && q?.tabNumber === tabNumber))

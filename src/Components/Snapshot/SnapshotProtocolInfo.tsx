@@ -6,7 +6,7 @@ const ProtocolInfo = ({ protocol } : any) => {
     <Card raised  sx={{ m: 3 }}>
       <CardContent>
         <Typography variant="h5" component="div" gutterBottom>
-          Protocol Details
+          Application Details
         </Typography>
         <List>
           <ListItem>
@@ -33,7 +33,7 @@ const ProtocolInfo = ({ protocol } : any) => {
           </ListItem>
           <Divider component="li" />
           <ListItem>
-            <ListItemText primary="Protocol Action" secondary={protocol?.protocolAction} />
+            <ListItemText primary="Application Action" secondary={protocol?.protocolAction} />
           </ListItem>
           <Divider component="li" />
           <ListItem>

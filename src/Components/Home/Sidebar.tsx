@@ -32,11 +32,11 @@ export const Sidebar = (props: any) => {
       icon: <CogIcon fontSize="small" />,
       title: 'Settings',
     },
-    {
-      href: '/publication',
-      icon: <LibraryBooksIcon fontSize="small" />,
-      title: 'Publication',
-    },
+    // {
+    //   href: '/publication',
+    //   icon: <LibraryBooksIcon fontSize="small" />,
+    //   title: 'Publication',
+    // },
   ])
 
   useEffect(
@@ -49,7 +49,7 @@ export const Sidebar = (props: any) => {
           {
             href: '/admin-dashboard/dashboard',
             icon: <InboxIcon fontSize="small" />,
-            title: 'Protocols',
+            title: 'Applications',
           },
           {
             href: '/admin-dashboard/analytics',
@@ -84,7 +84,7 @@ export const Sidebar = (props: any) => {
           {
             href: '/admin-dashboard/compliance',
             icon: <ShieldIcon fontSize="small" />,
-            title: 'Compliance',
+            title: 'Vertical',
           },
           {
             href: '/admin-dashboard/approval-rule',

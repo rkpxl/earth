@@ -44,9 +44,9 @@ interface IProps {
 const ApprovalAction = [
   { key: 'AMENDMENT', value: 'Amendment' },
   { key: 'REVISE', value: 'Revise' },
-  { key: 'EXPIRE', value: 'Expire' },
-  { key: 'CLOSURE', value: 'Closure' },
-  { key: 'CONREV', value: 'Continuous Review' },
+  // { key: 'EXPIRE', value: 'Expire' },
+  // { key: 'CLOSURE', value: 'Closure' },
+  // { key: 'CONREV', value: 'Continuous Review' },
 ]
 
 export default function LifeCycle({ flow, snapshots }: IProps) {
@@ -232,7 +232,7 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
                 </Grid>
                 <Grid item xs={6} sm={2}>
                   <Typography variant="body1" fontWeight={500}>
-                    PI Name
+                    Creator Name
                   </Typography>
                 </Grid>
                 <Grid item xs={6} sm={2}>

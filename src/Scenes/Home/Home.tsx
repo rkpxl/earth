@@ -19,19 +19,19 @@ const Home = () => {
 
   const homeCard = [
     {
-      title: 'Your Protocol Portfolio',
+      title: 'Your Application Portfolio',
       icon: '/static/images/tick.svg',
       nextPageRoute: '/all-protocols',
       count: allProtocols?.total,
     },
     {
-      title: 'Pending Decision Protocols',
+      title: 'Pending Decision Application',
       icon: '/static/images/info.svg',
       nextPageRoute: '/pending-protocols',
       count: allApprovals?.total,
     },
     {
-      title: 'Protocol Portfolio History',
+      title: 'Application Portfolio History',
       icon: '/static/images/paper.svg',
       nextPageRoute: '/all-protocol-status',
       count: allActiveApprovals?.total,
@@ -93,7 +93,7 @@ const Home = () => {
             color="primary"
             sx={{ background: 'primary.main' }}
           >
-            Create new protocol
+            Create new request
           </Button>
           <Menu
             id="demo-positioned-menu"

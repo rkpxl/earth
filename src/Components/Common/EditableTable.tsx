@@ -25,6 +25,7 @@ import theme from '../../Theme'
 import Loading from './Loading'
 import NoDataFound from './NoData'
 import GlobalPagination from './GlobalPagination'
+import { replaceKeys } from '../../Utils/util'
 
 interface EditableTableProps {
   data: { data: Array<any>; total?: number }
@@ -59,9 +60,17 @@ const EditableTable: React.FC<EditableTableProps> = ({
     'createdBy',
     'approvers',
     'approver_id',
+    'protocolNumber',
+    'reviewType',
   ],
 }) => {
-  const { data, total } = tableData
+  const { data : response, total } = tableData
+  const convertObject = {
+    'piName': 'creator',
+    'currentAssigneeName': 'Under',
+    'protocolAction': 'action',
+  }
+  const data = replaceKeys(convertObject, response);
   const [showColumnsDialog, setShowColumnsDialog] = useState(false)
   const [visibleColumns, setVisibleColumns] = useState(() =>
     Object.keys(data[0] || {}).reduce((acc: any, key) => {
@@ -69,6 +78,10 @@ const EditableTable: React.FC<EditableTableProps> = ({
       return acc
     }, {}),
   )
+
+  
+
+
 
   const [sortConfig, setSortConfig] = useState<{
     key: string | null

@@ -273,7 +273,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         })
         .then((response) => {
           if (response.status < 300) {
-            handleSnackbar('Your protocol created and send', 'success')
+            handleSnackbar('Your application created and send', 'success')
             setTimeout(() => {
               router.push('/')
             }, 2000)
@@ -308,7 +308,7 @@ export const QuestionList: React.FC<FormProps> = ({ title, dept, description }) 
         <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
           <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
             <Tab label="Question" {...a11yProps(0)} />
-            <Tab label="Personnel" {...a11yProps(1)} />
+            <Tab label="Approvers" {...a11yProps(1)} />
             <Tab label="Documents" {...a11yProps(1)} />
             <Tab label="Submit" {...a11yProps(2)} />
           </Tabs>

@@ -21,7 +21,7 @@ import { useRouter } from 'next/router'
 
 const tableHeader = [
   {
-    headerTitle: 'Protocol Id',
+    headerTitle: 'Application Id',
     isSortable: false,
   },
   {

@@ -32,3 +32,33 @@ export const getAnalyticsColor = (index = -1, opacity = 1) => {
     index == -1 || index > colors.length ? Math.floor(Math.random() * colors.length) : index
   return colors[num]
 }
+
+
+export function replaceKeys(replace : any, target : any) {
+  if (!replace || typeof replace !== 'object' || !target || (Array.isArray(target) && !target.every(obj => typeof obj === 'object'))) {
+      return target;
+  }
+
+  if (Array.isArray(target)) {
+      return target.map(obj => {
+          if (!obj || typeof obj !== 'object') {
+              return obj;
+          }
+          for (let key in replace) {
+              if (obj.hasOwnProperty(key)) {
+                  obj[replace[key]] = obj[key];
+                  delete obj[key];
+              }
+          }
+          return obj;
+      });
+  } else {
+      for (let key in replace) {
+          if (target.hasOwnProperty(key)) {
+              target[replace[key]] = target[key];
+              delete target[key];
+          }
+      }
+      return target;
+  }
+}

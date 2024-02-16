@@ -103,7 +103,7 @@ const LineChartCard = () => {
         <Card style={cardStyle}>
           <CardContent>
             <Typography variant="h6" gutterBottom>
-              Protocols Processed Per Day
+            Application Processed Per Day
             </Typography>
             <Line data={lineChartData} />
           </CardContent>

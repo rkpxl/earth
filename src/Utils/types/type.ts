@@ -237,12 +237,12 @@ export interface IFlow {
 
 export type TActionProtocol = 'AMENDMENT' | 'CONREV' | 'REVISE' | 'EXPIRE' | 'CLOSURE'
 
-export const ApprovalAction: Record<TActionProtocol, string> = {
+export const ApprovalAction: Record<string, string> = {
   AMENDMENT: 'Amendment',
   REVISE: 'Revise',
-  EXPIRE: 'Expire',
-  CLOSURE: 'Closure',
-  CONREV: 'Continuous Review',
+  // EXPIRE: 'Expire',
+  // CLOSURE: 'Closure',
+  // CONREV: 'Continuous Review',
 }
 
 export interface ISnapshot {
