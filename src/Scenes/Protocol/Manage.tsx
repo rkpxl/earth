@@ -31,6 +31,7 @@ import { useRouter } from 'next/router'
 import Loading from '../../Components/Common/Loading'
 import { showMessage } from '../../Store/reducers/snackbar'
 import { endLoading, startLoading } from '../../Store/reducers/loading'
+import MoreInfo from '../../Components/Common/Form/MoreInfo'
 
 interface DetailsData {
   [key: string]: any
@@ -39,6 +40,7 @@ interface DetailsData {
 interface IProps {
   flow: Array<IFlow>
   snapshots: Array<ISnapshot>
+  moreInfo: any
 }
 
 const ApprovalAction = [
@@ -49,7 +51,7 @@ const ApprovalAction = [
   { key: 'CONREV', value: 'Continuous Review' },
 ]
 
-export default function LifeCycle({ flow, snapshots }: IProps) {
+export default function LifeCycle({ flow, snapshots, moreInfo }: IProps) {
   const [anchorEl, setAnchorEl] = useState(null)
   const [detailsData, setDetailsData] = useState<DetailsData>({})
   const [accordionLoading, setAccordionLoading] = useState(false)
@@ -361,6 +363,8 @@ export default function LifeCycle({ flow, snapshots }: IProps) {
           </Typography>
         </Grid>
       </Grid>
+      <Divider sx={{ mt: 4 }} />
+      <MoreInfo moreInfo={moreInfo}/>
       <ConfirmationPopup handleConfirm={handleConfirmation} />
     </div>
   )

@@ -1,3 +1,5 @@
+import axiosInstance from "./axiosUtil"
+
 export const debounce = <T extends unknown[]>(
   func: (...args: T) => void,
   duration = 500,
@@ -31,4 +33,28 @@ export const getAnalyticsColor = (index = -1, opacity = 1) => {
   const num =
     index == -1 || index > colors.length ? Math.floor(Math.random() * colors.length) : index
   return colors[num]
+}
+
+
+export const uploadDoc = async (doc: any) => {
+  if (!(doc.file instanceof Blob)) {
+    console.error(`Invalid file format for document ${doc.name}.`)
+    return null // Return null or handle the error appropriately.
+  }
+
+  const formData = new FormData()
+  formData.append('file', doc.file, doc.name)
+
+  try {
+    const response = await axiosInstance.post('/document/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    })
+
+    return response.data
+  } catch (error) {
+    console.error(`Error uploading document ${doc.name}:`, error)
+    throw error // Rethrow the error to handle it outside the function if needed.
+  }
 }

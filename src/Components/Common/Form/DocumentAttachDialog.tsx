@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux'
 import { showMessage } from '../../../Store/reducers/snackbar'
 import { RefetchQueryFilters, useQueryClient } from '@tanstack/react-query'
 import { endLoading, startLoading } from '../../../Store/reducers/loading'
+import { uploadDoc } from '../../../Utils/util'
 
 interface AddDocumentDialogProps {
   open: boolean
@@ -38,50 +39,12 @@ const DocumentAttachDialog: React.FC<AddDocumentDialogProps> = ({
   const dispatch = useDispatch()
   const queryClient = useQueryClient()
 
-  const handleAddDocument = () => {
-    // Add your logic to handle the document addition
-    // You can pass the entered data to the parent component
-    onAddDocument({
-      documentFile,
-      versionFile,
-      title,
-      description,
-      protocolId: '',
-    })
-
-    // Close the dialog after adding the document
-    onClose()
-  }
-
   const handleDocumentButtonClick = () => {
     documentInputRef.current?.click()
   }
 
   const handleVersionButtonClick = () => {
     versionInputRef.current?.click()
-  }
-
-  const uploadDoc = async (doc: any) => {
-    if (!(doc.file instanceof Blob)) {
-      console.error(`Invalid file format for document ${doc.name}.`)
-      return null // Return null or handle the error appropriately.
-    }
-
-    const formData = new FormData()
-    formData.append('file', doc.file, doc.name)
-
-    try {
-      const response = await axiosInstance.post('/document/upload', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-
-      return response.data
-    } catch (error) {
-      console.error(`Error uploading document ${doc.name}:`, error)
-      throw error // Rethrow the error to handle it outside the function if needed.
-    }
   }
 
   const handleAdd = async () => {
