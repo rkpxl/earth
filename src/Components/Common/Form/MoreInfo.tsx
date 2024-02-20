@@ -9,7 +9,11 @@ import { useDispatch } from 'react-redux';
 import { endLoading, startLoading } from '../../../Store/reducers/loading';
 import UnifiedDataDisplay from './UnifiedDataDisplay';
 
-const MoreInfo: React.FC = ({moreInfo} : any) => {
+interface IProps {
+  moreInfo: any
+}
+
+const MoreInfo = ({ moreInfo } : IProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [formType, setFormType] = useState<string>('');
   const [formData, setFormData] = useState<any>({});

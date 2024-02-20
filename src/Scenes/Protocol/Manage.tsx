@@ -40,7 +40,7 @@ interface DetailsData {
 interface IProps {
   flow: Array<IFlow>
   snapshots: Array<ISnapshot>
-  moreInfo: any
+  moreInfo: Array<any>
 }
 
 const ApprovalAction = [
