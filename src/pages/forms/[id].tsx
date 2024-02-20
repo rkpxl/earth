@@ -32,6 +32,7 @@ interface IProps {
   protocol: IProtocol
   snapshots: Array<ISnapshot>
   flow: Array<IFlow>
+  moreInfo: Array<any>
 }
 
 function a11yProps(index: number) {
@@ -43,7 +44,7 @@ function a11yProps(index: number) {
 
 export default function DynamicForm(props: IProps) {
   const router = useRouter()
-  const { compliance, protocol, flow, snapshots } = props
+  const { compliance, protocol, flow, snapshots, moreInfo } = props
   const { id: protocol_id } = router.query as { id: string }
   const formData = useSelector((state: RootState) => state.form)
   const [value, setValue] = useState<number>(0)
@@ -187,7 +188,7 @@ export default function DynamicForm(props: IProps) {
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <LifeCycle flow={flow} snapshots={snapshots} />
+        <LifeCycle flow={flow} snapshots={snapshots} moreInfo={moreInfo}/>
       </CustomTabPanel>
       {compliance?.tabNames
         ?.sort((a: any, b: any) => parseInt(a.position) - parseInt(b.position))
@@ -246,10 +247,11 @@ export const getServerSideProps = async function getServerSideProps(context: any
           },
         }
       }
-      const [compliance, flow, snapshots] = await Promise.all([
+      const [compliance, flow, snapshots, moreInfo] = await Promise.all([
         axiosInstance.get(`/compliance/${protocol.data.complianceId}`),
         axiosInstance.get(`/flow/protocol/${id}`),
         axiosInstance.get(`/snapshot/protocol?id=${id}`),
+        axiosInstance.get(`/moreinfo?id=${id}`),
       ])
       return {
         props: {
@@ -258,6 +260,7 @@ export const getServerSideProps = async function getServerSideProps(context: any
           protocol: protocol.data,
           flow: flow?.data || [],
           snapshots: snapshots?.data || [],
+          moreInfo: moreInfo?.data || [],
         },
       }
     }

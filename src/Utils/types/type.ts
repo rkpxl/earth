@@ -254,6 +254,101 @@ export interface ISnapshot {
   updatedAt: string
   __v: number
 }
+export interface FieldOption {
+  value: string;
+  label: string;
+}
+
+export interface FieldConfig {
+  id: string;
+  label: string;
+  type: 'text' | 'number' | 'date' | 'select' | 'attachment' | 'dynamicTable' | 'dynamicQuestions';
+  options?: FieldOption[];
+  multiline?: boolean;
+  rows?: number;
+  xs: number;
+  md?: number;
+}
+
+export interface FormConfig {
+  [key: string]: FieldConfig[];
+}
+
+export const moreInfoFormConfigs: FormConfig = {
+  qa: [
+    { id: 'title', label: 'Title', type: 'text', xs: 12 },
+    { id: 'answer', label: 'Answer', type: 'text', xs: 12, multiline: true, rows: 4 },
+    { id: 'attachment', label: 'Attachment', type: 'attachment', xs: 12 },
+  ],
+  consent: [
+    { id: 'title', label: 'Title', type: 'text', xs: 12 },
+    { id: 'description', label: 'Description', type: 'text', xs: 12, multiline: true, rows: 4 },
+    { id: 'patientName', label: 'Patient Name', type: 'text', xs: 12, md: 6 },
+    { id: 'age', label: 'Age', type: 'number', xs: 12, md: 6 },
+    { id: 'gender', label: 'Gender', type: 'select', xs: 12, md: 6, options: [{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }, { value: 'other', label: 'Other' }] },
+    { id: 'dateOfBirth', label: 'Date of Birth', type: 'date', xs: 12, md: 6 },
+    { id: 'attachment', label: 'Attachment', type: 'attachment', xs: 12 },
+  ],
+  evaluation: [
+    { id: 'title', label: 'Title', type: 'text', xs: 12 },
+    { id: 'criteria', label: 'Criteria', type: 'text', xs: 12 },
+    { id: 'overallScore', label: 'Overall Score', type: 'number', xs: 12, md: 6 },
+    { id: 'comments', label: 'Comments', type: 'text', xs: 12 },
+    { id: 'evaluatorName', label: 'Evaluator Name', type: 'text', xs: 12, md: 6 },
+    { id: 'evaluationDate', label: 'Evaluation Date', type: 'date', xs: 12, md: 6 },
+    { id: 'attachment', label: 'Attachment', type: 'attachment', xs: 12 },
+  ],
+  feedback: [
+    { id: 'title', label: 'Feedback Title', type: 'text', xs: 12 },
+    { id: 'description', label: 'Description', type: 'text', xs: 12 },
+    { id: 'rating', label: 'Rating', type: 'number', xs: 12, md: 6 },
+    { id: 'openEndedResponse', label: 'Open-Ended Response', type: 'text', xs: 12 },
+    { id: 'submitDate', label: 'Submit Date', type: 'date', xs: 12, md: 6 },
+  ],
+  // Table form might require a different handling approach since it's dynamic.
+  receipt: [
+    { id: 'title', label: 'Receipt Title', type: 'text', xs: 12 },
+    { id: 'date', label: 'Date', type: 'date', xs: 12, md: 6 },
+    { id: 'amount', label: 'Amount', type: 'number', xs: 12, md: 6 },
+    { id: 'receivedFrom', label: 'Received From', type: 'text', xs: 12 },
+    { id: 'for', label: 'For', type: 'text', xs: 12 },
+    { id: 'paymentMethod', label: 'Payment Method', type: 'select', xs: 12, md: 6, options: [{ value: 'cash', label: 'Cash' }, { value: 'creditCard', label: 'Credit Card' }, { value: 'online', label: 'Online' }] },
+    { id: 'attachment', label: 'Attachment', type: 'attachment', xs: 12 },
+  ],
+  dataCollection: [
+    { id: 'title', label: 'Collection Title', type: 'text', xs: 12 },
+    { id: 'dataCollectionMethod', label: 'Data Collection Method', type: 'text', xs: 12 },
+    { id: 'dataType', label: 'Data Type', type: 'text', xs: 12, md: 6 },
+    { id: 'sampleSize', label: 'Sample Size', type: 'number', xs: 12, md: 6 },
+    { id: 'collectionStartDate', label: 'Collection Start Date', type: 'date', xs: 12, md: 6 },
+    { id: 'collectionEndDate', label: 'Collection End Date', type: 'date', xs: 12, md: 6 },
+    { id: 'attachment', label: 'Attachment', type: 'attachment', xs: 12 },
+  ],
+  survey: [
+    { id: 'title', label: 'Survey Title', type: 'text', xs: 12 },
+    { id: 'description', label: 'Description', type: 'text', xs: 12 },
+    // Survey questions could be dynamic, handled differently
+    { id: 'targetDemographic', label: 'Target Demographic', type: 'text', xs: 12 },
+    { id: 'surveyEndDate', label: 'Survey End Date', type: 'date', xs: 12, md: 6 },
+    { id: 'attachment', label: 'Attachment', type: 'attachment', xs: 12 },
+  ],
+  labNotes: [
+    { id: 'date', label: 'Date', type: 'date', xs: 12, md: 6 },
+    { id: 'notes', label: 'Notes', type: 'text', xs: 12 },
+    { id: 'tags', label: 'Tags', type: 'text', xs: 12 }, // Could be implemented as select with multiple options
+    { id: 'attachments', label: 'Attachments', type: 'attachment', xs: 12 },
+  ],
+  sampleTracking: [
+    { id: 'sampleID', label: 'Sample ID', type: 'text', xs: 12, md: 6 },
+    { id: 'collectionDate', label: 'Collection Date', type: 'date', xs: 12, md: 6 },
+    { id: 'sampleType', label: 'Sample Type', type: 'text', xs: 12, md: 6 },
+    { id: 'storageLocation', label: 'Storage Location', type: 'text', xs: 12, md: 6 },
+    { id: 'associatedProject', label: 'Associated Project', type: 'text', xs: 12 },
+    { id: 'attachments', label: 'Attachments', type: 'attachment', xs: 12 },
+  ],
+  // Note: The 'Table' type requires a specialized approach not covered here due to its dynamic nature.
+};
+
 
 export type QuestionType = 'text' | 'dropdown' | 'yesno' | 'bigtext' | 'multiselect' | 'info'
 export type SnackbarSeverity = 'success' | 'error' | 'warning'
