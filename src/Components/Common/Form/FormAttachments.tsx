@@ -6,6 +6,7 @@ import { Button, Grid, IconButton, TextField } from '@mui/material'
 import Loading from '../Loading'
 import DeleteIcon from '@mui/icons-material/Delete'
 import DocumentAttachDialog from './DocumentAttachDialog'
+import NoDataFound from '../NoData'
 
 interface IProps {
   compliance: ICompliance
@@ -57,7 +58,7 @@ export default function FormAttachment({ compliance, protocol }: IProps) {
 
   return (
     <div style={{ padding: '0px' }}>
-      {data.map((document: IDocument, index: any) => (
+      {data?.map((document: IDocument, index: any) => (
         <Grid container key={index} spacing={2} style={{ marginBottom: '16px' }}>
           <Grid item xs={12} sm={5}>
             <TextField
