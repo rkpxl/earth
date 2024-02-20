@@ -26,26 +26,14 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
     const { approver } = router.query
     dispatch(validateForm())
     if (isAllSet) {
+      let response: any
       try {
-        let response: any
         dispatch(startLoading())
-        if (reviewer === 'Approve') {
-          if ((protocol.status === 'Draft' || protocol.status === 'Rejected') && !approver) {
-            response = await axiosInstance.post('/flow', {
-              protocol_id: protocol._id,
-            })
-          } else {
-            response = await axiosInstance.put(`/approval/approve?_id=${approver}`)
-          }
-        } else {
-          if (protocol.status === 'Draft') {
-            dispatch(
-              showMessage({ message: 'Please select approve to process', severity: 'success' }),
-            )
-          } else {
-            response = await axiosInstance.put(`/approval/reject?_id=${approver}`)
-          }
-        }
+        response = await axiosInstance.post('/approval/update-status', {
+          protocol_id: protocol._id,
+          approval_id: approver || null,
+          status: (reviewer === 'Approve' || protocol.status === 'Draft') ? 'Approved' : 'Rejected'
+        });
         dispatch(endLoading())
         if (response?.status < 300) {
           dispatch(showMessage({ message: 'Submited', severity: 'success' }))
@@ -54,8 +42,8 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
           dispatch(showMessage({ message: 'Not Submited', severity: 'warning' }))
         }
       } catch (err) {
-        console.error(err)
-        dispatch(showMessage({ message: 'Not Submited', severity: 'error' }))
+        dispatch(endLoading())
+        dispatch(showMessage({ message: response, severity: 'error' }))
       }
     } else {
       dispatch(
@@ -83,6 +71,7 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
           fullWidth
         />
       </Grid>
+      {protocol.status === "Draft" ? null :
       <Grid item xs={12} lg={6}>
         <FormControl fullWidth required>
           <InputLabel id="select" size="small">
@@ -94,11 +83,6 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
             size="small"
             onChange={(e: any) => setReviewer(e.target.value)}
           >
-            {/* {protocol?.approvers?.map((option: any, index: number) => (
-              <MenuItem key={index} value={option}>
-                {`${option.name} ${option?.role ? '-' : ''} ${option?.role || ''}`}
-              </MenuItem>
-            ))} */}
             {['Approve', 'Reject'].map((option: any, index: number) => (
               <MenuItem key={index} value={option}>
                 {option}
@@ -106,11 +90,11 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
             ))}
           </Select>
         </FormControl>
-      </Grid>
+      </Grid> }
       <Grid
         item
         xs={12}
-        lg={6}
+        lg={protocol.status === 'Draft' ? 12 : 6}
         sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'end' }}
       >
         <Button

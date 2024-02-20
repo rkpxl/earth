@@ -4,9 +4,6 @@ import axiosInstance from '../../../Utils/axiosUtil'
 import NoDataFound from '../../../Components/Common/NoData'
 
 function index({ group, isAuthenticated }: any) {
-  if (group.length < 1) {
-    return <NoDataFound />
-  }
 
   return (
     <>

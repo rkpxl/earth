@@ -12,6 +12,7 @@ import { useRouter } from 'next/router'
 import { openConfirmation } from '../../../Store/reducers/confirm'
 import ConfirmationPopup from '../../../Components/Common/ConfirmationDialog'
 import CreateUpdateQuestionDialog from './CreateUpdateQuestionDialog'
+import NoDataFound from '../../../Components/Common/NoData'
 
 interface IProps {
   id: string | string[] | undefined
@@ -48,7 +49,8 @@ export default function ManageComplianceMember(props: IProps) {
 
   const handleConfirmation = async (id: string) => {
     try {
-      const response = await axiosInstance.delete(`/compliance/${id}`)
+      console.log('calling this')
+      const response = await axiosInstance.delete(`/questions/${id}`)
       if (response.status === 200) {
         dispatch(showMessage({ message: 'Compliance is deleted', severity: 'success' }))
       } else {
@@ -107,6 +109,7 @@ export default function ManageComplianceMember(props: IProps) {
           />
         </div>
       ))}
+      {data?.length === 0 ? <NoDataFound /> : null}
       <ConfirmationPopup handleConfirm={handleConfirmation} />
     </Grid>
   )

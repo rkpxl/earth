@@ -101,6 +101,7 @@ export default function Compliance(props: any) {
           />
         </div>
       ))}
+      {compliances?.length === 0 ? <NoDataFound /> : null}
       {/* {compliances?.total > 10 ? 
         <GlobalPagination 
           totalItems={compliances?.total} 

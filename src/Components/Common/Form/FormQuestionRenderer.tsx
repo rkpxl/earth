@@ -13,55 +13,41 @@ import { showMessage } from '../../../Store/reducers/snackbar'
 import Router from 'next/router'
 import { useProtocolContext } from '../../../Scenes/Protocol/Protocol'
 import DateTimeComponent from './DateTimeComponent'
+import { debounce } from '../../../Utils/util'
 
 interface FormQuestionRendererProps {
   question: any
   questionNumber: number
   tabId: number
-  qIdMap: Record<string, string>
 }
 
 const ProtocolQuestionContext = React.createContext<any>(null)
 
-const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, question, qIdMap }) => {
+const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, question }) => {
   const { questionType, dependent, isFullWidth, ...rest } = question
   const { id } = Router.query
   const { compliance, questionNumber } = useProtocolContext()
   const dispatch = useDispatch()
   const answers = useSelector((state: RootState) => state.form?.tabs?.[tabId]?.questions ?? {})
+  const answersRef = React.useRef(answers);
+  answersRef.current = answers;
 
   const handleAnswerChange = (newAnswer: any) => {
     dispatch(updateAnswer({ tabIndex: tabId, id: question?._id, answer: newAnswer }))
   }
-
-  if (dependent?.key && dependent?.value) {
-    const dependentAnswer = answers[qIdMap[dependent?.key]]?.answer
-    if (!dependentAnswer) {
-      return
-    }
-    if (Array.isArray(dependentAnswer)) {
-      if (!dependentAnswer.includes(dependent.value)) {
-        return
-      }
-    } else {
-      if (dependentAnswer.toLowerCase() !== dependent.value.toLowerCase()) {
-        return
-      }
-    }
-  }
-
-  const handleQuestionSubmit = async (e: React.FocusEvent<HTMLElement>) => {
+  const handleQuestionSubmit = React.useCallback(debounce(async (e: React.FocusEvent<HTMLElement>) => {
     if (e) {
       e.preventDefault()
     }
     try {
+      const currentAnswers = answersRef.current;
       const response: any = await axiosInstance.post('/answer', {
-        answer: answers[question?._id]?.answer || '',
+        answer: currentAnswers[question?._id]?.answer || '',
         question_id: question._id,
         tabId: tabId,
         protocol_id: id,
         complianceId: compliance.id,
-      })
+      });
       if (response.status < 300) {
         dispatch(showMessage({ message: 'Youe Answer Saved', severity: 'success', duration: 500 }))
       } else {
@@ -78,11 +64,28 @@ const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, ques
         }),
       )
     }
+  }, 1500), [])
+
+  if (dependent?.key && dependent?.value) {
+    const dependentAnswer = answers[dependent?.question_id]?.answer
+    if (!dependentAnswer) {
+      return
+    }
+    if (Array.isArray(dependentAnswer)) {
+      if (!dependentAnswer.includes(dependent.value)) {
+        return
+      }
+    } else {
+      if (dependentAnswer.toLowerCase() !== dependent.value.toLowerCase()) {
+        return
+      }
+    }
   }
+
 
   return (
     <ProtocolQuestionContext.Provider
-      value={{ ...rest, handleAnswerChange, handleQuestionSubmit, compliance, answers, question }}
+      value={{ ...rest, handleAnswerChange, handleQuestionSubmit, compliance, answers, question, tabId }}
     >
       <Grid item xs={12} sm={isFullWidth ? 12 : 6}>
         {(questionType === 'text' || questionType === 'bigtext') && (
