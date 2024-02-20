@@ -4,7 +4,6 @@ import Compliance from '../../../Scenes/AdminDashboard/Compliance'
 import NoDataFound from '../../../Components/Common/NoData'
 
 function index({ compliances, isAuthenticated }: any) {
-
   return (
     <>
       <Compliance compliances={compliances} />

@@ -1,6 +1,6 @@
-import React, { useMemo } from 'react';
-import { format } from 'date-fns';
-import PerfectScrollbar from 'react-perfect-scrollbar';
+import React, { useMemo } from 'react'
+import { format } from 'date-fns'
+import PerfectScrollbar from 'react-perfect-scrollbar'
 import {
   Box,
   Card,
@@ -12,20 +12,23 @@ import {
   TableRow,
   TableSortLabel,
   Tooltip,
-} from '@mui/material';
-import { SeverityPill } from '../Common/SeverityPills';
-import { useHomeContext } from '../../pages';
-import { getStandatedDateWithTime } from '../../Utils/dateTime';
-import { IApproval, IProtocol } from '../../Utils/types/type';
+} from '@mui/material'
+import { SeverityPill } from '../Common/SeverityPills'
+import { useHomeContext } from '../../pages'
+import { getStandatedDateWithTime } from '../../Utils/dateTime'
+import { IApproval, IProtocol } from '../../Utils/types/type'
 
 export const LatestTasks = () => {
-  const { allProtocols, allApprovals } = useHomeContext();
+  const { allProtocols, allApprovals } = useHomeContext()
 
   const finalArray = useMemo(() => {
-    const approvals = allApprovals?.data?.map((ap : IApproval) => ({ ...ap, type: 'Pending Decision' }));
-    const protocols = allProtocols?.data?.map((ap : IProtocol) => ({ ...ap, type: 'Protocol' }));
+    const approvals = allApprovals?.data?.map((ap: IApproval) => ({
+      ...ap,
+      type: 'Pending Decision',
+    }))
+    const protocols = allProtocols?.data?.map((ap: IProtocol) => ({ ...ap, type: 'Protocol' }))
 
-    const combinedArray = [...(approvals || []), ...(protocols || [])];
+    const combinedArray = [...(approvals || []), ...(protocols || [])]
     return combinedArray
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()) // Assuming createdAt is a string date
       .slice(0, 10)
@@ -36,8 +39,8 @@ export const LatestTasks = () => {
         status: t.status,
         createdAt: t.createdAt,
         type: t.type,
-      }));
-  }, [allApprovals?.data, allProtocols?.data]);
+      }))
+  }, [allApprovals?.data, allProtocols?.data])
 
   return (
     <Card>
@@ -65,17 +68,18 @@ export const LatestTasks = () => {
                   <TableCell>
                     <SeverityPill
                       color={
-                        ((e.status.toLowerCase() === 'approved' || e.status.toLowerCase() === 'draft' ) && 'success') ||
+                        ((e.status.toLowerCase() === 'approved' ||
+                          e.status.toLowerCase() === 'draft') &&
+                          'success') ||
                         (e.status.toLowerCase() === 'rejected' && 'error') ||
                         (e.status.toLowerCase() === 'review' && 'warning') ||
                         'warning'
-                      }>
+                      }
+                    >
                       {e.status}
                     </SeverityPill>
                   </TableCell>
-                  <TableCell>
-                    {e.createdAt ? getStandatedDateWithTime(e.createdAt) : ''}
-                  </TableCell>
+                  <TableCell>{e.createdAt ? getStandatedDateWithTime(e.createdAt) : ''}</TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -83,5 +87,5 @@ export const LatestTasks = () => {
         </Box>
       </PerfectScrollbar>
     </Card>
-  );
-};
+  )
+}

@@ -255,23 +255,23 @@ export interface ISnapshot {
   __v: number
 }
 export interface FieldOption {
-  value: string;
-  label: string;
+  value: string
+  label: string
 }
 
 export interface FieldConfig {
-  id: string;
-  label: string;
-  type: 'text' | 'number' | 'date' | 'select' | 'attachment' | 'dynamicTable' | 'dynamicQuestions';
-  options?: FieldOption[];
-  multiline?: boolean;
-  rows?: number;
-  xs: number;
-  md?: number;
+  id: string
+  label: string
+  type: 'text' | 'number' | 'date' | 'select' | 'attachment' | 'dynamicTable' | 'dynamicQuestions'
+  options?: FieldOption[]
+  multiline?: boolean
+  rows?: number
+  xs: number
+  md?: number
 }
 
 export interface FormConfig {
-  [key: string]: FieldConfig[];
+  [key: string]: FieldConfig[]
 }
 
 export const moreInfoFormConfigs: FormConfig = {
@@ -285,7 +285,18 @@ export const moreInfoFormConfigs: FormConfig = {
     { id: 'description', label: 'Description', type: 'text', xs: 12, multiline: true, rows: 4 },
     { id: 'patientName', label: 'Patient Name', type: 'text', xs: 12, md: 6 },
     { id: 'age', label: 'Age', type: 'number', xs: 12, md: 6 },
-    { id: 'gender', label: 'Gender', type: 'select', xs: 12, md: 6, options: [{ value: 'male', label: 'Male' }, { value: 'female', label: 'Female' }, { value: 'other', label: 'Other' }] },
+    {
+      id: 'gender',
+      label: 'Gender',
+      type: 'select',
+      xs: 12,
+      md: 6,
+      options: [
+        { value: 'male', label: 'Male' },
+        { value: 'female', label: 'Female' },
+        { value: 'other', label: 'Other' },
+      ],
+    },
     { id: 'dateOfBirth', label: 'Date of Birth', type: 'date', xs: 12, md: 6 },
     { id: 'attachment', label: 'Attachment', type: 'attachment', xs: 12 },
   ],
@@ -312,7 +323,18 @@ export const moreInfoFormConfigs: FormConfig = {
     { id: 'amount', label: 'Amount', type: 'number', xs: 12, md: 6 },
     { id: 'receivedFrom', label: 'Received From', type: 'text', xs: 12 },
     { id: 'for', label: 'For', type: 'text', xs: 12 },
-    { id: 'paymentMethod', label: 'Payment Method', type: 'select', xs: 12, md: 6, options: [{ value: 'cash', label: 'Cash' }, { value: 'creditCard', label: 'Credit Card' }, { value: 'online', label: 'Online' }] },
+    {
+      id: 'paymentMethod',
+      label: 'Payment Method',
+      type: 'select',
+      xs: 12,
+      md: 6,
+      options: [
+        { value: 'cash', label: 'Cash' },
+        { value: 'creditCard', label: 'Credit Card' },
+        { value: 'online', label: 'Online' },
+      ],
+    },
     { id: 'attachment', label: 'Attachment', type: 'attachment', xs: 12 },
   ],
   dataCollection: [
@@ -347,8 +369,7 @@ export const moreInfoFormConfigs: FormConfig = {
     { id: 'attachments', label: 'Attachments', type: 'attachment', xs: 12 },
   ],
   // Note: The 'Table' type requires a specialized approach not covered here due to its dynamic nature.
-};
-
+}
 
 export type QuestionType = 'text' | 'dropdown' | 'yesno' | 'bigtext' | 'multiselect' | 'info'
 export type SnackbarSeverity = 'success' | 'error' | 'warning'

@@ -1,4 +1,4 @@
-import axiosInstance from "./axiosUtil"
+import axiosInstance from './axiosUtil'
 
 export const debounce = <T extends unknown[]>(
   func: (...args: T) => void,
@@ -34,7 +34,6 @@ export const getAnalyticsColor = (index = -1, opacity = 1) => {
     index == -1 || index > colors.length ? Math.floor(Math.random() * colors.length) : index
   return colors[num]
 }
-
 
 export const uploadDoc = async (doc: any) => {
   if (!(doc.file instanceof Blob)) {

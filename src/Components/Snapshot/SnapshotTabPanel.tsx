@@ -1,8 +1,8 @@
-import { Box, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material'
 import React from 'react'
 
-export default function SnapshotTabPanel(props : any) {
-  const { children, value, index, ...other } = props;
+export default function SnapshotTabPanel(props: any) {
+  const { children, value, index, ...other } = props
 
   return (
     <div
@@ -18,5 +18,5 @@ export default function SnapshotTabPanel(props : any) {
         </Box>
       )}
     </div>
-  );
+  )
 }

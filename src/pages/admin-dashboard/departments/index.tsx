@@ -4,7 +4,6 @@ import axiosInstance from '../../../Utils/axiosUtil'
 import NoDataFound from '../../../Components/Common/NoData'
 
 function index({ departments, isAuthenticated }: any) {
-
   return (
     <>
       <Departments departments={departments} />

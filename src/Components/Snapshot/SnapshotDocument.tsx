@@ -1,15 +1,24 @@
-import React from 'react';
-import { Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Button, Box } from '@mui/material';
-import { getStandatedDate } from '../../Utils/dateTime';
-import NoDataFound from '../Common/NoData';
+import React from 'react'
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  Button,
+  Box,
+} from '@mui/material'
+import { getStandatedDate } from '../../Utils/dateTime'
+import NoDataFound from '../Common/NoData'
 
-const SnapshotDocuemt = ({ documents } : any) => {
-
-  if(!documents || documents?.length < 1) {
-    return (<NoDataFound />)
+const SnapshotDocuemt = ({ documents }: any) => {
+  if (!documents || documents?.length < 1) {
+    return <NoDataFound />
   }
   return (
-    <Box sx={{ m : 3 }}>
+    <Box sx={{ m: 3 }}>
       <TableContainer component={Paper}>
         <Table aria-label="document table">
           <TableHead>
@@ -21,7 +30,7 @@ const SnapshotDocuemt = ({ documents } : any) => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {documents?.map((doc : any) => (
+            {documents?.map((doc: any) => (
               <TableRow key={doc?._id}>
                 <TableCell>{doc?.title}</TableCell>
                 <TableCell>{doc?.providerName}</TableCell>
@@ -41,7 +50,7 @@ const SnapshotDocuemt = ({ documents } : any) => {
         </Table>
       </TableContainer>
     </Box>
-  );
-};
+  )
+}
 
-export default SnapshotDocuemt;
+export default SnapshotDocuemt

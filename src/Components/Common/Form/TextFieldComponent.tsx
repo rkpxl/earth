@@ -2,7 +2,7 @@ import React from 'react'
 import { Grid, IconButton, TextField, Tooltip, Typography } from '@mui/material'
 import CommentJustification from './CommentJustification'
 import { useProtocolQuestionContext } from './FormQuestionRenderer'
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 
 interface TextFieldComponentProps {
   questionNumber?: number
@@ -15,7 +15,10 @@ const TextFieldComponent: React.FC<TextFieldComponentProps> = ({ questionNumber,
   return (
     <Grid container spacing={1}>
       <Grid item xs={12} sm={12} sx={{ display: 'flex' }}>
-        <Typography sx={{ fontWeight: '420', fontSize: '16px', marginBottom: '6px', marginRight: '4px' }} variant="h6">
+        <Typography
+          sx={{ fontWeight: '420', fontSize: '16px', marginBottom: '6px', marginRight: '4px' }}
+          variant="h6"
+        >
           {questionNumber ? 'Q' + questionNumber + ' ' : ''} {title}
         </Typography>
         <Tooltip title={question?.description || ''}>

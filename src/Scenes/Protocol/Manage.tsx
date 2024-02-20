@@ -272,7 +272,9 @@ export default function LifeCycle({ flow, snapshots, moreInfo }: IProps) {
                         <Typography variant="body2">{e?.approver_name || ''}</Typography>
                       </Grid>
                       <Grid item xs={6} sm={2}>
-                        <Typography variant="body2">{e?.status.toString() == 'Review' ? 'Under Review' : e?.status}</Typography>
+                        <Typography variant="body2">
+                          {e?.status.toString() == 'Review' ? 'Under Review' : e?.status}
+                        </Typography>
                       </Grid>
                       <Grid item xs={6} sm={2}>
                         <Typography variant="body2">
@@ -364,7 +366,7 @@ export default function LifeCycle({ flow, snapshots, moreInfo }: IProps) {
         </Grid>
       </Grid>
       <Divider sx={{ mt: 4 }} />
-      <MoreInfo moreInfo={moreInfo}/>
+      <MoreInfo moreInfo={moreInfo} />
       <ConfirmationPopup handleConfirm={handleConfirmation} />
     </div>
   )

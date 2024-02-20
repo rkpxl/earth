@@ -32,8 +32,8 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
         response = await axiosInstance.post('/approval/update-status', {
           protocol_id: protocol._id,
           approval_id: approver || null,
-          status: (reviewer === 'Approve' || protocol.status === 'Draft') ? 'Approved' : 'Rejected'
-        });
+          status: reviewer === 'Approve' || protocol.status === 'Draft' ? 'Approved' : 'Rejected',
+        })
         dispatch(endLoading())
         if (response?.status < 300) {
           dispatch(showMessage({ message: 'Submited', severity: 'success' }))
@@ -58,44 +58,36 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
   }, [formRootData, dispatch])
 
   return (
-    <Grid
-      container
-      columnSpacing={2}
-      rowSpacing={2}
-      sx={{ marginBottom: '64px' }}
-    >
+    <Grid container columnSpacing={2} rowSpacing={2} sx={{ marginBottom: '64px' }}>
       <Grid item xs={12}>
-        <TextField
-          label="Comment"
-          variant="outlined"
-          fullWidth
-        />
+        <TextField label="Comment" variant="outlined" fullWidth />
       </Grid>
-      {protocol.status === "Draft" ? null :
-      <Grid item xs={12} lg={6}>
-        <FormControl fullWidth required>
-          <InputLabel id="select" size="small">
-            Select reviewer
-          </InputLabel>
-          <Select
-            required
-            label="Select reviewer"
-            size="small"
-            onChange={(e: any) => setReviewer(e.target.value)}
-          >
-            {['Approve', 'Reject'].map((option: any, index: number) => (
-              <MenuItem key={index} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-            {['Approve', 'Reject'].map((option: any, index: number) => (
-              <MenuItem key={index} value={option}>
-                {option}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
-      </Grid> }
+      {protocol.status === 'Draft' ? null : (
+        <Grid item xs={12} lg={6}>
+          <FormControl fullWidth required>
+            <InputLabel id="select" size="small">
+              Select reviewer
+            </InputLabel>
+            <Select
+              required
+              label="Select reviewer"
+              size="small"
+              onChange={(e: any) => setReviewer(e.target.value)}
+            >
+              {['Approve', 'Reject'].map((option: any, index: number) => (
+                <MenuItem key={index} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+              {['Approve', 'Reject'].map((option: any, index: number) => (
+                <MenuItem key={index} value={option}>
+                  {option}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
+        </Grid>
+      )}
       <Grid
         item
         xs={12}

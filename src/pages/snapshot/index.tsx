@@ -1,14 +1,14 @@
-import { useRouter } from 'next/router';
-import { useEffect } from 'react';
+import { useRouter } from 'next/router'
+import { useEffect } from 'react'
 
 const Index = () => {
-  const router = useRouter();
+  const router = useRouter()
 
   useEffect(() => {
-    router.back();
+    router.back()
   }, [router])
 
-  return (<></>);
-};
+  return <></>
+}
 
-export default Index;
+export default Index

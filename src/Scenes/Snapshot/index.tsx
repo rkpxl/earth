@@ -1,1 +1,1 @@
-export { default } from './Snapshot';
+export { default } from './Snapshot'

@@ -1,5 +1,15 @@
 import React from 'react'
-import { Grid, TextField, FormControl, InputLabel, Select, MenuItem, Button, Typography, Divider } from '@mui/material'
+import {
+  Grid,
+  TextField,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Button,
+  Typography,
+  Divider,
+} from '@mui/material'
 import { Formik as Formic, Form, Field, ErrorMessage } from 'formik'
 import PopUp from './Dialog'
 import { useRouter } from 'next/router'
@@ -24,8 +34,8 @@ type FormValues = {
   department: string
   title: string
   description: string
-  reviewType: string; 
-  protocolNumber: string;
+  reviewType: string
+  protocolNumber: string
 }
 
 const initialValues: FormValues = {
@@ -66,7 +76,7 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
       errors.description = 'Maximum 512 characters allowed'
     }
     if (!values.reviewType) {
-      errors.reviewType = 'Required'; // Add validation for reviewType
+      errors.reviewType = 'Required' // Add validation for reviewType
     }
     return errors
   }
@@ -127,11 +137,9 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
               </Field>
               <StyledErrorMessage name="department" />
             </Grid>
-            <Grid xs={12} sx={{ml: 3}}>
-              <Divider sx={{my: 2}}/>
-              <Typography variant="h6">
-                Fill in the protocol details
-              </Typography>
+            <Grid xs={12} sx={{ ml: 3 }}>
+              <Divider sx={{ my: 2 }} />
+              <Typography variant="h6">Fill in the protocol details</Typography>
             </Grid>
             <Grid item xs={12} sm={6}>
               <Field name="reviewType">
@@ -156,7 +164,9 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
             </Grid>
             <Grid item xs={12}>
               <Field name="title">
-                {({ field }: any) => <TextField label="Title of the study" required fullWidth {...field} />}
+                {({ field }: any) => (
+                  <TextField label="Title of the study" required fullWidth {...field} />
+                )}
               </Field>
               <StyledErrorMessage name="title" />
             </Grid>

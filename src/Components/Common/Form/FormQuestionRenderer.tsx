@@ -29,42 +29,47 @@ const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, ques
   const { compliance, questionNumber } = useProtocolContext()
   const dispatch = useDispatch()
   const answers = useSelector((state: RootState) => state.form?.tabs?.[tabId]?.questions ?? {})
-  const answersRef = React.useRef(answers);
-  answersRef.current = answers;
+  const answersRef = React.useRef(answers)
+  answersRef.current = answers
 
   const handleAnswerChange = (newAnswer: any) => {
     dispatch(updateAnswer({ tabIndex: tabId, id: question?._id, answer: newAnswer }))
   }
-  const handleQuestionSubmit = React.useCallback(debounce(async (e: React.FocusEvent<HTMLElement>) => {
-    if (e) {
-      e.preventDefault()
-    }
-    try {
-      const currentAnswers = answersRef.current;
-      const response: any = await axiosInstance.post('/answer', {
-        answer: currentAnswers[question?._id]?.answer || '',
-        question_id: question._id,
-        tabId: tabId,
-        protocol_id: id,
-        complianceId: compliance.id,
-      });
-      if (response.status < 300) {
-        dispatch(showMessage({ message: 'Youe Answer Saved', severity: 'success', duration: 500 }))
-      } else {
+  const handleQuestionSubmit = React.useCallback(
+    debounce(async (e: React.FocusEvent<HTMLElement>) => {
+      if (e) {
+        e.preventDefault()
+      }
+      try {
+        const currentAnswers = answersRef.current
+        const response: any = await axiosInstance.post('/answer', {
+          answer: currentAnswers[question?._id]?.answer || '',
+          question_id: question._id,
+          tabId: tabId,
+          protocol_id: id,
+          complianceId: compliance.id,
+        })
+        if (response.status < 300) {
+          dispatch(
+            showMessage({ message: 'Youe Answer Saved', severity: 'success', duration: 500 }),
+          )
+        } else {
+          dispatch(
+            showMessage({ message: 'Youe Answer Not Saved', severity: 'warning', duration: 600 }),
+          )
+        }
+      } catch (err) {
         dispatch(
-          showMessage({ message: 'Youe Answer Not Saved', severity: 'warning', duration: 600 }),
+          showMessage({
+            message: 'Youe Answer Not Saved, Please try after some time',
+            severity: 'error',
+            duration: 2000,
+          }),
         )
       }
-    } catch (err) {
-      dispatch(
-        showMessage({
-          message: 'Youe Answer Not Saved, Please try after some time',
-          severity: 'error',
-          duration: 2000,
-        }),
-      )
-    }
-  }, 1500), [])
+    }, 1500),
+    [],
+  )
 
   if (dependent?.key && dependent?.value) {
     const dependentAnswer = answers[dependent?.question_id]?.answer
@@ -82,10 +87,17 @@ const FormQuestionRenderer: React.FC<FormQuestionRendererProps> = ({ tabId, ques
     }
   }
 
-
   return (
     <ProtocolQuestionContext.Provider
-      value={{ ...rest, handleAnswerChange, handleQuestionSubmit, compliance, answers, question, tabId }}
+      value={{
+        ...rest,
+        handleAnswerChange,
+        handleQuestionSubmit,
+        compliance,
+        answers,
+        question,
+        tabId,
+      }}
     >
       <Grid item xs={12} sm={isFullWidth ? 12 : 6}>
         {(questionType === 'text' || questionType === 'bigtext') && (

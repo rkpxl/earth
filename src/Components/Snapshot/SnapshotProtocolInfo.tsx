@@ -1,16 +1,25 @@
-import React from 'react';
-import { Card, CardContent, List, ListItem, ListItemText, Typography, Divider, Grid } from '@mui/material';
+import React from 'react'
+import {
+  Card,
+  CardContent,
+  List,
+  ListItem,
+  ListItemText,
+  Typography,
+  Divider,
+  Grid,
+} from '@mui/material'
 
-const ProtocolInfo = ({ protocol } : any) => {
+const ProtocolInfo = ({ protocol }: any) => {
   return (
-    <Card raised  sx={{ m: 3 }}>
+    <Card raised sx={{ m: 3 }}>
       <CardContent>
         <Typography variant="h5" component="div" gutterBottom>
           Protocol Details
         </Typography>
         <List>
           <ListItem>
-            <ListItemText primary="Principal Investigator" secondary={protocol?.piName ||''} />
+            <ListItemText primary="Principal Investigator" secondary={protocol?.piName || ''} />
           </ListItem>
           <Divider component="li" />
           <ListItem>
@@ -46,7 +55,7 @@ const ProtocolInfo = ({ protocol } : any) => {
         </List>
       </CardContent>
     </Card>
-  );
-};
+  )
+}
 
-export default ProtocolInfo;
+export default ProtocolInfo

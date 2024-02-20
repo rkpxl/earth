@@ -1,22 +1,36 @@
-import React, { useRef, useState } from 'react';
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, TextField, MenuItem, Grid, IconButton, FormControl, InputLabel, Select, Typography } from '@mui/material';
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { FieldConfig, moreInfoFormConfigs } from '../../../Utils/types/type';
-import axiosInstance from '../../../Utils/axiosUtil';
-import { useRouter } from 'next/router';
-import { uploadDoc } from '../../../Utils/util';
-import { useDispatch } from 'react-redux';
-import { endLoading, startLoading } from '../../../Store/reducers/loading';
-import UnifiedDataDisplay from './UnifiedDataDisplay';
+import React, { useRef, useState } from 'react'
+import {
+  Button,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogTitle,
+  TextField,
+  MenuItem,
+  Grid,
+  IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  Typography,
+} from '@mui/material'
+import FileUploadIcon from '@mui/icons-material/FileUpload'
+import { FieldConfig, moreInfoFormConfigs } from '../../../Utils/types/type'
+import axiosInstance from '../../../Utils/axiosUtil'
+import { useRouter } from 'next/router'
+import { uploadDoc } from '../../../Utils/util'
+import { useDispatch } from 'react-redux'
+import { endLoading, startLoading } from '../../../Store/reducers/loading'
+import UnifiedDataDisplay from './UnifiedDataDisplay'
 
 interface IProps {
   moreInfo: any
 }
 
-const MoreInfo = ({ moreInfo } : IProps) => {
-  const [open, setOpen] = useState<boolean>(false);
-  const [formType, setFormType] = useState<string>('');
-  const [formData, setFormData] = useState<any>({});
+const MoreInfo = ({ moreInfo }: IProps) => {
+  const [open, setOpen] = useState<boolean>(false)
+  const [formType, setFormType] = useState<string>('')
+  const [formData, setFormData] = useState<any>({})
   const [apiData, setApiData] = useState(moreInfo.data)
   const [documentFile, setDocumentFile] = useState<any | null>(null)
   const dispatch = useDispatch()
@@ -24,9 +38,9 @@ const MoreInfo = ({ moreInfo } : IProps) => {
   const router = useRouter()
 
   const handleChange = (event: any) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  };
+    const { name, value } = event.target
+    setFormData({ ...formData, [name]: value })
+  }
 
   const initForm = () => {
     setOpen(false)
@@ -39,9 +53,9 @@ const MoreInfo = ({ moreInfo } : IProps) => {
   }
 
   const handleFormTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setFormType(event.target.value as string);
-    setFormData({}); // Reset form data on form type change
-  };
+    setFormType(event.target.value as string)
+    setFormData({}) // Reset form data on form type change
+  }
 
   const handleFileInputChange = (event: any, isVersion: boolean) => {
     const file = event.target.files[0]
@@ -50,16 +64,15 @@ const MoreInfo = ({ moreInfo } : IProps) => {
     }
   }
 
-
-  const handleOpen = (): void => setOpen(true);
-  const handleClose = (): void => setOpen(false);
+  const handleOpen = (): void => setOpen(true)
+  const handleClose = (): void => setOpen(false)
 
   const handleSave = async () => {
     const { id } = router.query
     let docUri = null
     setOpen(false)
     dispatch(startLoading())
-    if(documentFile) docUri =  await uploadDoc(documentFile)
+    if (documentFile) docUri = await uploadDoc(documentFile)
     try {
       const response = await axiosInstance.post('/moreinfo', {
         data: formData,
@@ -68,7 +81,7 @@ const MoreInfo = ({ moreInfo } : IProps) => {
         attachment: docUri || 'test',
         tabId: 1,
       })
-      setApiData((prev : any) => [response.data, ...prev])
+      setApiData((prev: any) => [response.data, ...prev])
     } catch (err) {
       console.error(err)
     }
@@ -82,30 +95,30 @@ const MoreInfo = ({ moreInfo } : IProps) => {
       case 'number':
         return (
           <TextField
-              key={fieldConfig.id}
-              fullWidth
-              label={fieldConfig.label}
-              type={fieldConfig.type}
-              variant="outlined"
-              value={formData[fieldConfig.id] || ''}
-              onChange={handleChange}
-              name={fieldConfig.id}
-              multiline={fieldConfig.type === 'text' && fieldConfig.hasOwnProperty('multiline')}
-              rows={fieldConfig.type === 'text' ? fieldConfig.rows || 1 : undefined}
-            />
-        );
+            key={fieldConfig.id}
+            fullWidth
+            label={fieldConfig.label}
+            type={fieldConfig.type}
+            variant="outlined"
+            value={formData[fieldConfig.id] || ''}
+            onChange={handleChange}
+            name={fieldConfig.id}
+            multiline={fieldConfig.type === 'text' && fieldConfig.hasOwnProperty('multiline')}
+            rows={fieldConfig.type === 'text' ? fieldConfig.rows || 1 : undefined}
+          />
+        )
       case 'date':
         return (
           <TextField
-              key={fieldConfig.id}
-              fullWidth
-              type={fieldConfig.type}
-              variant="outlined"
-              value={formData[fieldConfig.id] || ''}
-              onChange={handleChange}
-              name={fieldConfig.id}
-            />
-        );
+            key={fieldConfig.id}
+            fullWidth
+            type={fieldConfig.type}
+            variant="outlined"
+            value={formData[fieldConfig.id] || ''}
+            onChange={handleChange}
+            name={fieldConfig.id}
+          />
+        )
       case 'select':
         return (
           <FormControl fullWidth key={fieldConfig.id}>
@@ -116,14 +129,14 @@ const MoreInfo = ({ moreInfo } : IProps) => {
               onChange={handleChange}
               name={fieldConfig.id}
             >
-              {fieldConfig.options?.map(option => (
-                <MenuItem  key={option.value} value={option.value}>
+              {fieldConfig.options?.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
                   {option.label}
                 </MenuItem>
               ))}
             </Select>
           </FormControl>
-        );
+        )
       case 'attachment':
         return (
           <div key={fieldConfig.id}>
@@ -142,22 +155,22 @@ const MoreInfo = ({ moreInfo } : IProps) => {
               <Typography variant="body2">Upload</Typography>
             </label>
           </div>
-        );
+        )
       default:
-        return null;
+        return null
     }
-  };
+  }
 
   const renderFields = () => {
-    const fieldsConfig = moreInfoFormConfigs[formType];
-    if (!fieldsConfig) return null;
+    const fieldsConfig = moreInfoFormConfigs[formType]
+    if (!fieldsConfig) return null
 
-    return fieldsConfig.map(fieldConfig => (
+    return fieldsConfig.map((fieldConfig) => (
       <Grid item xs={fieldConfig.xs} md={fieldConfig.md || 12} key={fieldConfig.id}>
         {renderField(fieldConfig)}
       </Grid>
-    ));
-  };
+    ))
+  }
 
   return (
     <Grid container>
@@ -178,9 +191,9 @@ const MoreInfo = ({ moreInfo } : IProps) => {
                 value={formType}
                 onChange={handleFormTypeChange}
                 fullWidth
-                sx={{mt: 1}}
+                sx={{ mt: 1 }}
               >
-                {Object.keys(moreInfoFormConfigs).map(key => (
+                {Object.keys(moreInfoFormConfigs).map((key) => (
                   <MenuItem key={key} value={key}>
                     {key.charAt(0).toUpperCase() + key.slice(1)} {/* Capitalize the first letter */}
                   </MenuItem>
@@ -190,10 +203,10 @@ const MoreInfo = ({ moreInfo } : IProps) => {
             </Grid>
           </Grid>
           <form noValidate autoComplete="off">
-          <Grid container spacing={2} sx={{mt: 1}}>
-            {renderFields()}
-          </Grid>
-        </form>
+            <Grid container spacing={2} sx={{ mt: 1 }}>
+              {renderFields()}
+            </Grid>
+          </form>
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose}>Cancel</Button>
@@ -201,7 +214,7 @@ const MoreInfo = ({ moreInfo } : IProps) => {
         </DialogActions>
       </Dialog>
     </Grid>
-  );
-};
+  )
+}
 
-export default MoreInfo;
+export default MoreInfo

@@ -389,7 +389,9 @@ const CreateUpdateQuestionDialog: React.FC<IProps> = ({
             </Select>
           </FormControl>
         </Box>
-        {(state.questionType === 'dropdown' || state.questionType === 'multiselect' || state.questionType === 'info') && (
+        {(state.questionType === 'dropdown' ||
+          state.questionType === 'multiselect' ||
+          state.questionType === 'info') && (
           <Box marginBottom={2}>
             <TextField
               label="Value Count"

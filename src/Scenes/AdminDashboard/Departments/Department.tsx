@@ -90,7 +90,7 @@ export default function Department(props: any) {
         </div>
       ))}
       {departments?.length === 0 ? <NoDataFound /> : null}
-      
+
       {/* {departments?.total > 10 ? 
         <GlobalPagination 
         totalItems={departments?.total} 

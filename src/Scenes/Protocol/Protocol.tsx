@@ -84,7 +84,9 @@ export default function Protocol(props: IProps) {
     return <NoDataFound />
   }
 
-  const infos = data.filter((q: IQuestion) => (q?.questionType === 'info' && q?.tabNumber === tabNumber))
+  const infos = data.filter(
+    (q: IQuestion) => q?.questionType === 'info' && q?.tabNumber === tabNumber,
+  )
   const tabQuestion = data.filter((q: IQuestion) => q?.tabNumber === tabNumber)
 
   return (

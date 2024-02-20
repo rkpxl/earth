@@ -184,11 +184,11 @@ export default function DynamicForm(props: IProps) {
             }
           />
           <Tab label="Attachment" {...a11yProps(99)} />
-          <Tab label="Submit" {...a11yProps(100,)} />
+          <Tab label="Submit" {...a11yProps(100)} />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>
-        <LifeCycle flow={flow} snapshots={snapshots} moreInfo={moreInfo}/>
+        <LifeCycle flow={flow} snapshots={snapshots} moreInfo={moreInfo} />
       </CustomTabPanel>
       {compliance?.tabNames
         ?.sort((a: any, b: any) => parseInt(a.position) - parseInt(b.position))

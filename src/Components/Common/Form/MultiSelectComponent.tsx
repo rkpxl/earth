@@ -20,7 +20,7 @@ const MultiSelectComponent: React.FC<MultiSelectComponentProps> = ({ questionNum
     handleAnswerChange(updatedOptions)
   }
 
-  const isFull = (tabId < 96 && !(question?.answerOptions.length < 5));
+  const isFull = tabId < 96 && !(question?.answerOptions.length < 5)
 
   return (
     <Grid container spacing={1}>
@@ -32,9 +32,11 @@ const MultiSelectComponent: React.FC<MultiSelectComponentProps> = ({ questionNum
       <Grid item xs={11}>
         <FormControl component="fieldset" onBlur={(e) => handleQuestionSubmit(e)}>
           <FormGroup>
-            <Grid container spacing={1}> {/* Adjust the spacing as needed */}
-              {question?.answerOptions?.map((option : any, index : number) => (
-                <Grid item xs={6} sm={isFull ? 4 : 12} key={index}> 
+            <Grid container spacing={1}>
+              {' '}
+              {/* Adjust the spacing as needed */}
+              {question?.answerOptions?.map((option: any, index: number) => (
+                <Grid item xs={6} sm={isFull ? 4 : 12} key={index}>
                   <FormControlLabel
                     control={
                       <Checkbox
