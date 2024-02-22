@@ -83,7 +83,8 @@ export const Navbar = (props: any) => {
           if (entry.isIntersecting) {
             const id = entry.target.getAttribute('data-notification-id') as unknown as string;
             // @ts-ignore
-            const readed = data.filter((n : any) => n._id === id)[0]?.isReaded || true;
+            const readed = data.filter((n : any) => n._id === id)[0]?.isReaded;
+            console.log('readed', id, data, readed, data.filter((n : any) => n._id === id))
             if(readed || markedRead[id]) {
               if(!markedRead[id]) setMarkedRead((prev) => ({ ...prev, [id]: true }))
             } else {
