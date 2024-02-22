@@ -79,11 +79,6 @@ export default function FormSubmit({ compliance, protocol }: IProps) {
                   {option}
                 </MenuItem>
               ))}
-              {['Approve', 'Reject'].map((option: any, index: number) => (
-                <MenuItem key={index} value={option}>
-                  {option}
-                </MenuItem>
-              ))}
             </Select>
           </FormControl>
         </Grid>

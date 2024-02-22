@@ -137,7 +137,7 @@ const ProtocolPopUp = (props: IProps): JSX.Element => {
               </Field>
               <StyledErrorMessage name="department" />
             </Grid>
-            <Grid xs={12} sx={{ ml: 3 }}>
+            <Grid item xs={12} sx={{ ml: 3 }}>
               <Divider sx={{ my: 2 }} />
               <Typography variant="h6">Fill in the protocol details</Typography>
             </Grid>

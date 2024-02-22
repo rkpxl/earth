@@ -1,7 +1,9 @@
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import type { NextPage } from 'next'
 import HomePage from '../Scenes/Home/Home'
 import axiosInstance from '../Utils/axiosUtil'
+import { useDispatch } from 'react-redux'
+import { updateNotificationData } from '../Store/reducers/notification'
 
 const HomeContext = React.createContext<any>(null)
 
@@ -12,7 +14,14 @@ const Home: NextPage = ({
   allProtocols,
   allApprovals,
   allActiveApprovals,
+  notificationCount
 }: any) => {
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(updateNotificationData({total: notificationCount.total, data: []}))
+  }, [notificationCount])
+
   return (
     <HomeContext.Provider
       value={{
@@ -34,11 +43,14 @@ export const getServerSideProps = async function getServerSideProps(context: any
   try {
     const response = await axiosInstance.get('/auth/validate-token', context)
     if (response.status === 200) {
-      const compliances = await axiosInstance.get('/compliance')
-      const departments = await axiosInstance.get('/department')
-      const allProtocols = await axiosInstance.get('/protocol/get-all')
-      const allApprovals = await axiosInstance.get('/approval/all-review-ready')
-      const allActiveApprovals = await axiosInstance.get('/approval/all-active')
+      const [compliances, departments, allProtocols, allApprovals, allActiveApprovals, notificationCount] = await Promise.all([
+        axiosInstance.get('/compliance'),
+        axiosInstance.get('/department'),
+        axiosInstance.get('/protocol/get-all'),
+        axiosInstance.get('/approval/all-review-ready'),
+        axiosInstance.get('/approval/all-active'),
+        axiosInstance.get('/notification/active-count'),
+      ])
       return {
         props: {
           isAuthenticated: true,
@@ -47,6 +59,7 @@ export const getServerSideProps = async function getServerSideProps(context: any
           allProtocols: allProtocols.data,
           allApprovals: allApprovals.data,
           allActiveApprovals: allActiveApprovals.data,
+          notificationCount: notificationCount.data
         },
       }
     }
