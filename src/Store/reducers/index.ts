@@ -18,7 +18,7 @@ const rootReducer = combineReducers({
   form: formReducer,
   user: userReducer,
   globalLoading: loadingReducer,
-  notification: notificationReducer
+  notification: notificationReducer,
 })
 
 export default rootReducer

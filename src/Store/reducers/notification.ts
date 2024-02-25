@@ -9,7 +9,7 @@ const notificationSlice = createSlice({
   name: 'notification',
   initialState,
   reducers: {
-    updateNotificationData: (state, action: PayloadAction<{ total?: any, data?: any }>) => {
+    updateNotificationData: (state, action: PayloadAction<{ total?: any; data?: any }>) => {
       state.data = action.payload?.data || []
       state.total = action?.payload?.total || state?.total || 0
     },

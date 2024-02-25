@@ -124,7 +124,7 @@ export default function DynamicForm(props: IProps) {
     dispatch(
       updateAnswer({ tabIndex: 98, id: 'mandatoryApprovers', answer: protocol.mandatoryApprovers }),
     )
-  }, [protocol])
+  }, [protocol, dispatch])
 
   if (isLoading) {
     return <Loading />

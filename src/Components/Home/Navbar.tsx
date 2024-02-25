@@ -1,6 +1,27 @@
 import { useEffect, useRef, useState } from 'react'
 import styled from '@emotion/styled'
-import { AppBar, Avatar, Badge, Box, CircularProgress, Container, Divider, FormControlLabel, FormGroup, IconButton, List, ListItem, ListItemAvatar, ListItemIcon, ListItemText, Popover, Switch, Toolbar, Tooltip, Typography } from '@mui/material'
+import {
+  AppBar,
+  Avatar,
+  Badge,
+  Box,
+  CircularProgress,
+  Container,
+  Divider,
+  FormControlLabel,
+  FormGroup,
+  IconButton,
+  List,
+  ListItem,
+  ListItemAvatar,
+  ListItemIcon,
+  ListItemText,
+  Popover,
+  Switch,
+  Toolbar,
+  Tooltip,
+  Typography,
+} from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import SearchIcon from '@mui/icons-material/Search'
 import NotificationsNoneIcon from '@mui/icons-material/NotificationsNone'
@@ -14,9 +35,9 @@ import axiosInstance from '../../Utils/axiosUtil'
 import { updateNotificationData } from '../../Store/reducers/notification'
 import theme from '../../Theme'
 import { getStandatedDate } from '../../Utils/dateTime'
-import DraftsOutlinedIcon from '@mui/icons-material/DraftsOutlined';
-import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined';
-import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined';
+import DraftsOutlinedIcon from '@mui/icons-material/DraftsOutlined'
+import NotificationsNoneOutlinedIcon from '@mui/icons-material/NotificationsNoneOutlined'
+import NotificationsActiveOutlinedIcon from '@mui/icons-material/NotificationsActiveOutlined'
 import React from 'react'
 import Loading from '../Common/Loading'
 
@@ -32,97 +53,97 @@ export const Navbar = (props: any) => {
   const router = useRouter()
   const dispatch = useDispatch()
   const { total, data } = useSelector((state: RootState) => state.notification)
-  const [anchorEl, setAnchorEl] = useState(null);
-  const [page, setPage] = useState(1);
-  const [fetchMore, setFetchingMore] = useState(false);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
-  const [markedRead, setMarkedRead] = useState<{ [key: string]: boolean }>({});
-  const [allCount, setAllCount] = useState(0);
-  const observerRef = useRef<any>();
+  const [anchorEl, setAnchorEl] = useState(null)
+  const [page, setPage] = useState(1)
+  const [fetchMore, setFetchingMore] = useState(false)
+  const [isLoadingMore, setIsLoadingMore] = useState(false)
+  const [markedRead, setMarkedRead] = useState<{ [key: string]: boolean }>({})
+  const [allCount, setAllCount] = useState(0)
+  const observerRef = useRef<any>()
 
-  async function markAsRead(id : any) {
+  async function markAsRead(id: any) {
     try {
       const response = await axiosInstance.post('/notification/read-mark', {
-        _id: id
+        _id: id,
       })
-      if(response.data.success) {
+      if (response.data.success) {
         return true
       }
       return false
     } catch (error) {
-      console.error('Error marking notification as read:', error);
+      console.error('Error marking notification as read:', error)
     }
-  };
+  }
 
   const fetchNotification = async (page = 1) => {
-    setIsLoadingMore(true);
+    setIsLoadingMore(true)
     try {
       const response = await axiosInstance.get('/notification/', {
         params: {
           page,
-        }
-      });
+        },
+      })
       setAllCount(response.data.total)
-      dispatch(updateNotificationData({ data: [...data, ...response.data.data]}))
+      dispatch(updateNotificationData({ data: [...data, ...response.data.data] }))
     } catch (err) {
       console.error(err)
     }
-    setIsLoadingMore(false);
+    setIsLoadingMore(false)
   }
 
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
-        const lastEntry = entries[entries?.length - 1];
+        const lastEntry = entries[entries?.length - 1]
         if (lastEntry.isIntersecting && allCount > data?.length && !isLoadingMore) {
-          setFetchingMore(true);
-          fetchNotification(page+1)
-          setPage((prev) => prev + 1);
+          setFetchingMore(true)
+          fetchNotification(page + 1)
+          setPage((prev) => prev + 1)
         }
         entries.forEach(async (entry) => {
           if (entry.isIntersecting) {
-            const id = entry.target.getAttribute('data-notification-id') as unknown as string;
+            const id = entry.target.getAttribute('data-notification-id') as unknown as string
             // @ts-ignore
-            const readed = data.filter((n : any) => n._id === id)[0]?.isReaded;
-            if(readed || markedRead[id]) {
-              if(!markedRead[id]) setMarkedRead((prev) => ({ ...prev, [id]: true }))
+            const readed = data.filter((n: any) => n._id === id)[0]?.isReaded
+            if (readed || markedRead[id]) {
+              if (!markedRead[id]) setMarkedRead((prev) => ({ ...prev, [id]: true }))
             } else {
-              const response = await markAsRead(id);
+              const response = await markAsRead(id)
               if (response && id) {
-                setMarkedRead((prev) => ({ ...prev, [id]: true }));
+                setMarkedRead((prev) => ({ ...prev, [id]: true }))
               }
             }
           }
-        });
+        })
       },
-      { threshold: 0.8 } 
+      { threshold: 0.8 },
     )
 
-    observerRef.current = observer;
-    data.forEach((notification : any) => {
-      const element = document.querySelector(`[data-notification-id="${notification._id}"]`);
-      if (element) observer.observe(element);
-    });
+    observerRef.current = observer
+    data.forEach((notification: any) => {
+      const element = document.querySelector(`[data-notification-id="${notification._id}"]`)
+      if (element) observer.observe(element)
+    })
 
-    return () => observer.disconnect();
-  }, [data, fetchNotification, markedRead, page, total])
+    return () => observer.disconnect()
+  }, [data, fetchNotification, markedRead, page, total, allCount, isLoadingMore])
 
-  const addObserver = (el : any) => {
+  const addObserver = (el: any) => {
     if (el) {
-      observerRef?.current.observe(el);
+      observerRef?.current.observe(el)
     }
-  };
-  
-  const handleClick = async (event : any) => {
-    setAnchorEl(event.currentTarget);
-    await fetchNotification();
-  };
-  
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  }
 
-  const open = Boolean(anchorEl);
+  const handleClick = async (event: any) => {
+    setAnchorEl(event.currentTarget)
+    await fetchNotification()
+  }
+
+  const handleClose = () => {
+    setAnchorEl(null)
+  }
+
+  const open = Boolean(anchorEl)
   return (
     <>
       <NavbarRoot {...other}>
@@ -133,7 +154,7 @@ export const Navbar = (props: any) => {
             left: 0,
             px: 2,
           }}
-          >
+        >
           {router.pathname !== '/' && ( // Conditionally render the back button
             <IconButton
               onClick={() => router.back()} // Use router.back() to navigate to the previous page
@@ -179,38 +200,63 @@ export const Navbar = (props: any) => {
               horizontal: 'right',
             }}
           >
-            <Container sx={{ paddingLeft: { xs: '12px', sm: '16px' }, paddingRight: { xs: '12px', sm: '16px' } }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', my: 1 }}>
+            <Container
+              sx={{
+                paddingLeft: { xs: '12px', sm: '16px' },
+                paddingRight: { xs: '12px', sm: '16px' },
+              }}
+            >
+              <Box
+                sx={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  my: 1,
+                }}
+              >
                 <Typography variant="h6">Notifications</Typography>
                 <IconButton aria-label="DraftsOutlinedIcon">
                   <DraftsOutlinedIcon />
                 </IconButton>
               </Box>
-              <List sx={{  width: '100%', maxWidth: '380px', maxHeight: '50vh', bgcolor: 'background.paper', py: 0 }}>
-                {data.map((notification : any, index: number) => (
+              <List
+                sx={{
+                  width: '100%',
+                  maxWidth: '380px',
+                  maxHeight: '50vh',
+                  bgcolor: 'background.paper',
+                  py: 0,
+                }}
+              >
+                {data.map((notification: any, index: number) => (
                   <React.Fragment key={notification._id}>
                     <ListItem
-                      alignItems='flex-start'
+                      alignItems="flex-start"
                       data-notification-id={notification._id}
                       data-notification-readed={notification.isReaded}
-                      sx={{ 
-                      p: 0,
-                      pb: 1, 
-                      '&:hover': {
-                        transform: 'translateY(-4px)',
-                        transition: 'transform 0.3s',
-                        backgroundColor: theme.palette.grey[100],
-                      },}}
+                      sx={{
+                        p: 0,
+                        pb: 1,
+                        '&:hover': {
+                          transform: 'translateY(-4px)',
+                          transition: 'transform 0.3s',
+                          backgroundColor: theme.palette.grey[100],
+                        },
+                      }}
                       ref={(el) => {
                         addObserver(el)
                       }}
-                      
                     >
                       <ListItemAvatar>
-                         <IconButton aria-label="settings" sx={{ background: theme.palette.grey[100] }}>
-                          {(markedRead[notification._id] || notification.isReaded) ? <NotificationsNoneOutlinedIcon sx={{ fontWeight: 'bold' }} /> :
-                          <NotificationsActiveOutlinedIcon sx={{ fontWeight: 'bold' }} />
-                        }
+                        <IconButton
+                          aria-label="settings"
+                          sx={{ background: theme.palette.grey[100] }}
+                        >
+                          {markedRead[notification._id] || notification.isReaded ? (
+                            <NotificationsNoneOutlinedIcon sx={{ fontWeight: 'bold' }} />
+                          ) : (
+                            <NotificationsActiveOutlinedIcon sx={{ fontWeight: 'bold' }} />
+                          )}
                         </IconButton>
                       </ListItemAvatar>
                       <ListItemText
@@ -221,9 +267,10 @@ export const Navbar = (props: any) => {
                               component="span"
                               variant="body2"
                               color="text.primary"
-                              sx={{ display: 'block'}} // Use display block for proper spacing
+                              sx={{ display: 'block' }} // Use display block for proper spacing
                             >
-                              {notification?.description || 'No d webcuhweb cuweb cuw bexuwbxuyb escription available.'}
+                              {notification?.description ||
+                                'No d webcuhweb cuweb cuw bexuwbxuyb escription available.'}
                             </Typography>
                             <Typography
                               component="span"
@@ -237,12 +284,18 @@ export const Navbar = (props: any) => {
                         }
                       />
                     </ListItem>
-                    {index < data.length - 1 && <Divider sx={{m: 0}} variant="inset" component="li" />}
+                    {index < data.length - 1 && (
+                      <Divider sx={{ m: 0 }} variant="inset" component="li" />
+                    )}
                   </React.Fragment>
                 ))}
-                {isLoadingMore ? <ListItem sx={{ display: 'flex', alignItems:'center', justifyContent:"center" }}>
-                <CircularProgress size={24} />
-                </ListItem> : null }
+                {isLoadingMore ? (
+                  <ListItem
+                    sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    <CircularProgress size={24} />
+                  </ListItem>
+                ) : null}
               </List>
             </Container>
           </Popover>

@@ -14,13 +14,13 @@ const Home: NextPage = ({
   allProtocols,
   allApprovals,
   allActiveApprovals,
-  notificationCount
+  notificationCount,
 }: any) => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(updateNotificationData({total: notificationCount.total, data: []}))
-  }, [notificationCount])
+    dispatch(updateNotificationData({ total: notificationCount.total, data: [] }))
+  }, [notificationCount, dispatch])
 
   return (
     <HomeContext.Provider
@@ -43,7 +43,14 @@ export const getServerSideProps = async function getServerSideProps(context: any
   try {
     const response = await axiosInstance.get('/auth/validate-token', context)
     if (response.status === 200) {
-      const [compliances, departments, allProtocols, allApprovals, allActiveApprovals, notificationCount] = await Promise.all([
+      const [
+        compliances,
+        departments,
+        allProtocols,
+        allApprovals,
+        allActiveApprovals,
+        notificationCount,
+      ] = await Promise.all([
         axiosInstance.get('/compliance'),
         axiosInstance.get('/department'),
         axiosInstance.get('/protocol/get-all'),
@@ -59,7 +66,7 @@ export const getServerSideProps = async function getServerSideProps(context: any
           allProtocols: allProtocols.data,
           allApprovals: allApprovals.data,
           allActiveApprovals: allActiveApprovals.data,
-          notificationCount: notificationCount.data
+          notificationCount: notificationCount.data,
         },
       }
     }

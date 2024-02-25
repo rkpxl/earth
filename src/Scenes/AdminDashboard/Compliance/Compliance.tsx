@@ -90,6 +90,7 @@ export default function Compliance(props: any) {
         onClickHandle={handleClickOpen}
         title="Compliance"
         buttonText="Create New Compliance"
+        isCompliance={true}
       />
       <CreateComplianceDialog open={open} onClose={handleClose} />
       {compliances?.map((comp: any) => (

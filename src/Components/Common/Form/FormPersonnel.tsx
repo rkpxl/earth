@@ -63,7 +63,7 @@ export default function FormPersonnel({ compliance, protocol }: IProps) {
     dispatch(
       updateAnswer({ tabIndex: 98, id: 'mandatoryApprovers', answer: protocol.mandatoryApprovers }),
     )
-  }, [protocol])
+  }, [protocol, dispatch])
 
   const setApprovers = (updatedData: any) => {
     dispatch(updateAnswer({ tabIndex: 98, id: 'aditionalApprovers', answer: updatedData }))

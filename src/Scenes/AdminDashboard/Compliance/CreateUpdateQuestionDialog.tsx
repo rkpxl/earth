@@ -20,7 +20,6 @@ import { showMessage } from '../../../Store/reducers/snackbar'
 import { AppDispatch, IQuestion, QuestionType } from '../../../Utils/types/type'
 import { useDispatch } from 'react-redux'
 import { fetchCompliances } from '../../../Store/reducers/compliance'
-import { Page } from '../../../Utils/constants'
 
 interface State {
   title: string
