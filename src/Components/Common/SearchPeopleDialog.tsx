@@ -71,12 +71,9 @@ export default function SearchPeopleDialog({ open, onClose, addPerson }: IProps)
         <SearchPage setText={setSearchText} />
         <List sx={{ overflowY: 'auto', flexGrow: 1 }}>
           {data?.map((user: any) => (
-            <PersonCard
-              key={user._id}
-              name={user.name}
-              email={user.email}
-              onClick={() => addPerson(user)}
-            />
+            <React.Fragment key={user._id}>
+              <PersonCard name={user.name} email={user.email} onClick={() => addPerson(user)} />
+            </React.Fragment>
           ))}
         </List>
       </DialogContent>

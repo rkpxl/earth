@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
-import { Box, Divider, Drawer, Typography, useMediaQuery } from '@mui/material'
+import { Box, Divider, Drawer, List, Typography, useMediaQuery } from '@mui/material'
 import { ChartBar as ChartBarIcon } from '../../icons/chart-bar'
 import { Cog as CogIcon } from '../../icons/cog'
 import { UserAdd as UserAddIcon } from '../../icons/user-add'
@@ -161,16 +161,18 @@ export const Sidebar = (props: any) => {
           }}
         />
         <Box sx={{ flexGrow: 1 }}>
-          {items.map((item: any, index: number) => (
-            <SidebarItem
-              key={index.toString()}
-              icon={item.icon}
-              href={item.href}
-              title={item.title}
-              isAdmin={item?.subRoute?.length > 0}
-              subRoute={item?.subRoute || []}
-            />
-          ))}
+          <List>
+            {items.map((item: any, index: number) => (
+              <SidebarItem
+                key={index.toString()}
+                icon={item.icon}
+                href={item.href}
+                title={item.title}
+                isAdmin={item?.subRoute?.length > 0}
+                subRoute={item?.subRoute || []}
+              />
+            ))}
+          </List>
         </Box>
         <Divider sx={{ borderColor: '#2D3748' }} />
         <Box

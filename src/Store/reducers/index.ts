@@ -7,6 +7,7 @@ import complianceReducer from './compliance'
 import formReducer from './form'
 import userReducer from './user'
 import loadingReducer from './loading'
+import notificationReducer from './notification'
 
 const rootReducer = combineReducers({
   snackbar: snackbarReducer,
@@ -17,6 +18,7 @@ const rootReducer = combineReducers({
   form: formReducer,
   user: userReducer,
   globalLoading: loadingReducer,
+  notification: notificationReducer,
 })
 
 export default rootReducer

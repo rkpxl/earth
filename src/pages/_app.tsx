@@ -29,7 +29,7 @@ function MyApp(props: AppProps) {
         <CssBaseline />
         <Provider store={Store}>
           <QueryClientProvider client={queryClient}>
-            <HomeLayout>
+            <HomeLayout {...pageProps}>
               <Component {...pageProps} />
             </HomeLayout>
             <Snackbar />
@@ -46,6 +46,7 @@ export const getServerSideProps = async function getServerSideProps(context: any
   axiosInstance.context = context
   try {
     const response = await axiosInstance.get('/auth/validate-token', context)
+    console.log('response', response)
     if (response.status === 200) {
       return {
         redirect: {

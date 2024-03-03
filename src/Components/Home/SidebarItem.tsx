@@ -2,7 +2,7 @@ import React from 'react'
 import NextLink from 'next/link'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
-import { ListItem } from '@mui/material'
+import { List, ListItem } from '@mui/material'
 import Collapse from '@mui/material/Collapse'
 import { SidebarItemButton } from './SidebarItemButton'
 
@@ -80,33 +80,35 @@ export const SidebarItem = (props: any) => {
               ml: 4,
             }}
           >
-            {subRoute.map((route: any, index: any) => {
-              return (
-                <ListItem
-                  key={index.toString()}
-                  disableGutters
-                  sx={{
-                    display: 'flex',
-                    mb: 0.5,
-                    py: 0,
-                    px: 2,
-                    width: '100%',
-                  }}
-                  {...others}
-                >
-                  <NextLink style={{ width: '100%' }} href={route.href} passHref>
-                    <SidebarItemButton
-                      handleClick={() => {}}
-                      title={route.title}
-                      open={false}
-                      isAdmin={false}
-                      icon={route.icon}
-                      active={router.pathname.startsWith(`${route.href}`)}
-                    />
-                  </NextLink>
-                </ListItem>
-              )
-            })}
+            <List>
+              {subRoute.map((route: any, index: any) => {
+                return (
+                  <ListItem
+                    key={index.toString()}
+                    disableGutters
+                    sx={{
+                      display: 'flex',
+                      mb: 0.5,
+                      py: 0,
+                      px: 2,
+                      width: '100%',
+                    }}
+                    {...others}
+                  >
+                    <NextLink style={{ width: '100%' }} href={route.href} passHref>
+                      <SidebarItemButton
+                        handleClick={() => {}}
+                        title={route.title}
+                        open={false}
+                        isAdmin={false}
+                        icon={route.icon}
+                        active={router.pathname.startsWith(`${route.href}`)}
+                      />
+                    </NextLink>
+                  </ListItem>
+                )
+              })}
+            </List>
           </Collapse>
         </ListItem>
       )}
