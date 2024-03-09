@@ -78,7 +78,7 @@ const Header = ({ title, buttonText, onClickHandle, isCompliance = false }: any)
         <Typography
           variant="h6"
           component="div"
-          sx={{ flexGrow: 1, color: 'black', fontSize: '22px', minWidth: 400 }}
+          sx={{ flexGrow: 1, color: 'black', fontSize: '22px' }}
         >
           {title}
         </Typography>

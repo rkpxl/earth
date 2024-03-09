@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
-import { Box, Divider, Drawer, List, Typography, useMediaQuery } from '@mui/material'
+import { Box, Divider, Drawer, Grid, IconButton, List, Typography, useMediaQuery } from '@mui/material'
 import { ChartBar as ChartBarIcon } from '../../icons/chart-bar'
 import { Cog as CogIcon } from '../../icons/cog'
 import { UserAdd as UserAddIcon } from '../../icons/user-add'
@@ -9,10 +9,12 @@ import { SidebarItem } from './SidebarItem'
 import InboxIcon from '@mui/icons-material/MoveToInbox'
 import ShieldIcon from '@mui/icons-material/Shield'
 import GroupIcon from '@mui/icons-material/Group'
+import SendIcon from '@mui/icons-material/Send'
 import ApartmentIcon from '@mui/icons-material/Apartment'
 import LibraryBooksIcon from '@mui/icons-material/LibraryBooks'
 import RouteIcon from '@mui/icons-material/Route'
 import AnalyticsIcon from '@mui/icons-material/Analytics'
+import ArrowBackIcon from '@mui/icons-material/ArrowBack'
 
 export const Sidebar = (props: any) => {
   const { open, onClose } = props
@@ -61,11 +63,6 @@ export const Sidebar = (props: any) => {
           //   icon: (<DraftsIcon fontSize="small" />),
           //   title: 'Approvals'
           // },
-          // {
-          //   href: '/admin-dashboard/workflows',
-          //   icon: (<SendIcon fontSize="small" />),
-          //   title: 'Workflows'
-          // },
           {
             //   href: '/admin-dashboard/reports',
             //   icon: (<StarBorder fontSize="small" />),
@@ -90,6 +87,11 @@ export const Sidebar = (props: any) => {
             href: '/admin-dashboard/approval-rule',
             icon: <RouteIcon fontSize="small" />,
             title: 'Approval Rule',
+          },
+          {
+            href: '/admin-dashboard/scheduling',
+            icon: (<SendIcon fontSize="small" />),
+            title: 'Scheduling'
           },
           {
             href: '/admin-dashboard/register',
@@ -147,11 +149,19 @@ export const Sidebar = (props: any) => {
             </NextLink>
           </Box> */}
           <Box sx={{ px: 3, paddingTop: 3 }}>
-            <div>
+            <Grid sx={{ display: 'flex', justifyContent: "space-between", alignItems: 'center'}}>
               <Typography color="inherit" variant="subtitle1">
                 Knowledge Link
               </Typography>
-            </div>
+              {/* {router.pathname !== '/' && ( // Conditionally render the back button
+                <IconButton
+                  onClick={() => router.back()} // Use router.back() to navigate to the previous page
+                  sx={{ mr: 2, marginRight: '-10px' }}
+                >
+                  <ArrowBackIcon fontSize="small" sx={{ color: 'white'}} />
+                </IconButton>
+              )} */}
+            </Grid>
           </Box>
         </div>
         <Divider

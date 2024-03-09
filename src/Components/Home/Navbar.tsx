@@ -146,23 +146,16 @@ export const Navbar = (props: any) => {
   const open = Boolean(anchorEl)
   return (
     <>
-      <NavbarRoot {...other}>
+      <NavbarRoot>
         <Toolbar
           disableGutters
           sx={{
             minHeight: 64,
             left: 0,
             px: 2,
+            marginLeft: { sm:'0px', lg: '250px' }
           }}
         >
-          {router.pathname !== '/' && ( // Conditionally render the back button
-            <IconButton
-              onClick={() => router.back()} // Use router.back() to navigate to the previous page
-              sx={{ mr: 2 }}
-            >
-              <ArrowBackIcon fontSize="small" />
-            </IconButton>
-          )}
           <IconButton
             onClick={onSidebarOpen}
             sx={{
@@ -174,11 +167,18 @@ export const Navbar = (props: any) => {
           >
             <MenuIcon fontSize="small" />
           </IconButton>
-          <Tooltip title="Search">
-            <IconButton sx={{ ml: 1 }}>
+          {router.pathname !== '/' && (
+            <IconButton
+              onClick={() => router.back()} // Use router.back() to navigate to the previous page
+            >
+              <ArrowBackIcon fontSize="small" />
+            </IconButton>
+          )}
+          {/* <Tooltip title="Search">
+            <IconButton>
               <SearchIcon fontSize="small" />
             </IconButton>
-          </Tooltip>
+          </Tooltip> */}
           <Box sx={{ flexGrow: 1 }} />
           <Tooltip title="Notifications">
             <IconButton onClick={handleClick}>

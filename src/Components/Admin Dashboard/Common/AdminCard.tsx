@@ -8,7 +8,7 @@ import { Grid } from '@mui/material'
 import { getStandatedDate } from '../../../Utils/dateTime'
 import { Menu, MenuItem } from '@mui/material'
 
-const AdminCard = ({ card, onDelete, onManageClick }: any) => {
+const AdminCard = ({ card, onDelete, onManageClick, isSchedulers = false }: any) => {
   const { name, createdAt, updatedAt, isActive, manageActive, title } = card
   const avatarLetter = name ? name.charAt(0).toUpperCase() : title.charAt(0).toUpperCase()
   const [anchorEl, setAnchorEl] = useState(null)
@@ -38,8 +38,9 @@ const AdminCard = ({ card, onDelete, onManageClick }: any) => {
     <Card
       sx={{
         boxShadow: 5,
-        height: '100px',
+        height: 'auto',
         margin: '16px',
+        // padding: "16px",
         transition: 'box-shadow 0.3s ease',
         '&:hover': {
           boxShadow: 10,
@@ -47,6 +48,7 @@ const AdminCard = ({ card, onDelete, onManageClick }: any) => {
       }}
     >
       <CardHeader
+      sx={{ p: "16px", }}
         avatar={<Avatar>{avatarLetter}</Avatar>}
         action={
           <Grid
@@ -68,7 +70,7 @@ const AdminCard = ({ card, onDelete, onManageClick }: any) => {
           </Grid>
         }
         title={name ? name : title}
-        subheader={`${card?.id ? 'Id' + ' ' + card.id + ' | ' : ''}Created Date: ${getStandatedDate(createdAt)} | Modified Date: ${getStandatedDate(updatedAt)}`}
+        subheader={`${card?.id ? 'Id' + ' ' + card.id + ' | ' : ''} Created Date: ${getStandatedDate(createdAt)} | ${isSchedulers ? 'Date Of Conduct:' :  'Modified Date:'} ${isSchedulers ? getStandatedDate(card?.dateOfConduct) : getStandatedDate(updatedAt)}`}
       />
     </Card>
   )
