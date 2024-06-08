@@ -46,7 +46,7 @@ export const LatestTasks = () => {
     <Card>
       <CardHeader title="Latest Activity" />
       <PerfectScrollbar>
-        <Box sx={{ minWidth: 800 }}>
+        <Box sx={{ overflowX: 'auto', overflowY: 'auto' }}>
           <Table>
             <TableHead>
               <TableRow>

@@ -155,14 +155,14 @@ export const Navbar = (props: any) => {
             px: 2,
           }}
         >
-          {router.pathname !== '/' && ( // Conditionally render the back button
+          {(router.pathname !== '/' && router.pathname !== '/admin-dashboard/dashboard') ? ( // Conditionally render the back button
             <IconButton
               onClick={() => router.back()} // Use router.back() to navigate to the previous page
               sx={{ mr: 2 }}
             >
               <ArrowBackIcon fontSize="small" />
             </IconButton>
-          )}
+          ) : null}
           <IconButton
             onClick={onSidebarOpen}
             sx={{

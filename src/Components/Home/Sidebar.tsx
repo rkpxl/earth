@@ -32,11 +32,11 @@ export const Sidebar = (props: any) => {
       icon: <CogIcon fontSize="small" />,
       title: 'Settings',
     },
-    {
-      href: '/publication',
-      icon: <LibraryBooksIcon fontSize="small" />,
-      title: 'Publication',
-    },
+    // {
+    //   href: '/publication',
+    //   icon: <LibraryBooksIcon fontSize="small" />,
+    //   title: 'Publication',
+    // },
   ])
 
   useEffect(
