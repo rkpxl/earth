@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "PORT=8080 next dev",
     "build": "next build",
-    "start": "next start",
+    "start": "PORT=8080 next start",
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "format": "prettier --write .",
