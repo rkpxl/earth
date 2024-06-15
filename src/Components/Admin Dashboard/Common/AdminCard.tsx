@@ -48,12 +48,18 @@ const AdminCard = ({ card, onDelete, onManageClick }: any) => {
     >
       <CardHeader
         avatar={<Avatar>{avatarLetter}</Avatar>}
-        sx={{ 
+        sx={{
           padding: { xs: '8px', sm: '8px', lg: '16px' },
-         }}
+        }}
         action={
           <Grid
-            sx={{ zIndex: '2', display: 'flex', justifyContent: 'center', alignItems: 'center', padding: '16px' }}
+            sx={{
+              zIndex: '2',
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '16px',
+            }}
           >
             <IconButton aria-label="settings" onClick={handleMenuClick}>
               <MoreVertIcon />

@@ -74,18 +74,32 @@ const Header = ({ title, buttonText, onClickHandle, isCompliance = false }: any)
 
   return (
     <div>
-      <Toolbar sx={{ flexDirection: { xs: 'column', sm: 'row' }, marginTop: {xs: "12px", sm: 'auto'} }}>
+      <Toolbar
+        sx={{ flexDirection: { xs: 'column', sm: 'row' }, marginTop: { xs: '12px', sm: 'auto' } }}
+      >
         <Typography
           variant="h6"
           component="div"
-          sx={{ flexGrow: 1, color: 'black', fontSize: '22px', minWidth: { xs: '100px', sm: '200px', md: '400px' },  marginBottom: {xs: isCompliance ? "12px" : "0px", sm: '0px'} }}
+          sx={{
+            flexGrow: 1,
+            color: 'black',
+            fontSize: '22px',
+            minWidth: { xs: '100px', sm: '200px', md: '400px' },
+            marginBottom: { xs: isCompliance ? '12px' : '0px', sm: '0px' },
+          }}
         >
           {title}
         </Typography>
 
-        <Grid container spacing={2} alignItems="flex-end" justifyContent="flex-end" sx={{ flexDirection: { xs: 'column', sm: 'row' } }}>
+        <Grid
+          container
+          spacing={2}
+          alignItems="flex-end"
+          justifyContent="flex-end"
+          sx={{ flexDirection: { xs: 'column', sm: 'row' } }}
+        >
           <Grid item sx={{ width: { xs: '100%', sm: 'auto' } }}>
-            { isCompliance && (
+            {isCompliance && (
               <>
                 <Button
                   id="demo-positioned-button"
@@ -125,7 +139,12 @@ const Header = ({ title, buttonText, onClickHandle, isCompliance = false }: any)
             )}
           </Grid>
           <Grid item sx={{ width: { xs: '100%', sm: 'auto' } }}>
-            <Button sx={{ width: { xs: '100%', sm: 'auto' } }} color="primary" variant="contained" onClick={onClickHandle}>
+            <Button
+              sx={{ width: { xs: '100%', sm: 'auto' } }}
+              color="primary"
+              variant="contained"
+              onClick={onClickHandle}
+            >
               {buttonText}
             </Button>
           </Grid>
