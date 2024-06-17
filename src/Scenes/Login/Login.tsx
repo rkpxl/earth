@@ -124,8 +124,8 @@ const Login = () => {
     dispatch(showMessage({ message: 'Please refer to email and password', severity: 'warning' }))
   }
 
-  if(isLoading) {
-    return (<CircularProgress />)
+  if (isLoading) {
+    return <CircularProgress />
   }
 
   return (

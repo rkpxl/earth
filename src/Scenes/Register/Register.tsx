@@ -29,7 +29,6 @@ interface IProps {
 }
 
 const Register = ({ departments }: IProps) => {
-
   const accessLevels = ['superAdmin', 'admin', 'professor', 'student']
 
   const [openSuccessBar, setOpenSuccessBar] = React.useState(false)

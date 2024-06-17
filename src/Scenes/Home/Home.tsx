@@ -74,50 +74,52 @@ const Home = () => {
           py: 2,
         }}
       >
-        {(compliances && compliances?.length > 0) ? <Box
-          sx={{
-            pb: 2,
-            pr: 2,
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'row',
-            justifyContent: 'end',
-          }}
-        >
-           <Button
-            id="demo-positioned-button"
-            aria-controls={open ? 'demo-positioned-menu' : undefined}
-            aria-haspopup="true"
-            aria-expanded={open ? 'true' : undefined}
-            onClick={handleClick}
-            color="primary"
-            sx={{ background: 'primary.main' }}
-          >
-            Create new protocol
-          </Button> 
-          <Menu
-            id="demo-positioned-menu"
-            aria-labelledby="demo-positioned-button"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={handleClose}
-            sx={{ mt: 5 }}
-            anchorOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
-            }}
-            transformOrigin={{
-              vertical: 'top',
-              horizontal: 'left',
+        {compliances && compliances?.length > 0 ? (
+          <Box
+            sx={{
+              pb: 2,
+              pr: 2,
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'row',
+              justifyContent: 'end',
             }}
           >
-            {compliances?.map((comp: ICompliance) => (
-              <MenuItem key={comp._id} onClick={() => onComplienceClick(comp)}>
-                {comp.title}
-              </MenuItem>
-            ))}
-          </Menu>
-        </Box> : null }
+            <Button
+              id="demo-positioned-button"
+              aria-controls={open ? 'demo-positioned-menu' : undefined}
+              aria-haspopup="true"
+              aria-expanded={open ? 'true' : undefined}
+              onClick={handleClick}
+              color="primary"
+              sx={{ background: 'primary.main' }}
+            >
+              Create new protocol
+            </Button>
+            <Menu
+              id="demo-positioned-menu"
+              aria-labelledby="demo-positioned-button"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={handleClose}
+              sx={{ mt: 5 }}
+              anchorOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'left',
+              }}
+            >
+              {compliances?.map((comp: ICompliance) => (
+                <MenuItem key={comp._id} onClick={() => onComplienceClick(comp)}>
+                  {comp.title}
+                </MenuItem>
+              ))}
+            </Menu>
+          </Box>
+        ) : null}
         <Container maxWidth={false}>
           <Grid container spacing={2} mb={2}>
             {homeCard.map((card) => (
