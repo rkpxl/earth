@@ -74,7 +74,7 @@ const Home = () => {
           py: 2,
         }}
       >
-        <Box
+        {(compliances && compliances?.length > 0) ? <Box
           sx={{
             pb: 2,
             pr: 2,
@@ -84,7 +84,7 @@ const Home = () => {
             justifyContent: 'end',
           }}
         >
-          {compliances && compliances?.length > 0 ? <Button
+           <Button
             id="demo-positioned-button"
             aria-controls={open ? 'demo-positioned-menu' : undefined}
             aria-haspopup="true"
@@ -94,7 +94,7 @@ const Home = () => {
             sx={{ background: 'primary.main' }}
           >
             Create new protocol
-          </Button> : null }
+          </Button> 
           <Menu
             id="demo-positioned-menu"
             aria-labelledby="demo-positioned-button"
@@ -117,7 +117,7 @@ const Home = () => {
               </MenuItem>
             ))}
           </Menu>
-        </Box>
+        </Box> : null }
         <Container maxWidth={false}>
           <Grid container spacing={2} mb={2}>
             {homeCard.map((card) => (
