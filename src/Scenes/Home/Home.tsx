@@ -84,7 +84,7 @@ const Home = () => {
             justifyContent: 'end',
           }}
         >
-          <Button
+          {compliances && compliances?.length > 0 ? <Button
             id="demo-positioned-button"
             aria-controls={open ? 'demo-positioned-menu' : undefined}
             aria-haspopup="true"
@@ -94,7 +94,7 @@ const Home = () => {
             sx={{ background: 'primary.main' }}
           >
             Create new protocol
-          </Button>
+          </Button> : null }
           <Menu
             id="demo-positioned-menu"
             aria-labelledby="demo-positioned-button"
