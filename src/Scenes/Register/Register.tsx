@@ -18,7 +18,6 @@ import {
   TextField,
   Typography,
 } from '@mui/material'
-import { accessLevels } from '../../data/fixData'
 import Snackbar from '@mui/material/Snackbar'
 import { IDepartment } from '../../Utils/types/type'
 import { useDispatch } from 'react-redux'
@@ -30,6 +29,9 @@ interface IProps {
 }
 
 const Register = ({ departments }: IProps) => {
+
+  const accessLevels = ['superAdmin', 'admin', 'professor', 'student']
+
   const [openSuccessBar, setOpenSuccessBar] = React.useState(false)
   const dispatch = useDispatch()
 
