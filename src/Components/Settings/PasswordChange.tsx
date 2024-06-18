@@ -99,8 +99,8 @@ const PasswordChange = (props: any) => {
           console.error(err)
         }
       } else {
-        axios
-          .put(process.env.NEXT_PUBLIC_HOST_URL + '/users/updatePassword', {
+        axiosInstance
+          .put(process.env.NEXT_PUBLIC_HOST_URL + '/user/update-password', {
             email: localStorage.getItem('email'),
             password: values.password,
             previousPassword: values.previous,
